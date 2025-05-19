@@ -10,6 +10,7 @@ declare global {
     electron: {
       deleteMessage: (id: number) => Promise<DeleteResult>;
       addExpense: (description: string, amount: number) => Promise<void>;
+      updateExpense: (id: number, description: string, amount: number) => Promise<void>;
     };
   }
 }

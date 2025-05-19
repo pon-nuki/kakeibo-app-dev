@@ -1,7 +1,7 @@
 // main.ts
 import * as path from 'path'; 
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { getAllExpenses, addExpense, deleteExpense } from './db';
+import { getAllExpenses, addExpense, deleteExpense, updateExpense } from './db';
 
 let mainWindow: BrowserWindow | null;
 
@@ -89,5 +89,16 @@ ipcMain.handle('deleteMessage', async (event, id) => {
   } catch (error) {
     console.error('削除に失敗しました:', error);
     throw new Error('削除に失敗しました');
+  }
+});
+
+// updateExpenseイベントを追加
+ipcMain.handle('updateExpense', async (_event, { id, desc, amt }) => {
+  try {
+    await updateExpense(id, desc, amt);
+    return { message: '更新に成功しました' };
+  } catch (error) {
+    console.error('updateExpenseエラー:', error);
+    return { message: '更新に失敗しました' };
   }
 });

@@ -49,3 +49,19 @@ export const deleteExpense = (id: number): Promise<DeleteExpenseResult> => {
     });
   });
 };
+
+// 費用を更新する関数
+export const updateExpense = (id: number, description: string, amount: number): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare('UPDATE expenses SET description = ?, amount = ? WHERE id = ?');
+    stmt.run(description, amount, id, function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+    stmt.finalize();
+  });
+};
+

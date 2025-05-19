@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, TextField, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 interface Expense {
   id: number;
@@ -12,36 +13,27 @@ const Home: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
+  const [editId, setEditId] = useState<number | null>(null); // 編集対象ID
 
-  // データ取得関数
   const fetchExpenses = async () => {
     try {
       const response = await fetch('http://localhost:3000/expenses');
       const data = await response.json();
-      console.log('Fetched expenses:', data);
-      // 取得したデータをstateに設定
       setExpenses(data);
     } catch (error) {
       console.error('データ取得に失敗しました:', error);
     }
   };
 
-  // 初回レンダリング時のデータ取得
   useEffect(() => {
     fetchExpenses();
   }, []);
 
-  // 費用追加処理
   const handleAddExpense = async () => {
     if (description && amount) {
       try {
-        // Electron経由でDBに追加
         await window.electron.addExpense(description, parseFloat(amount));
-
-        // データ再取得
         await fetchExpenses();
-
-        // 入力クリア
         setDescription('');
         setAmount('');
       } catch (err) {
@@ -50,14 +42,24 @@ const Home: React.FC = () => {
     }
   };
 
-  // 削除処理
+  const handleUpdateExpense = async () => {
+    if (editId !== null && description && amount) {
+      try {
+        await window.electron.updateExpense(editId, description, parseFloat(amount));
+        await fetchExpenses();
+        setEditId(null);
+        setDescription('');
+        setAmount('');
+      } catch (err) {
+        console.error('更新に失敗しました:', err);
+      }
+    }
+  };
+
   const handleDeleteExpense = async (id: number) => {
     try {
       const resultMessage = await window.electron.deleteMessage(id);
-      console.log('削除結果:', resultMessage.message);
-
       if (resultMessage.message.includes('削除されました')) {
-        console.log('削除後にデータ再取得');
         await fetchExpenses();
       } else {
         alert(resultMessage.message);
@@ -67,7 +69,18 @@ const Home: React.FC = () => {
     }
   };
 
-  // 合計金額計算
+  const startEditing = (expense: Expense) => {
+    setEditId(expense.id);
+    setDescription(expense.description);
+    setAmount(expense.amount.toString());
+  };
+
+  const cancelEdit = () => {
+    setEditId(null);
+    setDescription('');
+    setAmount('');
+  };
+
   const totalAmount = expenses.reduce((total, expense) => total + expense.amount, 0);
 
   return (
@@ -86,7 +99,15 @@ const Home: React.FC = () => {
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
       />
-      <Button onClick={handleAddExpense} variant="contained">追加</Button>
+      {editId === null ? (
+        <Button onClick={handleAddExpense} variant="contained">追加</Button>
+      ) : (
+        <>
+          <Button onClick={handleUpdateExpense} variant="contained" color="primary">更新</Button>
+          <Button onClick={cancelEdit} variant="outlined" color="secondary">キャンセル</Button>
+        </>
+      )}
+
       <List>
         {expenses.map((expense) => (
           <ListItem key={expense.id}>
@@ -94,6 +115,9 @@ const Home: React.FC = () => {
               primary={expense.description}
               secondary={`¥${expense.amount.toLocaleString()}`}
             />
+            <IconButton onClick={() => startEditing(expense)} color="primary">
+              <EditIcon />
+            </IconButton>
             <IconButton onClick={() => handleDeleteExpense(expense.id)} color="secondary">
               <DeleteIcon />
             </IconButton>
