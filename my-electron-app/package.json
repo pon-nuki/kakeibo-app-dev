@@ -1,0 +1,47 @@
+{
+  "name": "my-electron-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "start": "concurrently \"npm run start:react\" \"npm run start:electron\" \"npm run start:backend\"",
+    "start:react": "webpack serve --config webpack.config.js --mode development --open",
+    "start:electron": "wait-on http://localhost:8080 && echo 'React app is ready!' && electron .",
+    "start:backend": "node server.js",
+    "build": "webpack --config webpack.config.js",
+    "build:main": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5",
+    "@types/sqlite3": "^3.1.11",
+    "concurrently": "^9.1.2",
+    "electron": "^36.2.1",
+    "html-webpack-plugin": "^5.6.3",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "wait-on": "^8.0.3",
+    "webpack": "^5.99.8",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
+    "better-sqlite3": "^11.10.0",
+    "cors": "^2.8.5",
+    "path-browserify": "^1.0.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^7.6.0",
+    "react-router-dom": "^7.6.0",
+    "sqlite3": "^5.1.7"
+  }
+}

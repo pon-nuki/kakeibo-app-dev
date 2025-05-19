@@ -1,0 +1,15 @@
+# Node.js dependencies
+node_modules/
+
+# Build directory
+/dist
+
+# Logs
+*.log
+
+# MacOS files
+.DS_Store
+
+# Electron's native builds
+*.app
+*.exe

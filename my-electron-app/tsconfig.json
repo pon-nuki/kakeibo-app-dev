@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node16",
+    "target": "ES2020",
+    "module": "Node16",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "jsx": "react",
+    "types": ["node"]
+  },
+  "include": [
+    "src/**/*",
+    "src/renderer/electron.d.ts"
+  ]
+}
