@@ -1,66 +1,114 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-// Renderer プロセス用の設定
-const rendererConfig = {
-  entry: './src/renderer/index.tsx',
-  output: {
-    filename: 'renderer.js',
-    path: path.resolve(__dirname, 'dist'),
-    clean: true,
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    fallback: {
-      path: require.resolve('path-browserify'),
-      fs: false,
+module.exports = (env, argv) => {
+  const mode = argv.mode || 'development';
+
+  const rendererConfig = {
+    mode,
+    entry: './src/renderer/index.tsx',
+    output: {
+      filename: 'renderer.js',
+      path: path.resolve(__dirname, 'dist'),
+      clean: true,
     },
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
+      fallback: {
+        path: require.resolve('path-browserify'),
+        fs: false,
       },
-    ],
-  },
-  devServer: {
-  static: {
-    directory: path.join(__dirname, 'public'),
-    publicPath: '/static/',
-  },
-    port: 8080,
-    hot: true,
-    open: false,
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-    }),
-  ],
-};
-
-// Preload スクリプト用の設定
-const preloadConfig = {
-  entry: './src/renderer/preload.ts',
-  target: 'electron-preload',
-  output: {
-    filename: 'preload.js',
-    path: path.resolve(__dirname, 'dist', 'renderer'),
-  },
-  resolve: {
-    extensions: ['.ts', '.js'],
-  },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/, // ✅ Babel で TS を処理
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+          },
+        },
+        {
+          test: /\.css$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+          exclude: /node_modules/,
+        },
+      ],
+    },
+    devtool: 'source-map',
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'public'),
+        publicPath: '/static/',
       },
+      port: 8080,
+      hot: true,
+      open: false,
+      headers: {
+        'Content-Security-Policy':
+        "default-src 'self'; " +
+        "script-src 'self' 'nonce-abc123' 'unsafe-inline' ; " +
+        "style-src 'self' 'nonce-abc123' 'unsafe-inline' ; " +
+        "img-src 'self' data:; " +
+        "connect-src 'self' ws://localhost:8080 http://localhost:3000;",
+      },
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: './public/index.html',
+        // nonce を渡す設定
+        scriptLoading: 'defer',  // 非同期で読み込む設定（任意）
+        inject: 'body',  // body 内に script を挿入
+        nonce: 'abc123',  // nonce を渡す
+      }),
+      new MiniCssExtractPlugin({ filename: 'styles.css' }),
     ],
-  },
-};
+  };
 
-module.exports = [rendererConfig, preloadConfig];
+  const preloadConfig = {
+    mode,
+    entry: './src/renderer/preload.ts',
+    target: 'electron-preload',
+    output: {
+      filename: 'preload.js',
+      path: path.resolve(__dirname, 'dist', 'renderer'),
+    },
+    resolve: {
+      extensions: ['.ts', '.js'],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.ts$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+      ],
+    },
+  };
+
+  const mainConfig = {
+    mode,
+    entry: './src/main/main.ts',
+    target: 'electron-main',
+    output: {
+      filename: 'main.js',
+      path: path.resolve(__dirname, 'dist', 'main'),
+    },
+    resolve: {
+      extensions: ['.ts', '.js'],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.ts$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+      ],
+    },
+  };
+
+  return [rendererConfig, preloadConfig, mainConfig];
+};

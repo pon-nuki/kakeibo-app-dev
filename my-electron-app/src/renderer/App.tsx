@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from './pages/Home'; 
 import Settings from './pages/Settings';
+import ErrorBoundary from '../components/ErrorBoundary';  // ErrorBoundary をインポート
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -14,12 +15,14 @@ const App: React.FC = () => {
   }, []);  // 初回レンダリング時には削除処理を実行しない
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/settings" element={<Settings />} />
-      </Routes>
-    </Router>
+    <ErrorBoundary>  {/* エラーバウンダリーで全体を囲む */}
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </Router>
+    </ErrorBoundary>
   );
 };
 

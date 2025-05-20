@@ -25,7 +25,9 @@ function createWindow() {
 
   mainWindow.once('ready-to-show', () => {
     console.log('mainWindow ready-to-show');
-    mainWindow.show();
+    if (mainWindow) {
+      mainWindow.show();
+    }
   });
 
   console.log('loadURL');
@@ -62,8 +64,8 @@ ipcMain.handle('getAllExpenses', async () => {
   return await getAllExpenses();
 });
 
-ipcMain.handle('addExpense', async (event, description, amount) => {
-  return await addExpense(description, amount);
+ipcMain.handle('addExpense', async (event, description, amount, date) => {
+  return await addExpense(description, amount, date);
 });
 
 // deleteMessageイベントを追加
@@ -93,9 +95,9 @@ ipcMain.handle('deleteMessage', async (event, id) => {
 });
 
 // updateExpenseイベントを追加
-ipcMain.handle('updateExpense', async (_event, { id, desc, amt }) => {
+ipcMain.handle('updateExpense', async (_event, { id, desc, amt, date }) => {
   try {
-    await updateExpense(id, desc, amt);
+    await updateExpense(id, desc, amt, date);
     return { message: '更新に成功しました' };
   } catch (error) {
     console.error('updateExpenseエラー:', error);

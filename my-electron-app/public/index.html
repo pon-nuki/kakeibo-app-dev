@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Electron App</title>
+    <script nonce="abc123"></script> <!-- nonce 設定 -->
+    
+    <!-- 修正した CSP ヘッダー -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'nonce-abc123'; 
+      style-src 'self' 'nonce-abc123' 'unsafe-inline'; 
+      connect-src 'self' http://localhost:3000 ws://localhost:8080; 
+      object-src 'none';
+    " />
   </head>
   <body>
     <div id="root"></div>

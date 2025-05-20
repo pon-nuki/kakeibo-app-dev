@@ -4,7 +4,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
-app.use(require('cors')());  // CORS設定
+app.use(require('cors')({ origin: 'http://localhost:8080' }));  // 特定のオリジンからのアクセスのみ許可
 
 // SQLiteデータベースに接続
 const db = new sqlite3.Database('expenses.db');
