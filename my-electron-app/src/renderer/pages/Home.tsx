@@ -21,8 +21,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ja } from 'date-fns/locale';
 import './Home.css';
-import FilterListIcon from '@mui/icons-material/FilterList';  // フィルターアイコン
-import MenuIcon from '@mui/icons-material/Menu';              // メニューアイコン
+import FilterListIcon from '@mui/icons-material/FilterList';
+import MenuIcon from '@mui/icons-material/Menu';
 
 interface Expense {
   id: number;
@@ -188,55 +188,65 @@ const Home: React.FC = () => {
         </IconButton>
       </Box>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
-      <div className="input-row">
-        <TextField
-          label="内容"
-          variant="outlined"
-          value={description} // descriptionの状態をバインド
-          onChange={(e) => setDescription(e.target.value)} // 入力内容を状態にセット
-          className="input-field"
-        />
-        <TextField
-          label="金額"
-          variant="outlined"
-          type="number"
-          value={amount} // amountの状態をバインド
-          onChange={(e) => setAmount(e.target.value)} // 入力内容を状態にセット
-          className="input-field"
-        />
-        {editId === null ? (
-          <Button onClick={handleAddExpense} variant="contained">
-            追加
-          </Button>
-        ) : (
-          <>
-            <Button onClick={handleUpdateExpense} variant="contained" color="primary">
-              更新
-            </Button>
-            <Button onClick={cancelEdit} variant="outlined" color="secondary">
-              キャンセル
-            </Button>
-          </>
-        )}
-      </div>
 
-      <div className="date-picker-row">
-        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
-          <DatePicker
-            label="支出日"
-            value={startDate}
-            onChange={(date) => setStartDate(date)}
-            enableAccessibleFieldDOMStructure={false}
-            slots={{ textField: TextField }}
-            slotProps={{ textField: { className: 'date-picker-input' } }}
+      {/* 固定したいフォーム部分 */}
+      <div className="sticky-input-container">
+        <div className="input-row">
+          <TextField
+            label="内容"
+            variant="outlined"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className={`input-field ${editId ? 'editing' : ''}`}
           />
-        </LocalizationProvider>
+          <TextField
+            label="金額"
+            variant="outlined"
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            className={`input-field ${editId ? 'editing' : ''}`}
+          />
+          {editId === null ? (
+            <Button onClick={handleAddExpense} variant="contained">
+              追加
+            </Button>
+          ) : (
+            <>
+              <Button onClick={handleUpdateExpense} variant="contained" color="primary">
+                更新
+              </Button>
+              <Button onClick={cancelEdit} variant="outlined" color="secondary">
+                キャンセル
+              </Button>
+            </>
+          )}
+        </div>
+
+        <div className="date-picker-row">
+          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
+            <DatePicker
+              label="支出日"
+              value={startDate}
+              onChange={(date) => setStartDate(date)}
+              enableAccessibleFieldDOMStructure={false}
+              slots={{ textField: TextField }}
+              slotProps={{ textField: { className: 'date-picker-input' } }}
+            />
+          </LocalizationProvider>
+        </div>
       </div>
 
       <hr />
 
-      <h3><IconButton style={{ marginLeft: '8px' }}><MenuIcon /></IconButton> フィルター</h3>
+      <h3>
+        <IconButton style={{ marginLeft: '8px' }}>
+          <MenuIcon />
+        </IconButton>
+        フィルター
+      </h3>
 
+      {/* 以下、フィルターの内容 */}
       <FormControl component="fieldset">
         <FormLabel component="legend">検索タイプ</FormLabel>
         <RadioGroup
@@ -252,7 +262,6 @@ const Home: React.FC = () => {
       </FormControl>
 
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
-        {/* 完全一致検索 */}
         {searchType === 'exact' && (
           <div className="date-picker-row">
             <DatePicker
@@ -274,7 +283,6 @@ const Home: React.FC = () => {
           </div>
         )}
 
-        {/* 範囲指定検索 */}
         {searchType === 'range' && (
           <div className="date-picker-row">
             <DatePicker
@@ -299,7 +307,10 @@ const Home: React.FC = () => {
 
       <List>
         {filteredExpenses.map((expense) => (
-          <ListItem key={expense.id}>
+          <ListItem
+            key={expense.id}
+            className={editId === expense.id ? 'editing-item' : ''}
+          >
             <ListItemText
               primary={expense.description}
               secondary={`¥${expense.amount.toLocaleString()} / ${expense.date}`}
