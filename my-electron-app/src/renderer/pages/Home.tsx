@@ -37,6 +37,7 @@ const Home: React.FC = () => {
   const [amount, setAmount] = useState('');
   const [editId, setEditId] = useState<number | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // フィルター用
   const [filterDate, setFilterDate] = useState<Date | null>(null);
@@ -52,7 +53,7 @@ const Home: React.FC = () => {
       setExpenses(data);
     } catch (error) {
       console.error(error);
-      alert('データの取得に失敗しました。');
+      setErrorMessage('データの取得に失敗しました。');
     }
   };
 
@@ -64,6 +65,10 @@ const Home: React.FC = () => {
     // 内容・金額・日付が全て入力されているかを確認
     if (description && amount && startDate) {
       try {
+        if (!window.electron || !window.electron.addExpense) {
+          setErrorMessage('Electron API が使えません。');
+          throw new Error('Electron API が使えません。window.electron が未定義です。');
+        }
         // 費用を追加する
         await window.electron.addExpense(
           description,
@@ -76,19 +81,23 @@ const Home: React.FC = () => {
         setDescription('');
         setAmount('');
         setStartDate(null);
+        setErrorMessage('');
       } catch (err) {
         console.error('追加に失敗しました:', err);
-        alert('費用の追加に失敗しました。');
+        setErrorMessage('追加に失敗しました');
       }
     } else {
       // 必須項目が未入力の場合に警告を表示
-      alert('内容・金額・日付は必須です。');
+      setErrorMessage('内容・金額・日付は必須です。');
     }
   };
 
   const handleUpdateExpense = async () => {
     if (editId !== null && description && amount && startDate) {
       try {
+        if (!window.electron || !window.electron.addExpense) {
+          throw new Error('Electron API が使えません。window.electron が未定義です。');
+        }
         await window.electron.updateExpense(
           editId,
           description,
@@ -100,12 +109,13 @@ const Home: React.FC = () => {
         setDescription('');
         setAmount('');
         setStartDate(null);
+        setErrorMessage('');
       } catch (err) {
         console.error('更新に失敗しました:', err);
-        alert('費用の更新に失敗しました。');
+        setErrorMessage('費用の更新に失敗しました。');
       }
     } else {
-      alert('編集する費用が選ばれていません。');
+      setErrorMessage('編集する費用が選ばれていません。');
     }
   };
 
@@ -119,7 +129,7 @@ const Home: React.FC = () => {
       }
     } catch (error) {
       console.error('削除に失敗しました:', error);
-      alert('費用の削除に失敗しました。');
+      setErrorMessage('費用の削除に失敗しました。');
     }
   };
 
@@ -177,7 +187,7 @@ const Home: React.FC = () => {
           <FilterListIcon />
         </IconButton>
       </Box>
-
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <div className="input-row">
         <TextField
           label="内容"
@@ -225,7 +235,7 @@ const Home: React.FC = () => {
 
       <hr />
 
-      <h3>📅 フィルター</h3>
+      <h3><IconButton style={{ marginLeft: '8px' }}><MenuIcon /></IconButton> フィルター</h3>
 
       <FormControl component="fieldset">
         <FormLabel component="legend">検索タイプ</FormLabel>
