@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home'; 
 import Settings from './pages/Settings';
-import ErrorBoundary from '../components/ErrorBoundary';  // ErrorBoundary をインポート
+import ErrorBoundary from './components/ErrorBoundary';
 
 const App: React.FC = () => {
   useEffect(() => {

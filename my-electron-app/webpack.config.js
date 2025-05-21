@@ -23,7 +23,7 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.tsx?$/, // ✅ Babel で TS を処理
+          test: /\.tsx?$/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
@@ -57,10 +57,9 @@ module.exports = (env, argv) => {
     plugins: [
       new HtmlWebpackPlugin({
         template: './public/index.html',
-        // nonce を渡す設定
-        scriptLoading: 'defer',  // 非同期で読み込む設定（任意）
-        inject: 'body',  // body 内に script を挿入
-        nonce: 'abc123',  // nonce を渡す
+        scriptLoading: 'defer',
+        inject: 'body',
+        nonce: 'abc123',
       }),
       new MiniCssExtractPlugin({ filename: 'styles.css' }),
     ],

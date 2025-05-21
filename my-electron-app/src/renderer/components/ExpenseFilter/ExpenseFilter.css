@@ -1,0 +1,118 @@
+/* コンテナの設定 */
+.home-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 入力フォームの行設定 */
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+/* 各入力フィールドの幅 */
+.input-field {
+  width: 200px;
+}
+
+/* 日付ピッカーの行設定 */
+.date-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+/* 日付ピッカーの入力フィールド */
+.date-picker-input {
+  width: 180px;
+}
+
+/* 入力フィールドの右マージン */
+.input-field {
+  margin-right: 1rem;
+}
+
+/* 更新ボタンのスタイル変更（編集中） */
+button:disabled {
+  background-color: #ddd; /* 無効なボタンの背景色 */
+  cursor: not-allowed;
+}
+
+button {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05); /* ホバー時に少し拡大 */
+}
+
+/* フィルターセクションのタイトル */
+h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* アイコンボタンのスタイル（ツールチップ追加） */
+.icon-button {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.icon-button:hover {
+  transform: scale(1.1); /* ホバー時に少し拡大 */
+}
+
+/* 編集・削除ボタンのツールチップ */
+.icon-button[title='編集'] {
+  color: #3f51b5;
+}
+
+.icon-button[title='削除'] {
+  color: #f44336;
+}
+
+/* エラーメッセージのスタイル */
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* 完了メッセージやフィードバック */
+.success-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* 固定するコンテナ */
+.sticky-input-container {
+  position: sticky;
+  top: 0; /* スクロールしても画面上部に固定 */
+  background-color: #fff; /* 背景色を指定 */
+  padding: 16px 0; /* 上下の余白 */
+  z-index: 100; /* 他の要素より前面に表示 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 少し影をつけて浮いているように見せる */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 編集中のアイテムを強調表示 */
+.editing-item {
+  background-color: #f0f0f0; /* 編集中アイテムの背景色 */
+  border-left: 4px solid #1976d2; /* 編集中アイテムの左側に青色のライン */
+}
+
+.editing-item:hover {
+  background-color: #e0e0e0; /* マウスオーバー時に色を少し変える */
+}
+
