@@ -81,6 +81,7 @@ const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
               slots={{ textField: TextField }}
             />
             <DatePicker
+              enableAccessibleFieldDOMStructure={false}
               label="終了日"
               value={rangeEndDate}
               onChange={setRangeEndDate}
