@@ -60,15 +60,18 @@ app.on('window-all-closed', () => {
 });
 
 // IPCリスナーを追加して、レンダラープロセスとバックエンドで通信
+
+// 参照
 ipcMain.handle('getAllExpenses', async () => {
   return await getAllExpenses();
 });
 
+// 追加
 ipcMain.handle('addExpense', async (event, description, amount, date) => {
   return await addExpense(description, amount, date);
 });
 
-// deleteMessageイベントを追加
+// 削除
 ipcMain.handle('deleteMessage', async (event, id) => {
   console.trace('[TRACE] deleteMessage invoked with ID:', id);
 
@@ -94,7 +97,7 @@ ipcMain.handle('deleteMessage', async (event, id) => {
   }
 });
 
-// updateExpenseイベントを追加
+// 更新
 ipcMain.handle('updateExpense', async (_event, { id, desc, amt, date }) => {
   try {
     await updateExpense(id, desc, amt, date);
