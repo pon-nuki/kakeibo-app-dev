@@ -8,7 +8,7 @@ interface DeleteResult {
 declare global {
   interface Window {
     electron: {
-      deleteMessage: (id: number) => Promise<DeleteResult>;
+      deleteExpense: (id: number) => Promise<DeleteResult>;
       addExpense: (description: string, amount: number, startDate: string) => Promise<void>;
       updateExpense: (id: number, description: string, amount: number, startDate: string) => Promise<void>;
     };

@@ -55,7 +55,7 @@ export const updateExpense = async (
 // 費用を削除する関数
 export const deleteExpense = async (id: number) => {
   try {
-    const resultMessage = await window.electron.deleteMessage(id);
+    const resultMessage = await window.electron.deleteExpense(id);
     if (resultMessage.message.includes('削除されました')) {
       return true;
     } else {
