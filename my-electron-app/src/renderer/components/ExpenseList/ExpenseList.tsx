@@ -1,8 +1,9 @@
-import React from 'react';
-import { List, ListItem, ListItemText, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { List, ListItem, ListItemText, IconButton, PaginationItem } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './ExpenseList.css';
+import Pagination from '../Pagination/PaginationControls';
 
 interface Expense {
   id: number;
@@ -18,10 +19,28 @@ interface ExpenseListProps {
   editId: number | null;
 }
 
-const ExpenseList: React.FC<ExpenseListProps> = ({ filteredExpenses, startEditing, handleDeleteExpense, editId }) => {
+const ITEMS_PER_PAGE = 10;
+
+const ExpenseList: React.FC<ExpenseListProps> = ({
+  filteredExpenses,
+  startEditing,
+  handleDeleteExpense,
+  editId,
+}) => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pageCount = Math.ceil(filteredExpenses.length / ITEMS_PER_PAGE);
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const selectedExpenses = filteredExpenses.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   return (
+    <div>
       <List>
-        {filteredExpenses.map((expense) => (
+        {selectedExpenses.map((expense) => (
           <ListItem
             key={expense.id}
             className={editId === expense.id ? 'editing-item' : ''}
@@ -39,6 +58,14 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ filteredExpenses, startEditin
           </ListItem>
         ))}
       </List>
+
+      {/* ページネーション */}
+      <Pagination
+        currentPage={currentPage}
+        pageCount={pageCount}
+        onPageChange={handlePageChange}
+      />
+    </div>
   );
 };
 
