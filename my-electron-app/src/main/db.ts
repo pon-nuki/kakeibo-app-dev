@@ -1,6 +1,40 @@
 import * as sqlite3 from 'sqlite3';
 
-const db = new sqlite3.Database('expenses.db');
+const db = new sqlite3.Database('expenses.db', (err) => {
+  if (err) {
+    console.error('データベース接続エラー:', err.message);
+  } else {
+    console.log('データベース接続成功');
+  }
+});
+
+// テーブルが存在しない場合は作成する
+const createTableIfNotExists = () => {
+  const createTableSQL = `
+    CREATE TABLE IF NOT EXISTS expenses (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      description TEXT NOT NULL,
+      amount REAL NOT NULL,
+      date TEXT NOT NULL
+    );
+  `;
+  
+  return new Promise<void>((resolve, reject) => {
+    db.run(createTableSQL, (err) => {
+      if (err) {
+        console.error('テーブル作成エラー:', err.message);
+        reject(err);
+      } else {
+        console.log('テーブル作成成功');
+        resolve();
+      }
+    });
+  });
+};
+
+export const initializeDatabase = () => {
+  return createTableIfNotExists();
+};
 
 // 全ての費用を取得する関数
 export const getAllExpenses = () => {

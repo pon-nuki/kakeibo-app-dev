@@ -1,11 +1,13 @@
-// main.ts
-import * as path from 'path'; 
+import * as path from 'path';
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { getAllExpenses, addExpense, deleteExpense, updateExpense } from './db';
+import { getAllExpenses, addExpense, deleteExpense, updateExpense, initializeDatabase } from './db';
 
 let mainWindow: BrowserWindow | null;
 
 console.log('App is starting');
+
+// データベースの初期化
+initializeDatabase();
 
 function createWindow() {
   const preloadPath = path.join(__dirname, '..', 'renderer', 'preload.js');
@@ -61,35 +63,42 @@ app.on('window-all-closed', () => {
 
 // IPCリスナーを追加して、レンダラープロセスとバックエンドで通信
 
-// 参照
+// 参照: 全ての費用を取得
 ipcMain.handle('getAllExpenses', async () => {
-  return await getAllExpenses();
+  try {
+    const expenses = await getAllExpenses();
+    return expenses;
+  } catch (error) {
+    console.error('getAllExpensesエラー:', error);
+    throw new Error('費用の取得に失敗しました');
+  }
 });
 
-// 追加
+// 追加: 費用を追加
 ipcMain.handle('addExpense', async (event, description, amount, date) => {
-  return await addExpense(description, amount, date);
+  try {
+    const id = await addExpense(description, amount, date);
+    return { message: '費用の追加に成功しました', id };
+  } catch (error) {
+    console.error('addExpenseエラー:', error);
+    throw new Error('費用の追加に失敗しました');
+  }
 });
 
-// 削除
-ipcMain.handle('deleteMessage', async (event, id) => {
-  console.trace('[TRACE] deleteMessage invoked with ID:', id);
+// 削除: 費用を削除
+ipcMain.handle('deleteExpense', async (event, id) => {
+  console.trace('[TRACE] deleteExpense invoked with ID:', id);
 
-  // idが不正な場合は何もせずreturn
   if (!id || typeof id !== 'number') {
     return { message: '無効な ID です。', changes: 0 };
   }
 
   try {
     const result = await deleteExpense(id);
-    if (result !== null) {
-      if (result.changes > 0) {
-        return { message: `ID ${id} の費用が削除されました`, changes: result.changes };
-      } else {
-        return { message: `ID ${id} の費用は見つかりませんでした`, changes: result.changes };
-      }
+    if (result.changes > 0) {
+      return { message: `ID ${id} の費用が削除されました`, changes: result.changes };
     } else {
-      throw new Error('削除失敗: 型が不正です');
+      return { message: `ID ${id} の費用は見つかりませんでした`, changes: result.changes };
     }
   } catch (error) {
     console.error('削除に失敗しました:', error);
@@ -97,7 +106,7 @@ ipcMain.handle('deleteMessage', async (event, id) => {
   }
 });
 
-// 更新
+// 更新: 費用を更新
 ipcMain.handle('updateExpense', async (_event, { id, desc, amt, date }) => {
   try {
     await updateExpense(id, desc, amt, date);
