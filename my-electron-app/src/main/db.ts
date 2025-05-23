@@ -1,10 +1,30 @@
+// db.ts
 import * as sqlite3 from 'sqlite3';
+import * as path from 'path';
+import * as fs from 'fs';
 
-const db = new sqlite3.Database('expenses.db', (err) => {
+// データベースファイルのパスを設定
+const dbPath = path.join(
+  'C:',
+  'Users',
+  'PC_admin',
+  'AppData',
+  'Roaming',
+  'my-electron-app',
+  'expenses.db'
+);
+
+// ディレクトリが存在しない場合に作成
+if (!fs.existsSync(path.dirname(dbPath))) {
+  fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+}
+
+// SQLite データベースを作成（または開く）
+const db = new sqlite3.Database(dbPath, (err: Error | null) => {
   if (err) {
     console.error('データベース接続エラー:', err.message);
   } else {
-    console.log('データベース接続成功');
+    console.log('データベース接続成功:', dbPath);
   }
 });
 
@@ -20,7 +40,7 @@ const createTableIfNotExists = () => {
   `;
   
   return new Promise<void>((resolve, reject) => {
-    db.run(createTableSQL, (err) => {
+    db.run(createTableSQL, (err: Error | null) => {
       if (err) {
         console.error('テーブル作成エラー:', err.message);
         reject(err);
@@ -32,13 +52,14 @@ const createTableIfNotExists = () => {
   });
 };
 
+// テーブル作成を実行
 export const initializeDatabase = () => {
   return createTableIfNotExists();
 };
 
 // 全ての費用を取得する関数
 export const getAllExpenses = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise<any[]>((resolve, reject) => {
     db.all('SELECT * FROM expenses', (err: Error | null, rows: any[]) => {
       if (err) {
         reject(err);
@@ -51,7 +72,7 @@ export const getAllExpenses = () => {
 
 // 費用を追加する関数
 export const addExpense = (description: string, amount: number, date: string) => {
-  return new Promise((resolve, reject) => {
+  return new Promise<number>((resolve, reject) => {
     const stmt = db.prepare('INSERT INTO expenses (description, amount, date) VALUES (?, ?, ?)');
     stmt.run(description, amount, date, function (this: sqlite3.RunResult, err: Error | null) {
       if (err) {

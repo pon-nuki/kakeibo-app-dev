@@ -1,23 +1,23 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",                         // ESモジュール対応
-    "moduleResolution": "NodeNext",               // Node.jsスタイルの解決方法
-    "target": "ES2020",                           // 出力対象のJSバージョン
-    "outDir": "./dist",                           // 出力先フォルダ
-    "rootDir": "./src",                           // ソースのルート
-    "esModuleInterop": true,                      // CJSとの互換性を確保
-    "jsx": "react",                               // Reactサポート（.tsx対応）
-    "types": ["node", "react", "react-dom"],      // グローバル型定義に含めるもの
-    "allowSyntheticDefaultImports": true,         // デフォルトインポート対応
-    "resolveJsonModule": true,                    // JSONのインポートを許可
-    "strict": true,                               // 厳格モード（型の安全性）
-    "noEmit": false,                               // tscコマンドでJSを出力しない
-    "allowImportingTsExtensions": false,           // `.tsx` 拡張子付きのimportを許可
-    "skipLibCheck": true                          // 依存パッケージの型チェックをスキップ ← ★これが重要！
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2020",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "jsx": "react",
+    "types": ["node", "react", "react-dom"],
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "skipLibCheck": true
   },
   "include": [
-    "src/**/*",                                   // プロジェクトの全コード
-    "src/renderer/electron.d.ts",                 // Electron固有の型定義
-    "src/types/react-transition-group-shim.d.ts"  // 手動で追加した型定義
+    "src/**/*",
+    "src/renderer/electron.d.ts",
+    "src/types/*.d.ts"
   ]
 }

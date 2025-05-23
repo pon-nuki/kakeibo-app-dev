@@ -91,6 +91,9 @@ module.exports = (env, argv) => {
     mode,
     entry: './src/main/main.ts',
     target: 'electron-main',
+    externals: {
+      express: 'commonjs express', // express をバンドルしないように設定
+    },
     output: {
       filename: 'main.js',
       path: path.resolve(__dirname, 'dist', 'main'),
