@@ -1,23 +1,19 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "target": "ES2020",
+    "jsx": "react",
     "outDir": "./dist",
     "rootDir": "./src",
     "esModuleInterop": true,
-    "jsx": "react",
-    "types": ["node", "react", "react-dom"],
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "strict": true,
-    "noEmit": false,
-    "allowImportingTsExtensions": false,
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*",
-    "src/renderer/electron.d.ts",
-    "src/types/*.d.ts"
+    "src/renderer/**/*",
+    "src/renderer/preload.ts"
   ]
 }

@@ -58,7 +58,7 @@ export const initializeDatabase = () => {
 };
 
 // 全ての費用を取得する関数
-export const getAllExpenses = () => {
+export const fetchExpenses = () => {
   return new Promise<any[]>((resolve, reject) => {
     db.all('SELECT * FROM expenses', (err: Error | null, rows: any[]) => {
       if (err) {

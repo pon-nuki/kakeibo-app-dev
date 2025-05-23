@@ -1,19 +1,35 @@
 {
   "name": "my-electron-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "これは家計簿アプリのElectron版です",
   "main": "dist/main/main.js",
   "scripts": {
     "start": "concurrently \"npm run start:react\" \"npm run start:electron\" \"npm run start:backend\"",
     "start:react": "webpack serve --config webpack.config.js --mode development",
     "start:electron": "wait-on http://localhost:8080 && echo 'React app is ready!' && electron .",
     "start:backend": "node server.js",
-    "build": "webpack --config webpack.config.js",
-    "build:main": "tsc"
+    "build": "npm run build:main && webpack --config webpack.config.js --mode production",
+    "package": "npm run build && npm run build:electron",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:electron": "electron-builder"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "build": {
+    "appId": "com.example.myapp",
+    "productName": "稼ぐに追いつく貧乏なし",
+    "files": [
+      "dist/**/*",
+      "server.js"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": "nsis"
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.27.1",
     "@babel/preset-env": "^7.27.2",
@@ -30,6 +46,7 @@
     "concurrently": "^9.1.2",
     "css-loader": "^7.1.2",
     "electron": "^36.2.1",
+    "electron-builder": "^26.0.12",
     "html-webpack-plugin": "^5.6.3",
     "mini-css-extract-plugin": "^2.9.2",
     "style-loader": "^4.0.0",

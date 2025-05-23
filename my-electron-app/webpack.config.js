@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack'); // ← 追加
 
 module.exports = (env, argv) => {
   const mode = argv.mode || 'development';
@@ -10,8 +11,7 @@ module.exports = (env, argv) => {
     entry: './src/renderer/index.tsx',
     output: {
       filename: 'renderer.js',
-      path: path.resolve(__dirname, 'dist'),
-      clean: true,
+      path: path.resolve(__dirname, 'dist', 'renderer'),
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
@@ -47,14 +47,17 @@ module.exports = (env, argv) => {
       open: false,
       headers: {
         'Content-Security-Policy':
-        "default-src 'self'; " +
-        "script-src 'self' 'nonce-abc123' 'unsafe-inline' ; " +
-        "style-src 'self' 'nonce-abc123' 'unsafe-inline' ; " +
-        "img-src 'self' data:; " +
-        "connect-src 'self' ws://localhost:8080 http://localhost:3000;",
+          "default-src 'self'; " +
+          "script-src 'self' 'nonce-abc123' 'unsafe-inline' ; " +
+          "style-src 'self' 'nonce-abc123' 'unsafe-inline' ; " +
+          "img-src 'self' data:; " +
+          "connect-src 'self' ws://localhost:8080 http://localhost:3000;",
       },
     },
     plugins: [
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(mode), // ← 追加
+      }),
       new HtmlWebpackPlugin({
         template: './public/index.html',
         scriptLoading: 'defer',
@@ -92,7 +95,8 @@ module.exports = (env, argv) => {
     entry: './src/main/main.ts',
     target: 'electron-main',
     externals: {
-      express: 'commonjs express', // express をバンドルしないように設定
+      express: 'commonjs express',
+      sqlite3: 'commonjs sqlite3',
     },
     output: {
       filename: 'main.js',

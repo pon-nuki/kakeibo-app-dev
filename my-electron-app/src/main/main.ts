@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { getAllExpenses, addExpense, deleteExpense, updateExpense, initializeDatabase } from './db';
+import { fetchExpenses, addExpense, deleteExpense, updateExpense, initializeDatabase } from './db';
 
 let mainWindow: BrowserWindow | null;
 
@@ -10,6 +10,7 @@ console.log('App is starting');
 initializeDatabase();
 
 function createWindow() {
+  // 本番ビルド時は preload.js のパスを調整
   const preloadPath = path.join(__dirname, '..', 'renderer', 'preload.js');
 
   mainWindow = new BrowserWindow({
@@ -32,14 +33,26 @@ function createWindow() {
     }
   });
 
-  console.log('loadURL');
-  mainWindow.loadURL('http://localhost:8080')
-    .then(() => {
-      console.log('URL loaded successfully');
-    })
-    .catch((err) => {
-      console.error('Failed to load URL:', err);
-    });
+  // 開発時は localhost:8080 を読み込み、本番はビルド済みのファイルを読み込む
+  if (app.isPackaged) {
+    // __dirname はビルド後は dist/main の中なので1階層上の renderer/index.html へ
+    const indexPath = path.join(__dirname, '..', 'renderer', 'index.html');
+    mainWindow.loadFile(indexPath)
+      .then(() => {
+        console.log('index.html loaded successfully');
+      })
+      .catch((err) => {
+        console.error('Failed to load index.html:', err);
+      });
+  } else {
+    mainWindow.loadURL('http://localhost:8080')
+      .then(() => {
+        console.log('URL loaded successfully');
+      })
+      .catch((err) => {
+        console.error('Failed to load URL:', err);
+      });
+  }
 }
 
 app.whenReady().then(() => {
@@ -64,12 +77,12 @@ app.on('window-all-closed', () => {
 // IPCリスナーを追加して、レンダラープロセスとバックエンドで通信
 
 // 参照: 全ての費用を取得
-ipcMain.handle('getAllExpenses', async () => {
+ipcMain.handle('fetchExpenses', async () => {
   try {
-    const expenses = await getAllExpenses();
+    const expenses = await fetchExpenses();
     return expenses;
   } catch (error) {
-    console.error('getAllExpensesエラー:', error);
+    console.error('fetchExpenses:', error);
     throw new Error('費用の取得に失敗しました');
   }
 });

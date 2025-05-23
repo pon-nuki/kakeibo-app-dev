@@ -7,15 +7,32 @@ interface Expense {
   date: string;
 }
 
-// 費用を取得する関数
+// 環境判定
+const isDev = process.env.NODE_ENV === 'development';
+
+// 開発時はfetch、本番はElectron APIを使う例
 export const fetchExpenses = async (): Promise<Expense[]> => {
-  try {
-    const response = await fetch('http://localhost:3000/expenses');
-    if (!response.ok) throw new Error('データ取得に失敗しました');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    throw new Error('データの取得に失敗しました。');
+  if (isDev) {
+    // 開発環境ならlocalhost:3000へHTTP fetch
+    try {
+      const response = await fetch('http://localhost:3000/expenses');
+      if (!response.ok) throw new Error('データ取得に失敗しました');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw new Error('データの取得に失敗しました。');
+    }
+  } else {
+    // 本番環境はElectronのAPI呼び出しに切り替え
+    if (!window.electron || !window.electron.fetchExpenses) {
+      throw new Error('Electron API が使えません。');
+    }
+    try {
+      const expenses = await window.electron.fetchExpenses();
+      return expenses;
+    } catch (error) {
+      throw new Error('データの取得に失敗しました。');
+    }
   }
 };
 
