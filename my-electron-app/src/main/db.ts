@@ -2,12 +2,16 @@
 import * as sqlite3 from 'sqlite3';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
+
+// 現在のユーザー名を取得
+const username = os.userInfo().username;
 
 // データベースファイルのパスを設定
 const dbPath = path.join(
   'C:',
   'Users',
-  'PC_admin',
+  username,
   'AppData',
   'Roaming',
   'my-electron-app',
