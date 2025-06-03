@@ -1,9 +1,11 @@
-/* コンテナの設定 */
 .home-container {
   padding: 20px;
   max-width: 800px;
   margin: 0 auto;
   font-family: 'Arial', sans-serif;
+  background-color: #fafafa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
 }
 
 /* 入力フォームの行設定 */
@@ -18,6 +20,12 @@
 /* 各入力フィールドの幅 */
 .input-field {
   width: 200px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-right: 1rem;
+  box-sizing: border-box;
 }
 
 /* 日付ピッカーの行設定 */
@@ -32,87 +40,95 @@
 /* 日付ピッカーの入力フィールド */
 .date-picker-input {
   width: 180px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-/* 入力フィールドの右マージン */
-.input-field {
-  margin-right: 1rem;
-}
-
-/* 更新ボタンのスタイル変更（編集中） */
-button:disabled {
-  background-color: #ddd; /* 無効なボタンの背景色 */
-  cursor: not-allowed;
-}
-
+/* ボタンのスタイル統一 */
 button {
+  background-color: #1976d2; /* MUIプライマリーブルー */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  font-family: 'Arial', sans-serif;
+  box-shadow: 0 2px 5px rgba(25, 118, 210, 0.4);
 }
 
 button:hover {
-  transform: scale(1.05); /* ホバー時に少し拡大 */
+  background-color: #115293;
+  transform: scale(1.05);
 }
 
-/* フィルターセクションのタイトル */
-h3 {
+button:active {
+  background-color: #0d3c71;
+  transform: scale(0.98);
+}
+
+button:focus {
+  outline: 3px solid #90caf9;
+  outline-offset: 2px;
+}
+
+/* 無効ボタンのスタイル */
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+  box-shadow: none;
+  color: #666;
+  transform: none;
+}
+
+/* タイトルとアイコンを横並びに */
+.header-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.title-icon-row {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* アイコンボタンのスタイル（ツールチップ追加） */
+/* 家計簿タイトル */
+.header-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* アイコンボタン */
 .icon-button {
   cursor: pointer;
   transition: transform 0.2s ease;
+  background: none;
+  border: none;
+  padding: 0;
 }
 
 .icon-button:hover {
-  transform: scale(1.1); /* ホバー時に少し拡大 */
+  transform: scale(1.1);
 }
 
-/* 編集・削除ボタンのツールチップ */
-.icon-button[title='編集'] {
-  color: #3f51b5;
-}
-
-.icon-button[title='削除'] {
-  color: #f44336;
-}
-
-/* エラーメッセージのスタイル */
+/* メッセージのスタイル */
 .error-message {
   color: red;
   font-weight: bold;
   margin-top: 10px;
 }
 
-/* 完了メッセージやフィードバック */
 .success-message {
   color: green;
   font-weight: bold;
   margin-top: 10px;
 }
-
-/* 固定するコンテナ */
-.sticky-input-container {
-  position: sticky;
-  top: 0; /* スクロールしても画面上部に固定 */
-  background-color: #fff; /* 背景色を指定 */
-  padding: 16px 0; /* 上下の余白 */
-  z-index: 100; /* 他の要素より前面に表示 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 少し影をつけて浮いているように見せる */
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* 編集中のアイテムを強調表示 */
-.editing-item {
-  background-color: #f0f0f0; /* 編集中アイテムの背景色 */
-  border-left: 4px solid #1976d2; /* 編集中アイテムの左側に青色のライン */
-}
-
-.editing-item:hover {
-  background-color: #e0e0e0; /* マウスオーバー時に色を少し変える */
-}
-

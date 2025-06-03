@@ -20,6 +20,10 @@ declare global {
       deleteExpense: (id: number) => Promise<DeleteResult>;
       addExpense: (description: string, amount: number, startDate: string) => Promise<void>;
       updateExpense: (id: number, description: string, amount: number, startDate: string) => Promise<void>;
+
+      getBudget: (month: string) => Promise<number | null>;
+      setBudget: (params: { month: string; amount: number }) => Promise<void>;
+      getExpensesTotal: (month: string) => Promise<number>;
     };
   }
 }

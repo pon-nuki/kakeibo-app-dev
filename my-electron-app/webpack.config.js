@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const webpack = require('webpack'); // ← 追加
+const webpack = require('webpack');
 
 module.exports = (env, argv) => {
   const mode = argv.mode || 'development';
@@ -56,7 +56,7 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(mode), // ← 追加
+        'process.env.NODE_ENV': JSON.stringify(mode),
       }),
       new HtmlWebpackPlugin({
         template: './public/index.html',
@@ -93,6 +93,11 @@ module.exports = (env, argv) => {
         },
       ],
     },
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(mode),
+      }),
+    ],
   };
 
   const mainConfig = {
@@ -119,6 +124,11 @@ module.exports = (env, argv) => {
         },
       ],
     },
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(mode),
+      }),
+    ],
   };
 
   return [rendererConfig, preloadConfig, mainConfig];

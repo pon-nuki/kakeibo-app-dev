@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { fetchExpenses, addExpense, deleteExpense, updateExpense, initializeDatabase } from './db';
+import { fetchExpenses, addExpense, deleteExpense, updateExpense, initializeDatabase, getBudget, setBudget, getTotalExpensesForMonth } from './db';
 
 let mainWindow: BrowserWindow | null;
 
@@ -129,3 +129,37 @@ ipcMain.handle('updateExpense', async (_event, { id, desc, amt, date }) => {
     return { message: '更新に失敗しました' };
   }
 });
+
+// 月別予算を取得
+ipcMain.handle('getBudget', async (_event, month: string) => {
+  try {
+    const amount = await getBudget(month);
+    return amount;
+  } catch (error) {
+    console.error('getBudget エラー:', error);
+    throw new Error('予算の取得に失敗しました');
+  }
+});
+
+// 月別予算を追加・更新
+ipcMain.handle('setBudget', async (_event, { month, amount }) => {
+  try {
+    await setBudget(month, amount);
+    return { message: '予算の保存に成功しました' };
+  } catch (error) {
+    console.error('setBudget エラー:', error);
+    throw new Error('予算の保存に失敗しました');
+  }
+});
+
+// 月別支出合計を取得
+ipcMain.handle('getExpensesTotal', async (_event, month: string) => {
+  try {
+    const total = await getTotalExpensesForMonth(month);
+    return total;
+  } catch (error) {
+    console.error('getExpensesTotal エラー:', error);
+    throw new Error('支出合計の取得に失敗しました');
+  }
+});
+

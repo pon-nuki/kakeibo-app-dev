@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';  // Router は使わない
+import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home'; 
 import Settings from './pages/Settings';
 import ErrorBoundary from './components/ErrorBoundary';
+import Budget from './pages/Budget';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -18,6 +19,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/budget" element={<Budget />} />
       </Routes>
     </ErrorBoundary>
   );

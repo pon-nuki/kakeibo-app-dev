@@ -5,7 +5,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import Filter from '../components/ExpenseFilter/ExpenseFilter';
 import ExpenseList from '../components/ExpenseList/ExpenseList';
 import ExpenseForm from '../components/ExpenseForm/ExpenseForm';
-import { fetchExpenses, addExpense, updateExpense, deleteExpense } from '../services/expenseService'; // サービスをインポート
+import { fetchExpenses, addExpense, updateExpense, deleteExpense } from '../services/expenseService';
+import { Link } from 'react-router-dom';
 
 interface Expense {
   id: number;
@@ -45,7 +46,7 @@ const Home: React.FC = () => {
   const handleAddExpense = async () => {
     if (description && amount && startDate) {
       try {
-        await addExpense(description, parseFloat(amount), startDate.toLocaleDateString('ja-JP'));
+        await addExpense(description, parseFloat(amount), startDate.toISOString().slice(0, 10));
         await fetchAndSetExpenses(); // データを再取得して表示を更新
         setDescription('');
         setAmount('');
@@ -62,12 +63,7 @@ const Home: React.FC = () => {
   const handleUpdateExpense = async () => {
     if (editId !== null && description && amount && startDate) {
       try {
-        await updateExpense(
-          editId,
-          description,
-          parseFloat(amount),
-          startDate.toLocaleDateString('ja-JP')
-        );
+        await updateExpense(editId, description, parseFloat(amount), startDate.toISOString().slice(0, 10));
         await fetchAndSetExpenses();
         setEditId(null);
         setDescription('');
@@ -138,11 +134,16 @@ const Home: React.FC = () => {
 
   return (
     <div className="home-container">
-      <Box display="flex" alignItems="center">
-        <Typography variant="h5">家計簿</Typography>
-        <IconButton style={{ marginLeft: '8px' }}>
-          <FilterListIcon />
-        </IconButton>
+      <Box className="header-wrapper">
+        <Box className="title-icon-row">
+          <Typography variant="h5" className="header-title">家計簿</Typography>
+          <IconButton className="filter-icon-button">
+            <FilterListIcon />
+          </IconButton>
+        </Box>
+        <Link to="/budget" className="budget-link">
+          <button className="budget-button">予算設定</button>
+        </Link>
       </Box>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 

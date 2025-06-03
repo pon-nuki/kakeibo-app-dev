@@ -4,10 +4,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 
-// 現在のユーザー名を取得
+// データベースパスをユーザーディレクトリに設定
 const username = os.userInfo().username;
-
-// データベースファイルのパスを設定
 const dbPath = path.join(
   'C:',
   'Users',
@@ -18,13 +16,13 @@ const dbPath = path.join(
   'expenses.db'
 );
 
-// ディレクトリが存在しない場合に作成
+// ディレクトリが存在しない場合は作成
 if (!fs.existsSync(path.dirname(dbPath))) {
   fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 }
 
-// SQLite データベースを作成（または開く）
-const db = new sqlite3.Database(dbPath, (err: Error | null) => {
+// SQLiteに接続
+const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('データベース接続エラー:', err.message);
   } else {
@@ -32,9 +30,17 @@ const db = new sqlite3.Database(dbPath, (err: Error | null) => {
   }
 });
 
-// テーブルが存在しない場合は作成する
-const createTableIfNotExists = () => {
-  const createTableSQL = `
+// 日付をYYYY-MM-DDに変換
+const toISODate = (rawDate: string): string => {
+  const normalized = rawDate.replace(/\//g, '-');
+  const d = new Date(normalized);
+  if (isNaN(d.getTime())) throw new Error(`Invalid date format: ${rawDate}`);
+  return d.toISOString().slice(0, 10);
+};
+
+// テーブル作成
+export const createTablesIfNotExists = async (): Promise<void> => {
+  const createExpensesSQL = `
     CREATE TABLE IF NOT EXISTS expenses (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       description TEXT NOT NULL,
@@ -42,83 +48,128 @@ const createTableIfNotExists = () => {
       date TEXT NOT NULL
     );
   `;
-  
-  return new Promise<void>((resolve, reject) => {
-    db.run(createTableSQL, (err: Error | null) => {
+  const createBudgetsSQL = `
+    CREATE TABLE IF NOT EXISTS budgets (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      month TEXT NOT NULL UNIQUE,
+      amount REAL NOT NULL
+    );
+  `;
+
+  await new Promise<void>((resolve, reject) => {
+    db.run(createExpensesSQL, (err: Error | null) => {
       if (err) {
-        console.error('テーブル作成エラー:', err.message);
         reject(err);
       } else {
-        console.log('テーブル作成成功');
         resolve();
       }
     });
   });
-};
 
-// テーブル作成を実行
-export const initializeDatabase = () => {
-  return createTableIfNotExists();
-};
-
-// 全ての費用を取得する関数
-export const fetchExpenses = () => {
-  return new Promise<any[]>((resolve, reject) => {
-    db.all('SELECT * FROM expenses', (err: Error | null, rows: any[]) => {
+  await new Promise<void>((resolve, reject) => {
+    db.run(createBudgetsSQL, (err: Error | null) => {
       if (err) {
         reject(err);
       } else {
-        resolve(rows);
+        resolve();
       }
+    });
+  });
+
+  console.log('全テーブル作成完了');
+};
+
+// DB初期化
+export const initializeDatabase = () => createTablesIfNotExists();
+
+// 費用取得
+export const fetchExpenses = (): Promise<any[]> => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM expenses', (err, rows) => {
+      err ? reject(err) : resolve(rows);
     });
   });
 };
 
-// 費用を追加する関数
-export const addExpense = (description: string, amount: number, date: string) => {
-  return new Promise<number>((resolve, reject) => {
+// 費用追加
+export const addExpense = (description: string, amount: number, rawDate: string): Promise<number> => {
+  const date = toISODate(rawDate);
+  return new Promise((resolve, reject) => {
     const stmt = db.prepare('INSERT INTO expenses (description, amount, date) VALUES (?, ?, ?)');
     stmt.run(description, amount, date, function (this: sqlite3.RunResult, err: Error | null) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID); // `this` を RunResult 型として扱う
-      }
+      err ? reject(err) : resolve(this.lastID);
     });
     stmt.finalize();
   });
 };
 
-// 費用を削除する関数
-interface DeleteExpenseResult {
-  message: string;
-  changes: number;
-}
-
-export const deleteExpense = (id: number): Promise<DeleteExpenseResult> => {
+// 費用削除
+export const deleteExpense = (id: number): Promise<{ message: string; changes: number }> => {
   return new Promise((resolve, reject) => {
-    db.run('DELETE FROM expenses WHERE id = ?', [id], function (this: sqlite3.RunResult, err: Error | null) {
-      if (err) {
-        reject(err);
-      } else {
-        const changes = this.changes; // 削除された行数
-        resolve({ message: `削除されました。${changes} 行が影響を受けました。`, changes });
-      }
+    db.run('DELETE FROM expenses WHERE id = ?', [id], function (this: sqlite3.RunResult, err) {
+      err
+        ? reject(err)
+        : resolve({ message: `削除されました。${this.changes} 行が影響を受けました。`, changes: this.changes });
     });
   });
 };
 
-// 費用を更新する関数
-export const updateExpense = (id: number, description: string, amount: number, date: string): Promise<void> => {
+// 費用更新
+export const updateExpense = (id: number, description: string, amount: number, rawDate: string): Promise<void> => {
+  const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
     const stmt = db.prepare('UPDATE expenses SET description = ?, amount = ?, date = ? WHERE id = ?');
-    stmt.run(description, amount, date, id, function (err: Error | null) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
+    stmt.run(description, amount, date, id, (err: Error | null) => (err ? reject(err) : resolve()));
     stmt.finalize();
+  });
+};
+
+// 予算取得
+export const getBudget = (month: string): Promise<number | null> => {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT amount FROM budgets WHERE month = ?', [month], (err, row) => {
+      if (err) return reject(err);
+      const result = row as { amount: number } | undefined;
+      resolve(result?.amount ?? null);
+    });
+  });
+};
+
+// 予算保存（新規または更新）
+export const setBudget = (month: string, amount: number): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      INSERT INTO budgets (month, amount)
+      VALUES (?, ?)
+      ON CONFLICT(month) DO UPDATE SET amount = excluded.amount
+    `;
+    db.run(sql, [month, amount], (err) => (err ? reject(err) : resolve()));
+  });
+};
+
+// 月別支出合計取得
+export const getTotalExpensesForMonth = (month: string): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    const start = `${month}-01`;
+
+    const [yearStr, monthStr] = month.split('-');
+    const year = parseInt(yearStr, 10);
+    const monthNum = parseInt(monthStr, 10);
+
+    const endDate = new Date(year, monthNum, 0);
+    const end = endDate.toISOString().slice(0, 10);
+
+    db.get(
+      `
+      SELECT SUM(amount) AS total FROM expenses
+      WHERE date BETWEEN ? AND ?
+    `,
+      [start, end],
+      (err, row) => {
+        if (err) return reject(err);
+        const result = row as { total: number | null } | undefined;
+        resolve(result?.total ?? 0);
+      }
+    );
   });
 };
