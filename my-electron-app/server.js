@@ -2,14 +2,16 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const app = express();
 const port = 3000;
 
-// APPDATA内のmy-electron-appディレクトリにデータベースファイルを作成する
+// データベースパスをユーザーディレクトリに設定
+const username = os.userInfo().username;
 const dbPath = path.join(
   'C:',
   'Users',
-  'PC_admin',
+  username,
   'AppData',
   'Roaming',
   'my-electron-app',
