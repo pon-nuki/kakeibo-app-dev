@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home'; 
 import Settings from './pages/Settings';
 import Budget from './pages/Budget';
 import FixedCosts from './pages/FixedCosts';
@@ -18,16 +18,14 @@ const App: React.FC = () => {
 
   return (
     <ErrorBoundary>
-      <Router>
-        <AppLayout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/budget" element={<Budget />} />
-            <Route path="/fixed-costs" element={<FixedCosts />} />
-          </Routes>
-        </AppLayout>
-      </Router>
+      <AppLayout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/budget" element={<Budget />} />
+          <Route path="/fixed-costs" element={<FixedCosts />} />
+        </Routes>
+      </AppLayout>
     </ErrorBoundary>
   );
 };
