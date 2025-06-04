@@ -6,7 +6,7 @@ import Filter from '../components/ExpenseFilter/ExpenseFilter';
 import ExpenseList from '../components/ExpenseList/ExpenseList';
 import ExpenseForm from '../components/ExpenseForm/ExpenseForm';
 import { fetchExpenses, addExpense, updateExpense, deleteExpense } from '../services/expenseService';
-import { Link } from 'react-router-dom';
+import AppLayout from '../components/Layouts/AppLayout';
 
 interface Expense {
   id: number;
@@ -133,57 +133,53 @@ const Home: React.FC = () => {
   );
 
   return (
-    <div className="home-container">
-      <Box className="header-wrapper">
-        <Box className="title-icon-row">
-          <Typography variant="h5" className="header-title">家計簿</Typography>
-          <IconButton className="filter-icon-button">
-            <FilterListIcon />
-          </IconButton>
+    <AppLayout>
+      <div className="home-container">
+        <Box className="header-wrapper">
+          <Box className="title-icon-row">
+            <Typography variant="h5" className="header-title">家計簿</Typography>
+            <IconButton className="filter-icon-button">
+              <FilterListIcon />
+            </IconButton>
+          </Box>
         </Box>
-        <Link to="/budget" className="budget-link">
-          <button className="budget-button">予算設定</button>
-        </Link>
-        <Link to="/fixed-costs" className="budget-link">
-          <button className="budget-button">固定費設定</button>
-        </Link>
-      </Box>
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-      <ExpenseForm
-        description={description}
-        amount={amount}
-        startDate={startDate}
-        editId={editId}
-        onSubmit={editId === null ? handleAddExpense : handleUpdateExpense}
-        onCancel={cancelEdit}
-        onDescriptionChange={setDescription}
-        onAmountChange={setAmount}
-        onStartDateChange={setStartDate}
-      />
+        <ExpenseForm
+          description={description}
+          amount={amount}
+          startDate={startDate}
+          editId={editId}
+          onSubmit={editId === null ? handleAddExpense : handleUpdateExpense}
+          onCancel={cancelEdit}
+          onDescriptionChange={setDescription}
+          onAmountChange={setAmount}
+          onStartDateChange={setStartDate}
+        />
 
-      <hr />
+        <hr />
 
-      <Filter
-        searchType={searchType}
-        setSearchType={setSearchType}
-        filterDate={filterDate}
-        setFilterDate={setFilterDate}
-        rangeStartDate={rangeStartDate}
-        setRangeStartDate={setRangeStartDate}
-        rangeEndDate={rangeEndDate}
-        setRangeEndDate={setRangeEndDate}
-      />
+        <Filter
+          searchType={searchType}
+          setSearchType={setSearchType}
+          filterDate={filterDate}
+          setFilterDate={setFilterDate}
+          rangeStartDate={rangeStartDate}
+          setRangeStartDate={setRangeStartDate}
+          rangeEndDate={rangeEndDate}
+          setRangeEndDate={setRangeEndDate}
+        />
 
-      <ExpenseList
-        filteredExpenses={filteredExpenses}
-        startEditing={startEditing}
-        handleDeleteExpense={handleDeleteExpense}
-        editId={editId}
-      />
+        <ExpenseList
+          filteredExpenses={filteredExpenses}
+          startEditing={startEditing}
+          handleDeleteExpense={handleDeleteExpense}
+          editId={editId}
+        />
 
-      <h3>合計: ¥{totalFilteredAmount.toLocaleString()}</h3>
-    </div>
+        <h3>合計: ¥{totalFilteredAmount.toLocaleString()}</h3>
+      </div>
+    </AppLayout>
   );
 };
 

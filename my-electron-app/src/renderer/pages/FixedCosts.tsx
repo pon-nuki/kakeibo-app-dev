@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { Link } from 'react-router-dom';
 import Filter from '../components/ExpenseFilter/ExpenseFilter';
 import Pagination from '../components/Pagination/PaginationControls';
 import FixedCostForm from '../components/FixedCostForm/FixedCostForm';
 import FixedCostList from '../components/FixedCostList/FixedCostList';
+import AppLayout from '../components/Layouts/AppLayout';
 import {
   fetchFixedCosts,
   addFixedCost,
@@ -122,60 +122,56 @@ const FixedCosts: React.FC = () => {
   const currentItems = filteredCosts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div className="home-container">
-      <Box className="header-wrapper">
-        <Box className="title-icon-row">
-          <Typography variant="h5" className="header-title">固定費管理</Typography>
-          <IconButton><FilterListIcon /></IconButton>
+    <AppLayout>
+      <div className="home-container">
+        <Box className="header-wrapper">
+          <Box className="title-icon-row">
+            <Typography variant="h5" className="header-title">固定費管理</Typography>
+            <IconButton><FilterListIcon /></IconButton>
+          </Box>
         </Box>
-        <Link to="/budget" className="budget-link">
-          <button className="budget-button">予算設定</button>
-        </Link>
-        <Link to="/" className="budget-link">
-          <button className="budget-button">家計簿へ</button>
-        </Link>
-      </Box>
 
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-      <FixedCostForm
-        description={name}
-        amount={amount}
-        startDate={date}
-        onDescriptionChange={setName}
-        onAmountChange={setAmount}
-        onStartDateChange={setDate}
-        onSubmit={editId === null ? handleAdd : handleUpdate}
-        onCancel={resetForm}
-        editId={editId}
-      />
+        <FixedCostForm
+          description={name}
+          amount={amount}
+          startDate={date}
+          onDescriptionChange={setName}
+          onAmountChange={setAmount}
+          onStartDateChange={setDate}
+          onSubmit={editId === null ? handleAdd : handleUpdate}
+          onCancel={resetForm}
+          editId={editId}
+        />
 
-      <Filter
-        searchType={searchType}
-        setSearchType={setSearchType}
-        filterDate={filterDate}
-        setFilterDate={setFilterDate}
-        rangeStartDate={rangeStartDate}
-        setRangeStartDate={setRangeStartDate}
-        rangeEndDate={rangeEndDate}
-        setRangeEndDate={setRangeEndDate}
-      />
+        <Filter
+          searchType={searchType}
+          setSearchType={setSearchType}
+          filterDate={filterDate}
+          setFilterDate={setFilterDate}
+          rangeStartDate={rangeStartDate}
+          setRangeStartDate={setRangeStartDate}
+          rangeEndDate={rangeEndDate}
+          setRangeEndDate={setRangeEndDate}
+        />
 
-      <FixedCostList
-        filteredFixedCosts={currentItems}
-        startEditing={startEditing}
-        handleDeleteFixedCost={handleDelete}
-        editId={editId}
-      />
+        <FixedCostList
+          filteredFixedCosts={currentItems}
+          startEditing={startEditing}
+          handleDeleteFixedCost={handleDelete}
+          editId={editId}
+        />
 
-      <Pagination
-        currentPage={currentPage}
-        pageCount={totalPages}
-        onPageChange={(_, page) => setCurrentPage(page)}
-      />
+        <Pagination
+          currentPage={currentPage}
+          pageCount={totalPages}
+          onPageChange={(_, page) => setCurrentPage(page)}
+        />
 
-      <h3>合計: ¥{totalAmount.toLocaleString()}</h3>
-    </div>
+        <h3>合計: ¥{totalAmount.toLocaleString()}</h3>
+      </div>
+    </AppLayout>
   );
 };
 

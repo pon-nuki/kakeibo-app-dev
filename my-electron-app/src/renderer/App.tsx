@@ -22,6 +22,7 @@ const App: React.FC = () => {
         <Route path="/settings" element={<Settings />} />
         <Route path="/budget" element={<Budget />} />
         <Route path="/fixed-costs" element={<FixedCosts />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </ErrorBoundary>
   );
