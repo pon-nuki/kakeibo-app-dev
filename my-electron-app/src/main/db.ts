@@ -56,6 +56,15 @@ export const createTablesIfNotExists = async (): Promise<void> => {
     );
   `;
 
+  const createFixedCostsSQL = `
+    CREATE TABLE IF NOT EXISTS fixed_costs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      description TEXT NOT NULL,
+      amount REAL NOT NULL,
+      date TEXT NOT NULL
+    );
+  `;
+
   await new Promise<void>((resolve, reject) => {
     db.run(createExpensesSQL, (err: Error | null) => {
       if (err) {
@@ -68,6 +77,16 @@ export const createTablesIfNotExists = async (): Promise<void> => {
 
   await new Promise<void>((resolve, reject) => {
     db.run(createBudgetsSQL, (err: Error | null) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+
+  await new Promise<void>((resolve, reject) => {
+    db.run(createFixedCostsSQL, (err: Error | null) => {
       if (err) {
         reject(err);
       } else {
@@ -173,3 +192,63 @@ export const getTotalExpensesForMonth = (month: string): Promise<number> => {
     );
   });
 };
+
+// --- [固定費一覧取得] ---
+export const fetchFixedCosts = (): Promise<any[]> => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM fixed_costs', (err, rows) => {
+      err ? reject(err) : resolve(rows);
+    });
+  });
+};
+
+// 固定費追加
+export const addFixedCost = (description: string, amount: number, rawDate: string): Promise<number> => {
+  const date = toISODate(rawDate);
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare('INSERT INTO fixed_costs (description, amount, date) VALUES (?, ?, ?)');
+    stmt.run(description, amount, date, function (this: sqlite3.RunResult, err: Error | null) {
+      if (err) {
+        console.error('[addFixedCost] SQL実行エラー:', err);
+        reject(err);
+      } else {
+        console.log('[addFixedCost] 追加成功 ID:', this.lastID);
+        resolve(this.lastID);
+      }
+    });
+    stmt.finalize();
+  });
+};
+
+// 固定費更新
+export const updateFixedCost = (
+  id: number,
+  description: string,
+  amount: number,
+  rawDate: string
+): Promise<void> => {
+  const date = toISODate(rawDate);
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare(
+      'UPDATE fixed_costs SET description = ?, amount = ?, date = ? WHERE id = ?'
+    );
+    stmt.run(description, amount, date, id, (err: Error | null) =>
+      err ? reject(err) : resolve()
+    );
+    stmt.finalize();
+  });
+};
+
+// 固定費削除
+export const deleteFixedCost = (
+  id: number
+): Promise<{ message: string; changes: number }> => {
+  return new Promise((resolve, reject) => {
+    db.run('DELETE FROM fixed_costs WHERE id = ?', [id], function (this: sqlite3.RunResult, err) {
+      err
+        ? reject(err)
+        : resolve({ message: `削除されました。${this.changes} 行が影響を受けました。`, changes: this.changes });
+    });
+  });
+};
+

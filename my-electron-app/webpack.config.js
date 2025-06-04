@@ -75,6 +75,7 @@ module.exports = (env, argv) => {
     output: {
       filename: 'preload.js',
       path: path.resolve(__dirname, 'dist', 'renderer'),
+      libraryTarget: 'commonjs2',
     },
     resolve: {
       extensions: ['.ts', '.js'],

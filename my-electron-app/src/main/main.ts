@@ -1,6 +1,19 @@
+// src/main/main.ts
 import * as path from 'path';
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { fetchExpenses, addExpense, deleteExpense, updateExpense, initializeDatabase, getBudget, setBudget, getTotalExpensesForMonth } from './db';
+import { fetchExpenses,
+          addExpense,
+          deleteExpense,
+          updateExpense,
+          initializeDatabase,
+          getBudget,
+          setBudget,
+          getTotalExpensesForMonth,
+          fetchFixedCosts,
+          addFixedCost,
+          deleteFixedCost,
+          updateFixedCost
+        } from './db';
 
 let mainWindow: BrowserWindow | null;
 
@@ -161,6 +174,60 @@ ipcMain.handle('getExpensesTotal', async (_event, month: string) => {
   } catch (error) {
     console.error('getExpensesTotal エラー:', error);
     throw new Error('支出合計の取得に失敗しました');
+  }
+});
+
+// 固定費一覧を取得
+ipcMain.handle('fetchFixedCosts', async () => {
+  try {
+    const rows = await fetchFixedCosts();
+    return rows;
+  } catch (error) {
+    console.error('fetchFixedCosts エラー:', error);
+    throw new Error('固定費の取得に失敗しました');
+  }
+});
+
+// 固定費を追加
+ipcMain.handle('addFixedCost', async (event, description, amount, date) => {
+  try {
+    const id = await addFixedCost(description, amount, date);
+    return { message: '固定費の追加に成功しました', id };
+  } catch (error) {
+    console.error('addFixedCost エラー:', error);
+    throw new Error('固定費の追加に失敗しました');
+  }
+});
+
+// 固定費を削除
+ipcMain.handle('deleteFixedCost', async (_event, id: number) => {
+  console.trace('[TRACE] deleteFixedCost invoked with ID:', id);
+
+  if (!id || typeof id !== 'number') {
+    return { message: '無効な ID です。', changes: 0 };
+  }
+
+  try {
+    const result = await deleteFixedCost(id);
+    if (result.changes > 0) {
+      return { message: `ID ${id} の固定費が削除されました`, changes: result.changes };
+    } else {
+      return { message: `ID ${id} の固定費は見つかりませんでした`, changes: result.changes };
+    }
+  } catch (error) {
+    console.error('deleteFixedCost エラー:', error);
+    throw new Error('固定費の削除に失敗しました');
+  }
+});
+
+// 固定費を更新
+ipcMain.handle('updateFixedCost', async (_event, { id, desc, amt, date }) => {
+  try {
+    await updateFixedCost(id, desc, amt, date);
+    return { message: '固定費の更新に成功しました' };
+  } catch (error) {
+    console.error('updateFixedCost エラー:', error);
+    return { message: '固定費の更新に失敗しました' };
   }
 });
 

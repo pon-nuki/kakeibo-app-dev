@@ -144,6 +144,9 @@ const Home: React.FC = () => {
         <Link to="/budget" className="budget-link">
           <button className="budget-button">予算設定</button>
         </Link>
+        <Link to="/fixed-costs" className="budget-link">
+          <button className="budget-button">固定費設定</button>
+        </Link>
       </Box>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 

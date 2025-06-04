@@ -55,6 +55,16 @@ const createTableIfNotExists = () => {
     );
   `;
 
+  const createFixedCostsSQL = `
+    CREATE TABLE IF NOT EXISTS fixed_costs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      description TEXT NOT NULL,
+      amount REAL NOT NULL,
+      date TEXT NOT NULL
+    );
+  `;
+
+  // 各テーブルの作成
   db.run(createExpensesSQL, (err) => {
     if (err) {
       console.error('expensesテーブル作成エラー:', err.message);
@@ -70,12 +80,20 @@ const createTableIfNotExists = () => {
       console.log('budgetsテーブル作成成功');
     }
   });
+
+  db.run(createFixedCostsSQL, (err) => {
+    if (err) {
+      console.error('fixed_costsテーブル作成エラー:', err.message);
+    } else {
+      console.log('fixed_costsテーブル作成成功');
+    }
+  });
 };
 
 // サーバ起動時にテーブルを作成
 createTableIfNotExists();
 
-// 取得エンドポイント
+// 取得エンドポイント (費用)
 app.get('/expenses', (req, res) => {
   try {
     db.all('SELECT * FROM expenses', (err, rows) => {
@@ -93,7 +111,7 @@ app.get('/expenses', (req, res) => {
   }
 });
 
-// 削除エンドポイント
+// 削除エンドポイント (費用)
 app.delete('/expenses/:id', (req, res) => {
   const { id } = req.params;
   // id に対応する費用の削除処理
@@ -182,6 +200,42 @@ app.get('/expenses/total', (req, res) => {
       return res.status(500).json({ error: '支出合計の取得に失敗しました' });
     }
     res.json({ total: row?.total ?? 0 });
+  });
+});
+
+// 固定費取得エンドポイント
+app.get('/fixed-costs', (req, res) => {
+  try {
+    db.all('SELECT * FROM fixed_costs', (err, rows) => {
+      if (err) {
+        console.error('データベースエラー:', err.message);
+        return res.status(500).json({ error: 'データベースの取得に失敗しました' });
+      }
+      res.json(rows);  // 固定費を返す
+    });
+  } catch (err) {
+    console.error('サーバーエラー:', err.message);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'サーバーエラー' });
+    }
+  }
+});
+
+// 固定費削除エンドポイント
+app.delete('/fixed-costs/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = 'DELETE FROM fixed_costs WHERE id = ?';
+
+  db.run(sql, [id], function (err) {
+    if (err) {
+      console.error('削除エラー:', err.message);
+      return res.status(500).json({ error: '固定費の削除に失敗しました' });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: '指定された固定費が見つかりませんでした' });
+    }
+    res.json({ message: `固定費 ID ${id} が削除されました` });
   });
 });
 
