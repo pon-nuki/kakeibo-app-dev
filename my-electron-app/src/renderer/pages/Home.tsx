@@ -6,7 +6,6 @@ import Filter from '../components/ExpenseFilter/ExpenseFilter';
 import ExpenseList from '../components/ExpenseList/ExpenseList';
 import ExpenseForm from '../components/ExpenseForm/ExpenseForm';
 import { fetchExpenses, addExpense, updateExpense, deleteExpense } from '../services/expenseService';
-import AppLayout from '../components/Layouts/AppLayout';
 
 interface Expense {
   id: number;
@@ -133,53 +132,51 @@ const Home: React.FC = () => {
   );
 
   return (
-    <AppLayout>
-      <div className="home-container">
-        <Box className="header-wrapper">
-          <Box className="title-icon-row">
-            <Typography variant="h5" className="header-title">家計簿</Typography>
-            <IconButton className="filter-icon-button">
-              <FilterListIcon />
-            </IconButton>
-          </Box>
+    <div className="home-container">
+      <Box className="header-wrapper">
+        <Box className="title-icon-row">
+          <Typography variant="h5" className="header-title">家計簿</Typography>
+          <IconButton className="filter-icon-button">
+            <FilterListIcon />
+          </IconButton>
         </Box>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
+      </Box>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-        <ExpenseForm
-          description={description}
-          amount={amount}
-          startDate={startDate}
-          editId={editId}
-          onSubmit={editId === null ? handleAddExpense : handleUpdateExpense}
-          onCancel={cancelEdit}
-          onDescriptionChange={setDescription}
-          onAmountChange={setAmount}
-          onStartDateChange={setStartDate}
-        />
+      <ExpenseForm
+        description={description}
+        amount={amount}
+        startDate={startDate}
+        editId={editId}
+        onSubmit={editId === null ? handleAddExpense : handleUpdateExpense}
+        onCancel={cancelEdit}
+        onDescriptionChange={setDescription}
+        onAmountChange={setAmount}
+        onStartDateChange={setStartDate}
+      />
 
-        <hr />
+      <hr />
 
-        <Filter
-          searchType={searchType}
-          setSearchType={setSearchType}
-          filterDate={filterDate}
-          setFilterDate={setFilterDate}
-          rangeStartDate={rangeStartDate}
-          setRangeStartDate={setRangeStartDate}
-          rangeEndDate={rangeEndDate}
-          setRangeEndDate={setRangeEndDate}
-        />
+      <Filter
+        searchType={searchType}
+        setSearchType={setSearchType}
+        filterDate={filterDate}
+        setFilterDate={setFilterDate}
+        rangeStartDate={rangeStartDate}
+        setRangeStartDate={setRangeStartDate}
+        rangeEndDate={rangeEndDate}
+        setRangeEndDate={setRangeEndDate}
+      />
 
-        <ExpenseList
-          filteredExpenses={filteredExpenses}
-          startEditing={startEditing}
-          handleDeleteExpense={handleDeleteExpense}
-          editId={editId}
-        />
+      <ExpenseList
+        filteredExpenses={filteredExpenses}
+        startEditing={startEditing}
+        handleDeleteExpense={handleDeleteExpense}
+        editId={editId}
+      />
 
-        <h3>合計: ¥{totalFilteredAmount.toLocaleString()}</h3>
-      </div>
-    </AppLayout>
+      <h3>合計: ¥{totalFilteredAmount.toLocaleString()}</h3>
+    </div>
   );
 };
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {fetchBudget, saveBudget, fetchTotalExpensesForMonth} from '../services/budgetService';
 import './Budget.css';
-import AppLayout from '../components/Layouts/AppLayout';
 
 const BudgetPage: React.FC = () => {
   const navigate = useNavigate(); 
@@ -33,37 +32,35 @@ const BudgetPage: React.FC = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="budget-container">
-        <h1>月別予算管理</h1>
-        <label className="month-label">
-          設定月:
-          <input
-            type="month"
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            className="month-input"
-          />
-        </label>
+    <div className="budget-container">
+      <h1>月別予算管理</h1>
+      <label className="month-label">
+        設定月:
+        <input
+          type="month"
+          value={month}
+          onChange={(e) => setMonth(e.target.value)}
+          className="month-input"
+        />
+      </label>
 
-        <div className="summary">
-          <p>設定済み予算: ¥{budget.toLocaleString()}</p>
-          <p>支出合計: ¥{expenses.toLocaleString()}</p>
-          <p>差額: ¥{(budget - expenses).toLocaleString()}</p>
-        </div>
-
-        <div className="input-group">
-          <input
-            type="number"
-            value={inputBudget}
-            onChange={(e) => setInputBudget(e.target.value)}
-            placeholder="予算を入力"
-            className="budget-input"
-          />
-          <button onClick={handleSave} className="save-button">予算を保存</button>
-        </div>
+      <div className="summary">
+        <p>設定済み予算: ¥{budget.toLocaleString()}</p>
+        <p>支出合計: ¥{expenses.toLocaleString()}</p>
+        <p>差額: ¥{(budget - expenses).toLocaleString()}</p>
       </div>
-    </AppLayout>
+
+      <div className="input-group">
+        <input
+          type="number"
+          value={inputBudget}
+          onChange={(e) => setInputBudget(e.target.value)}
+          placeholder="予算を入力"
+          className="budget-input"
+        />
+        <button onClick={handleSave} className="save-button">予算を保存</button>
+      </div>
+    </div>
   );
 };
 
