@@ -18,6 +18,7 @@ interface FixedCost {
   description: string;
   amount: number;
   date: string;
+  paymentMethod: string;
 }
 
 const FixedCosts: React.FC = () => {
@@ -25,6 +26,7 @@ const FixedCosts: React.FC = () => {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState<Date | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState('bank');
   const [editId, setEditId] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -45,17 +47,19 @@ const FixedCosts: React.FC = () => {
   const fetchAndSetFixedCosts = async () => {
     try {
       const data = await fetchFixedCosts();
-      setFixedCosts(data);
+      const normalized = normalizeFixedCosts(data);
+      setFixedCosts(normalized);
     } catch {
       setErrorMessage('固定費の取得に失敗しました。');
     }
   };
 
   const handleAdd = async () => {
-    if (name && amount && date) {
+    console.log('送信前 paymentMethod:', paymentMethod);
+    if (name && amount && date && paymentMethod) {
       try {
         console.log('test1')
-        await addFixedCost(name, parseFloat(amount), date.toISOString().slice(0, 10));
+        await addFixedCost(name, parseFloat(amount), date.toISOString().slice(0, 10), paymentMethod);
         console.log('test2')
         await fetchAndSetFixedCosts();
         resetForm();
@@ -68,9 +72,9 @@ const FixedCosts: React.FC = () => {
   };
 
   const handleUpdate = async () => {
-    if (editId !== null && name && amount && date) {
+    if (editId !== null && name && amount && date && paymentMethod) {
       try {
-        await updateFixedCost(editId, name, parseFloat(amount), date.toISOString().slice(0, 10));
+        await updateFixedCost(editId, name, parseFloat(amount), date.toISOString().slice(0, 10), paymentMethod);
         await fetchAndSetFixedCosts();
         resetForm();
       } catch {
@@ -93,6 +97,7 @@ const FixedCosts: React.FC = () => {
     setName(cost.description);
     setAmount(cost.amount.toString());
     setDate(new Date(cost.date));
+    setPaymentMethod(cost.paymentMethod);
   };
 
   const resetForm = () => {
@@ -100,6 +105,7 @@ const FixedCosts: React.FC = () => {
     setName('');
     setAmount('');
     setDate(null);
+    setPaymentMethod('');
     setErrorMessage(null);
   };
 
@@ -115,6 +121,15 @@ const FixedCosts: React.FC = () => {
     }
     return true;
   });
+
+  const normalizeFixedCosts = (rows: any[]): FixedCost[] =>
+    rows.map(row => ({
+      id: row.id,
+      description: row.description,
+      amount: row.amount,
+      date: row.date,
+      paymentMethod: row.payment_method,
+  }));
 
   const totalAmount = filteredCosts.reduce((sum, cost) => sum + cost.amount, 0);
   const totalPages = Math.ceil(filteredCosts.length / itemsPerPage);
@@ -135,9 +150,11 @@ const FixedCosts: React.FC = () => {
         description={name}
         amount={amount}
         startDate={date}
+        paymentMethod={paymentMethod}
         onDescriptionChange={setName}
         onAmountChange={setAmount}
         onStartDateChange={setDate}
+        onPaymentMethodChange={setPaymentMethod}
         onSubmit={editId === null ? handleAdd : handleUpdate}
         onCancel={resetForm}
         editId={editId}

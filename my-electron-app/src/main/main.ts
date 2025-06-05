@@ -189,9 +189,9 @@ ipcMain.handle('fetchFixedCosts', async () => {
 });
 
 // 固定費を追加
-ipcMain.handle('addFixedCost', async (event, description, amount, date) => {
+ipcMain.handle('addFixedCost', async (event, description, amount, date, paymentMethod) => {
   try {
-    const id = await addFixedCost(description, amount, date);
+    const id = await addFixedCost(description, amount, date, paymentMethod);
     return { message: '固定費の追加に成功しました', id };
   } catch (error) {
     console.error('addFixedCost エラー:', error);
@@ -221,9 +221,9 @@ ipcMain.handle('deleteFixedCost', async (_event, id: number) => {
 });
 
 // 固定費を更新
-ipcMain.handle('updateFixedCost', async (_event, { id, desc, amt, date }) => {
+ipcMain.handle('updateFixedCost', async (_event, { id, desc, amt, date, paymentMethod }) => {
   try {
-    await updateFixedCost(id, desc, amt, date);
+    await updateFixedCost(id, desc, amt, date, paymentMethod);
     return { message: '固定費の更新に成功しました' };
   } catch (error) {
     console.error('updateFixedCost エラー:', error);

@@ -61,7 +61,8 @@ export const createTablesIfNotExists = async (): Promise<void> => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       description TEXT NOT NULL,
       amount REAL NOT NULL,
-      date TEXT NOT NULL
+      date TEXT NOT NULL,
+      payment_method TEXT NOT NULL
     );
   `;
 
@@ -203,11 +204,18 @@ export const fetchFixedCosts = (): Promise<any[]> => {
 };
 
 // 固定費追加
-export const addFixedCost = (description: string, amount: number, rawDate: string): Promise<number> => {
+export const addFixedCost = (
+  description: string,
+  amount: number,
+  rawDate: string,
+  paymentMethod: string
+): Promise<number> => {
   const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
-    const stmt = db.prepare('INSERT INTO fixed_costs (description, amount, date) VALUES (?, ?, ?)');
-    stmt.run(description, amount, date, function (this: sqlite3.RunResult, err: Error | null) {
+    const stmt = db.prepare(
+      'INSERT INTO fixed_costs (description, amount, date, payment_method) VALUES (?, ?, ?, ?)'
+    );
+    stmt.run(description, amount, date, paymentMethod, function (this: sqlite3.RunResult, err: Error | null) {
       if (err) {
         console.error('[addFixedCost] SQL実行エラー:', err);
         reject(err);
@@ -225,14 +233,15 @@ export const updateFixedCost = (
   id: number,
   description: string,
   amount: number,
-  rawDate: string
+  rawDate: string,
+  paymentMethod: string
 ): Promise<void> => {
   const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
     const stmt = db.prepare(
-      'UPDATE fixed_costs SET description = ?, amount = ?, date = ? WHERE id = ?'
+      'UPDATE fixed_costs SET description = ?, amount = ?, date = ?, payment_method = ? WHERE id = ?'
     );
-    stmt.run(description, amount, date, id, (err: Error | null) =>
+    stmt.run(description, amount, date, paymentMethod, id, (err: Error | null) =>
       err ? reject(err) : resolve()
     );
     stmt.finalize();

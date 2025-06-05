@@ -13,6 +13,7 @@ interface FixedCost {
   description: string;
   amount: number;
   date: string;
+  paymentMethod: string;
 }
 
 interface DeleteResult {
@@ -36,8 +37,8 @@ declare global {
 
       // 固定費
       fetchFixedCosts: () => Promise<FixedCost[]>;
-      addFixedCost: (description: string, amount: number, startDate: string) => Promise<void>;
-      updateFixedCost: (id: number, description: string, amount: number, startDate: string) => Promise<void>;
+      addFixedCost: (description: string, amount: number, startDate: string, paymentMethod: string) => Promise<void>;
+      updateFixedCost: (id: number, description: string, amount: number, startDate: string, paymentMethod: string) => Promise<void>;
       deleteFixedCost: (id: number) => Promise<DeleteResult>;
     };
   }

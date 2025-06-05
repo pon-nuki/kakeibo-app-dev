@@ -16,6 +16,7 @@ interface FixedCost {
   description: string;
   amount: number;
   date: string;
+  paymentMethod: string;
 }
 
 interface FixedCostListProps {
@@ -26,6 +27,16 @@ interface FixedCostListProps {
 }
 
 const ITEMS_PER_PAGE = 10;
+
+const getPaymentMethodLabel = (method: string): string => {
+  switch (method) {
+    case 'bank': return '口座振替';
+    case 'credit': return 'クレジットカード';
+    case 'cash': return '現金';
+    case 'other': return 'その他';
+    default: return '不明';
+  }
+};
 
 const FixedCostList: React.FC<FixedCostListProps> = ({
   filteredFixedCosts,
@@ -44,6 +55,8 @@ const FixedCostList: React.FC<FixedCostListProps> = ({
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const selectedFixedCosts = filteredFixedCosts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
+  console.log('[FixedCostList] props.filteredFixedCosts:', filteredFixedCosts);
+
   return (
     <div>
       <List>
@@ -54,7 +67,7 @@ const FixedCostList: React.FC<FixedCostListProps> = ({
           >
             <ListItemText
               primary={cost.description}
-              secondary={`¥${cost.amount.toLocaleString()} / ${cost.date}`}
+              secondary={`¥${cost.amount.toLocaleString()} / ${cost.date} / ${getPaymentMethodLabel(cost.paymentMethod)}`}
             />
             <IconButton onClick={() => startEditing(cost)} color="primary">
               <EditIcon />

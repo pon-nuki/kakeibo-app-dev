@@ -60,7 +60,8 @@ const createTableIfNotExists = () => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       description TEXT NOT NULL,
       amount REAL NOT NULL,
-      date TEXT NOT NULL
+      date TEXT NOT NULL,
+      payment_method TEXT NOT NULL
     );
   `;
 
@@ -101,7 +102,7 @@ app.get('/expenses', (req, res) => {
         console.error('データベースエラー:', err.message);
         return res.status(500).json({ error: 'データベースの取得に失敗しました' });
       }
-      res.json(rows);  // データベースから取得した費用を返す
+      res.json(rows);
     });
   } catch (err) {
     console.error('サーバーエラー:', err.message);
@@ -211,7 +212,7 @@ app.get('/fixed-costs', (req, res) => {
         console.error('データベースエラー:', err.message);
         return res.status(500).json({ error: 'データベースの取得に失敗しました' });
       }
-      res.json(rows);  // 固定費を返す
+      res.json(rows);
     });
   } catch (err) {
     console.error('サーバーエラー:', err.message);

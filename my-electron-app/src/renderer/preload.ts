@@ -18,8 +18,8 @@ try {
 
     // Fixed Costs
     fetchFixedCosts: () => ipcRenderer.invoke('fetchFixedCosts'),
-    addFixedCost: (description: string, amount: number, date: string) => ipcRenderer.invoke('addFixedCost', description, amount, date),
-    updateFixedCost: (id: number, desc: string, amt: number, date: string) => ipcRenderer.invoke('updateFixedCost', { id, desc, amt, date }),
+    addFixedCost: (description: string, amount: number, date: string, paymentMethod: string) => ipcRenderer.invoke('addFixedCost', description, amount, date, paymentMethod),
+    updateFixedCost: (id: number, desc: string, amt: number, date: string, paymentMethod: string) => ipcRenderer.invoke('updateFixedCost', { id, desc, amt, date, paymentMethod }),
     deleteFixedCost: (id: number) => ipcRenderer.invoke('deleteFixedCost', id),
   });
 
