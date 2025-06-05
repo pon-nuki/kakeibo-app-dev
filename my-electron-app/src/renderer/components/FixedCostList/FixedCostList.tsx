@@ -10,14 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../ExpenseList/ExpenseList.css';
 import Pagination from '../Pagination/PaginationControls';
-
-interface FixedCost {
-  id: number;
-  description: string;
-  amount: number;
-  date: string;
-  paymentMethod: string;
-}
+import { FixedCost } from '../../../types/index';
 
 interface FixedCostListProps {
   filteredFixedCosts: FixedCost[];

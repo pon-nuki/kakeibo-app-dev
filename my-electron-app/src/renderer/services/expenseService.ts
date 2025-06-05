@@ -1,11 +1,5 @@
 // services/expenseService.ts
-
-interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  date: string;
-}
+import { Expense } from '../../types/index';
 
 // 環境判定
 const isDev = process.env.NODE_ENV === 'development';

@@ -6,13 +6,7 @@ import Filter from '../components/ExpenseFilter/ExpenseFilter';
 import ExpenseList from '../components/ExpenseList/ExpenseList';
 import ExpenseForm from '../components/ExpenseForm/ExpenseForm';
 import { fetchExpenses, addExpense, updateExpense, deleteExpense } from '../services/expenseService';
-
-interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  date: string;
-}
+import { Expense } from '../../types/index';
 
 const Home: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);

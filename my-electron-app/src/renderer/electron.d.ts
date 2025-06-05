@@ -1,25 +1,5 @@
 // src/renderer/electron.d.ts
-export {};
-
-interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  date: string;
-}
-
-interface FixedCost {
-  id: number;
-  description: string;
-  amount: number;
-  date: string;
-  paymentMethod: string;
-}
-
-interface DeleteResult {
-  message: string;
-  changes: number;
-}
+import { Expense, FixedCost, DeleteResult } from '../types/index';
 
 declare global {
   interface Window {
@@ -43,3 +23,5 @@ declare global {
     };
   }
 }
+
+export {};

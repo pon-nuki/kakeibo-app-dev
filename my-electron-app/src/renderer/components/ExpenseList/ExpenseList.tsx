@@ -4,13 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './ExpenseList.css';
 import Pagination from '../Pagination/PaginationControls';
-
-interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  date: string;
-}
+import { Expense } from '../../../types/index';
 
 interface ExpenseListProps {
   filteredExpenses: Expense[];

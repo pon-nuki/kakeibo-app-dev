@@ -1,10 +1,5 @@
 // services/budgetService.ts
-
-interface Budget {
-  id: number;
-  month: string; // YYYY-MM
-  amount: number;
-}
+import { Budget } from '../../types/index';
 
 const isDev = process.env.NODE_ENV === 'development';
 

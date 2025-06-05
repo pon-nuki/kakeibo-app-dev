@@ -1,10 +1,4 @@
-interface FixedCost {
-  id: number;
-  description: string;
-  amount: number;
-  date: string;
-  paymentMethod: string;
-}
+import { FixedCost } from '../../types/index';
 
 const isDev = process.env.NODE_ENV === 'development';
 

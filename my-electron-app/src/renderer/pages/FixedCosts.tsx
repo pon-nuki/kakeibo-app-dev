@@ -6,20 +6,13 @@ import Filter from '../components/ExpenseFilter/ExpenseFilter';
 import Pagination from '../components/Pagination/PaginationControls';
 import FixedCostForm from '../components/FixedCostForm/FixedCostForm';
 import FixedCostList from '../components/FixedCostList/FixedCostList';
+import { FixedCost } from '../../types/index';
 import {
   fetchFixedCosts,
   addFixedCost,
   updateFixedCost,
   deleteFixedCost,
 } from '../services/fixedCostService';
-
-interface FixedCost {
-  id: number;
-  description: string;
-  amount: number;
-  date: string;
-  paymentMethod: string;
-}
 
 const FixedCosts: React.FC = () => {
   const [fixedCosts, setFixedCosts] = useState<FixedCost[]>([]);
