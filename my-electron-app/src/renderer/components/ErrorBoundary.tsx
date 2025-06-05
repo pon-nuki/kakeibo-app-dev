@@ -1,13 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 
 // ErrorBoundary コンポーネント
-interface ErrorBoundaryState {
-  hasError: boolean;
-}
-
-interface ErrorBoundaryProps {
-  children: ReactNode;
-}
+import { ErrorBoundaryState, ErrorBoundaryProps } from '../../types/errorBoundaryTypes';
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
@@ -20,14 +14,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return { hasError: true };
   }
 
-  // 詳細なエラー情報を log 出力するために使用（オプション）
+  // 詳細なエラー情報をlog出力するために使用
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     console.error('Error caught in ErrorBoundary:', error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
-      // エラーが発生した場合に表示する UI
+      // エラーが発生した場合に表示するUI
       return <h1>Something went wrong.</h1>;
     }
 

@@ -7,18 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ja } from 'date-fns/locale';
-
-interface ExpenseFormProps {
-  description: string;
-  amount: string;
-  startDate: Date | null;
-  editId: number | null;
-  onSubmit: () => Promise<void>;
-  onCancel: () => void;
-  onDescriptionChange: (description: string) => void;
-  onAmountChange: (amount: string) => void;
-  onStartDateChange: (date: Date | null) => void;
-}
+import { ExpenseFormProps } from '../../../types/expenseFormTypes';
 
 const ExpenseForm: React.FC<ExpenseFormProps> = ({
   description,

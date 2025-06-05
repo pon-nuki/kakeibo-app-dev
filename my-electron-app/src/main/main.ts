@@ -23,7 +23,6 @@ console.log('App is starting');
 initializeDatabase();
 
 function createWindow() {
-  // 本番ビルド時は preload.js のパスを調整
   const preloadPath = path.join(__dirname, '..', 'renderer', 'preload.js');
 
   mainWindow = new BrowserWindow({
@@ -49,7 +48,7 @@ function createWindow() {
 
   // 開発時は localhost:8080 を読み込み、本番はビルド済みのファイルを読み込む
   if (app.isPackaged) {
-    // __dirname はビルド後は dist/main の中なので1階層上の renderer/index.html へ
+    // __dirname はビルド後は dist/main の中なので1階層上のrenderer/index.htmlへ
     const indexPath = path.join(__dirname, '..', 'renderer', 'index.html');
     mainWindow.loadFile(indexPath)
       .then(() => {

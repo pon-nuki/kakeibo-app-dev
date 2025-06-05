@@ -4,14 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './ExpenseList.css';
 import Pagination from '../Pagination/PaginationControls';
-import { Expense } from '../../../types/index';
-
-interface ExpenseListProps {
-  filteredExpenses: Expense[];
-  startEditing: (expense: Expense) => void;
-  handleDeleteExpense: (id: number) => void;
-  editId: number | null;
-}
+import { ExpenseListProps } from '../../../types/expenseListTypes';
 
 const ITEMS_PER_PAGE = 10;
 

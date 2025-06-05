@@ -6,7 +6,7 @@ import Filter from '../components/ExpenseFilter/ExpenseFilter';
 import ExpenseList from '../components/ExpenseList/ExpenseList';
 import ExpenseForm from '../components/ExpenseForm/ExpenseForm';
 import { fetchExpenses, addExpense, updateExpense, deleteExpense } from '../services/expenseService';
-import { Expense } from '../../types/index';
+import { Expense } from '../../types/common.d';
 
 const Home: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -40,7 +40,7 @@ const Home: React.FC = () => {
     if (description && amount && startDate) {
       try {
         await addExpense(description, parseFloat(amount), startDate.toISOString().slice(0, 10));
-        await fetchAndSetExpenses(); // データを再取得して表示を更新
+        await fetchAndSetExpenses();
         setDescription('');
         setAmount('');
         setStartDate(null);

@@ -6,7 +6,7 @@ import Filter from '../components/ExpenseFilter/ExpenseFilter';
 import Pagination from '../components/Pagination/PaginationControls';
 import FixedCostForm from '../components/FixedCostForm/FixedCostForm';
 import FixedCostList from '../components/FixedCostList/FixedCostList';
-import { FixedCost } from '../../types/index';
+import { FixedCost } from '../../types/common.d';
 import {
   fetchFixedCosts,
   addFixedCost,
@@ -48,12 +48,9 @@ const FixedCosts: React.FC = () => {
   };
 
   const handleAdd = async () => {
-    console.log('送信前 paymentMethod:', paymentMethod);
     if (name && amount && date && paymentMethod) {
       try {
-        console.log('test1')
         await addFixedCost(name, parseFloat(amount), date.toISOString().slice(0, 10), paymentMethod);
-        console.log('test2')
         await fetchAndSetFixedCosts();
         resetForm();
       } catch {

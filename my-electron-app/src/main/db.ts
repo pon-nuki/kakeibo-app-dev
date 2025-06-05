@@ -194,7 +194,7 @@ export const getTotalExpensesForMonth = (month: string): Promise<number> => {
   });
 };
 
-// --- [固定費一覧取得] ---
+// 固定費一覧取得
 export const fetchFixedCosts = (): Promise<any[]> => {
   return new Promise((resolve, reject) => {
     db.all('SELECT * FROM fixed_costs', (err, rows) => {

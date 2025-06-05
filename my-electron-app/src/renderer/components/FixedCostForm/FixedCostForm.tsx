@@ -11,20 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ja } from 'date-fns/locale';
-
-interface FixedCostFormProps {
-  description: string;
-  amount: string;
-  startDate: Date | null;
-  paymentMethod: string;
-  editId: number | null;
-  onSubmit: () => Promise<void>;
-  onCancel: () => void;
-  onDescriptionChange: (description: string) => void;
-  onAmountChange: (amount: string) => void;
-  onStartDateChange: (date: Date | null) => void;
-  onPaymentMethodChange: (method: string) => void;
-}
+import { FixedCostFormProps } from '../../../types/fixedCostFormTypes';
 
 const FixedCostForm: React.FC<FixedCostFormProps> = ({
   description,

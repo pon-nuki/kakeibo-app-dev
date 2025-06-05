@@ -1,4 +1,4 @@
-import { FixedCost } from '../../types/index';
+import { FixedCost } from '../../types/common.d';
 
 const isDev = process.env.NODE_ENV === 'development';
 

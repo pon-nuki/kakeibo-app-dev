@@ -1,11 +1,6 @@
 import React from 'react';
 import { Pagination } from '@mui/material';
-
-interface PaginationControlsProps {
-  currentPage: number;
-  pageCount: number;
-  onPageChange: (event: React.ChangeEvent<unknown>, page: number) => void;
-}
+import { PaginationControlsProps } from '../../../types/paginationControlsTypes';
 
 const PaginationControls: React.FC<PaginationControlsProps> = ({
   currentPage,

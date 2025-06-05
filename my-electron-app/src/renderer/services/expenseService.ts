@@ -1,5 +1,5 @@
 // services/expenseService.ts
-import { Expense } from '../../types/index';
+import { Expense } from '../../types/common.d';
 
 // 環境判定
 const isDev = process.env.NODE_ENV === 'development';

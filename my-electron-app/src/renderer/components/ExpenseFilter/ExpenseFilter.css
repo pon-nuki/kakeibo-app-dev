@@ -41,7 +41,7 @@
 
 /* 更新ボタンのスタイル変更（編集中） */
 button:disabled {
-  background-color: #ddd; /* 無効なボタンの背景色 */
+  background-color: #ddd;
   cursor: not-allowed;
 }
 
@@ -50,7 +50,7 @@ button {
 }
 
 button:hover {
-  transform: scale(1.05); /* ホバー時に少し拡大 */
+  transform: scale(1.05);
 }
 
 /* フィルターセクションのタイトル */
@@ -67,7 +67,7 @@ h3 {
 }
 
 .icon-button:hover {
-  transform: scale(1.1); /* ホバー時に少し拡大 */
+  transform: scale(1.1);
 }
 
 /* 編集・削除ボタンのツールチップ */
@@ -96,11 +96,11 @@ h3 {
 /* 固定するコンテナ */
 .sticky-input-container {
   position: sticky;
-  top: 0; /* スクロールしても画面上部に固定 */
-  background-color: #fff; /* 背景色を指定 */
-  padding: 16px 0; /* 上下の余白 */
-  z-index: 100; /* 他の要素より前面に表示 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 少し影をつけて浮いているように見せる */
+  top: 0;
+  background-color: #fff;
+  padding: 16px 0;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -108,11 +108,11 @@ h3 {
 
 /* 編集中のアイテムを強調表示 */
 .editing-item {
-  background-color: #f0f0f0; /* 編集中アイテムの背景色 */
-  border-left: 4px solid #1976d2; /* 編集中アイテムの左側に青色のライン */
+  background-color: #f0f0f0;
+  border-left: 4px solid #1976d2;
 }
 
 .editing-item:hover {
-  background-color: #e0e0e0; /* マウスオーバー時に色を少し変える */
+  background-color: #e0e0e0;
 }
 

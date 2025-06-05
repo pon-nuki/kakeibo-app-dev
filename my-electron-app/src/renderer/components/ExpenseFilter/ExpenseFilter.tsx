@@ -12,17 +12,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ja } from 'date-fns/locale';
-
-interface ExpenseFilterProps {
-  searchType: 'exact' | 'range';
-  setSearchType: (type: 'exact' | 'range') => void;
-  filterDate: Date | null;
-  setFilterDate: (date: Date | null) => void;
-  rangeStartDate: Date | null;
-  setRangeStartDate: (date: Date | null) => void;
-  rangeEndDate: Date | null;
-  setRangeEndDate: (date: Date | null) => void;
-}
+import { ExpenseFilterProps } from '../../../types/expenseFilterTypes';
 
 const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
   searchType,

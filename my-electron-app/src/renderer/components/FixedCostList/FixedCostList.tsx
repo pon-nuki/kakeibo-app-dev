@@ -10,14 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../ExpenseList/ExpenseList.css';
 import Pagination from '../Pagination/PaginationControls';
-import { FixedCost } from '../../../types/index';
-
-interface FixedCostListProps {
-  filteredFixedCosts: FixedCost[];
-  startEditing: (cost: FixedCost) => void;
-  handleDeleteFixedCost: (id: number) => void;
-  editId: number | null;
-}
+import { FixedCostListProps } from '../../../types/fixedCostListTypes';
 
 const ITEMS_PER_PAGE = 10;
 
