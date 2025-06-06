@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Settings from './pages/Settings';
 import Budget from './pages/Budget';
 import FixedCosts from './pages/FixedCosts';
+import Categories from './pages/Categories'; 
 import ErrorBoundary from './components/ErrorBoundary';
 import AppLayout from './components/Layouts/AppLayout';
 
@@ -24,6 +25,7 @@ const App: React.FC = () => {
           <Route path="/settings" element={<Settings />} />
           <Route path="/budget" element={<Budget />} />
           <Route path="/fixed-costs" element={<FixedCosts />} />
+          <Route path="/categories" element={<Categories />} />
         </Routes>
       </AppLayout>
     </ErrorBoundary>

@@ -38,61 +38,116 @@ app.use(require('cors')({ origin: 'http://localhost:8080' }));  // 特定のオ�
 
 // テーブルが存在しない場合は作成
 const createTableIfNotExists = () => {
-  const createExpensesSQL = `
-    CREATE TABLE IF NOT EXISTS expenses (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      description TEXT NOT NULL,
-      amount REAL NOT NULL,
-      date TEXT NOT NULL
-    );
-  `;
+  return new Promise((resolve, reject) => {
+    const createCategoriesSQL = `
+      CREATE TABLE IF NOT EXISTS categories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE
+      );
+    `;
 
-  const createBudgetsSQL = `
-    CREATE TABLE IF NOT EXISTS budgets (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      month TEXT NOT NULL UNIQUE,
-      amount REAL NOT NULL
-    );
-  `;
+    const createExpensesSQL = `
+      CREATE TABLE IF NOT EXISTS expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        description TEXT NOT NULL,
+        amount REAL NOT NULL,
+        date TEXT NOT NULL,
+        category_id INTEGER,
+        FOREIGN KEY (category_id) REFERENCES categories(id)
+      );
+    `;
 
-  const createFixedCostsSQL = `
-    CREATE TABLE IF NOT EXISTS fixed_costs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      description TEXT NOT NULL,
-      amount REAL NOT NULL,
-      date TEXT NOT NULL,
-      payment_method TEXT NOT NULL
-    );
-  `;
+    const createBudgetsSQL = `
+      CREATE TABLE IF NOT EXISTS budgets (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        month TEXT NOT NULL UNIQUE,
+        amount REAL NOT NULL
+      );
+    `;
 
-  // 各テーブルの作成
-  db.run(createExpensesSQL, (err) => {
-    if (err) {
-      console.error('expensesテーブル作成エラー:', err.message);
-    } else {
-      console.log('expensesテーブル作成成功');
-    }
+    const createFixedCostsSQL = `
+      CREATE TABLE IF NOT EXISTS fixed_costs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        description TEXT NOT NULL,
+        amount REAL NOT NULL,
+        date TEXT NOT NULL,
+        payment_method TEXT NOT NULL,
+        category_id INTEGER,
+        FOREIGN KEY (category_id) REFERENCES categories(id)
+      );
+    `;
+
+    // categoriesテーブル作成
+    db.run(createCategoriesSQL, (err) => {
+      if (err) {
+        reject('categoriesテーブル作成エラー: ' + err.message);
+      } else {
+        console.log('categoriesテーブル作成成功');
+
+        // expensesテーブル作成
+        db.run(createExpensesSQL, (err) => {
+          if (err) {
+            reject('expensesテーブル作成エラー: ' + err.message);
+          } else {
+            console.log('expensesテーブル作成成功');
+
+            // budgetsテーブル作成
+            db.run(createBudgetsSQL, (err) => {
+              if (err) {
+                reject('budgetsテーブル作成エラー: ' + err.message);
+              } else {
+                console.log('budgetsテーブル作成成功');
+
+                // fixed_costsテーブル作成
+                db.run(createFixedCostsSQL, (err) => {
+                  if (err) {
+                    reject('fixed_costsテーブル作成エラー: ' + err.message);
+                  } else {
+                    console.log('fixed_costsテーブル作成成功');
+                    resolve();
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
   });
+};
 
-  db.run(createBudgetsSQL, (err) => {
-    if (err) {
-      console.error('budgetsテーブル作成エラー:', err.message);
-    } else {
-      console.log('budgetsテーブル作成成功');
-    }
-  });
+// デフォルトカテゴリを挿入
+const insertDefaultCategories = () => {
+  return new Promise((resolve, reject) => {
+    const defaultCategories = ['食費', '交通費', '光熱費', '交際費', '住宅費', '娯楽費'];
 
-  db.run(createFixedCostsSQL, (err) => {
-    if (err) {
-      console.error('fixed_costsテーブル作成エラー:', err.message);
-    } else {
-      console.log('fixed_costsテーブル作成成功');
-    }
+    defaultCategories.forEach((category, index) => {
+      db.run("INSERT OR IGNORE INTO categories (name) VALUES (?)", [category], (err) => {
+        if (err) {
+          console.error('カテゴリ挿入エラー:', err.message);
+        }
+        if (index === defaultCategories.length - 1) {
+          resolve();
+        }
+      });
+    });
   });
 };
 
 // サーバ起動時にテーブルを作成
-createTableIfNotExists();
+createTableIfNotExists()
+  .then(() => {
+    console.log('全テーブル作成完了');
+    // 初回起動時にカテゴリ挿入
+    return insertDefaultCategories();
+  })
+  .then(() => {
+    console.log('デフォルトカテゴリの挿入完了');
+  })
+  .catch((error) => {
+    console.error('エラー:', error);
+  });
+
 
 // 取得エンドポイント (費用)
 app.get('/expenses', (req, res) => {
@@ -243,3 +298,59 @@ app.delete('/fixed-costs/:id', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
+// カテゴリ取得エンドポイント
+app.get('/categories', (req, res) => {
+  try {
+    db.all('SELECT * FROM categories', (err, rows) => {
+      if (err) {
+        console.error('データベースエラー:', err.message);
+        return res.status(500).json({ error: 'データベースの取得に失敗しました' });
+      }
+      res.json(rows);
+    });
+  } catch (err) {
+    console.error('サーバーエラー:', err.message);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'サーバーエラー' });
+    }
+  }
+});
+
+// カテゴリ登録エンドポイント
+app.post('/categories', (req, res) => {
+  const { name } = req.body;
+
+  if (!name) {
+    return res.status(400).json({ error: 'nameは必須です' });
+  }
+
+  const sql = 'INSERT INTO categories (name) VALUES (?)';
+
+  db.run(sql, [name], function (err) {
+    if (err) {
+      console.error('カテゴリ登録エラー:', err.message);
+      return res.status(500).json({ error: 'カテゴリの登録に失敗しました' });
+    }
+    res.json({ message: `カテゴリ "${name}" が登録されました`, id: this.lastID });
+  });
+});
+
+// カテゴリ削除エンドポイント
+app.delete('/categories/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = 'DELETE FROM categories WHERE id = ?';
+
+  db.run(sql, [id], function (err) {
+    if (err) {
+      console.error('削除エラー:', err.message);
+      return res.status(500).json({ error: 'カテゴリの削除に失敗しました' });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: '指定されたカテゴリが見つかりませんでした' });
+    }
+    res.json({ message: `カテゴリ ID ${id} が削除されました` });
+  });
+});
+

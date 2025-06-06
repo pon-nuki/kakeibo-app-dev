@@ -1,5 +1,5 @@
 // src/renderer/electron.d.ts
-import { Expense, FixedCost, DeleteResult } from '../types/common.d';
+import { Expense, FixedCost, DeleteResult, Category } from '../types/common.d';
 
 declare global {
   interface Window {
@@ -20,6 +20,12 @@ declare global {
       addFixedCost: (description: string, amount: number, startDate: string, paymentMethod: string) => Promise<void>;
       updateFixedCost: (id: number, description: string, amount: number, startDate: string, paymentMethod: string) => Promise<void>;
       deleteFixedCost: (id: number) => Promise<DeleteResult>;
+
+      // カテゴリ管理
+      fetchCategories: () => Promise<Category[]>;
+      addCategory: (name: string) => Promise<void>;
+      updateCategory: (id: number, name: string) => Promise<void>;
+      deleteCategory: (id: number) => Promise<DeleteResult>;
     };
   }
 }

@@ -34,6 +34,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             { path: '/', label: '家計簿' },
             { path: '/budget', label: '予算設定' },
             { path: '/fixed-costs', label: '固定費設定' },
+            { path: '/categories', label: 'カテゴリ設定' },
             { path: '/settings', label: 'アプリ設定' },
           ].map((item) => (
             <ListItem key={item.path} disablePadding>

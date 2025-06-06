@@ -23,3 +23,8 @@ export interface Budget {
   month: string; // YYYY-MM
   amount: number;
 }
+
+export interface Category {
+  id: number;
+  name: string;
+}

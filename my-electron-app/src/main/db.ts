@@ -45,7 +45,9 @@ export const createTablesIfNotExists = async (): Promise<void> => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       description TEXT NOT NULL,
       amount REAL NOT NULL,
-      date TEXT NOT NULL
+      date TEXT NOT NULL,
+      category_id INTEGER,
+      FOREIGN KEY (category_id) REFERENCES categories(id)
     );
   `;
   const createBudgetsSQL = `
@@ -62,41 +64,53 @@ export const createTablesIfNotExists = async (): Promise<void> => {
       description TEXT NOT NULL,
       amount REAL NOT NULL,
       date TEXT NOT NULL,
-      payment_method TEXT NOT NULL
+      payment_method TEXT NOT NULL,
+      category_id INTEGER,
+      FOREIGN KEY (category_id) REFERENCES categories(id)
     );
   `;
 
-  await new Promise<void>((resolve, reject) => {
-    db.run(createExpensesSQL, (err: Error | null) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
+  const createCategoriesSQL = `
+    CREATE TABLE IF NOT EXISTS categories (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL UNIQUE
+    );
+  `;
 
-  await new Promise<void>((resolve, reject) => {
-    db.run(createBudgetsSQL, (err: Error | null) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
+  // SQLを実行する関数を作成（共通化）
+  const runSQL = (sql: string): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
+      db.run(sql, (err: Error | null) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
     });
-  });
+  };
 
-  await new Promise<void>((resolve, reject) => {
-    db.run(createFixedCostsSQL, (err: Error | null) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
+  try {
+    // カテゴリーテーブル
+    await runSQL(createCategoriesSQL);
+    console.log('categoriesテーブル作成成功');
 
-  console.log('全テーブル作成完了');
+    // expensesテーブル
+    await runSQL(createExpensesSQL);
+    console.log('expensesテーブル作成成功');
+
+    // budgetsテーブル
+    await runSQL(createBudgetsSQL);
+    console.log('budgetsテーブル作成成功');
+
+    // fixed_costsテーブル
+    await runSQL(createFixedCostsSQL);
+    console.log('fixed_costsテーブル作成成功');
+    
+    console.log('全テーブル作成完了');
+  } catch (error) {
+    console.error('テーブル作成中にエラーが発生:', error);
+  }
 };
 
 // DB初期化
@@ -261,3 +275,46 @@ export const deleteFixedCost = (
   });
 };
 
+// カテゴリ取得
+export const fetchCategories = (): Promise<any[]> => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM categories', (err, rows) => {
+      err ? reject(err) : resolve(rows);
+    });
+  });
+};
+
+// カテゴリ追加
+export const addCategory = (name: string): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare('INSERT INTO categories (name) VALUES (?)');
+    stmt.run(name, function (this: sqlite3.RunResult, err: Error | null) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(this.lastID);
+      }
+    });
+    stmt.finalize();
+  });
+};
+
+// カテゴリ更新
+export const updateCategory = (id: number, name: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare('UPDATE categories SET name = ? WHERE id = ?');
+    stmt.run(name, id, (err: Error | null) => (err ? reject(err) : resolve()));
+    stmt.finalize();
+  });
+};
+
+// カテゴリ削除
+export const deleteCategory = (id: number): Promise<{ message: string; changes: number }> => {
+  return new Promise((resolve, reject) => {
+    db.run('DELETE FROM categories WHERE id = ?', [id], function (this: sqlite3.RunResult, err) {
+      err
+        ? reject(err)
+        : resolve({ message: `削除されました。${this.changes} 行が影響を受けました。`, changes: this.changes });
+    });
+  });
+};

@@ -21,6 +21,12 @@ try {
     addFixedCost: (description: string, amount: number, date: string, paymentMethod: string) => ipcRenderer.invoke('addFixedCost', description, amount, date, paymentMethod),
     updateFixedCost: (id: number, desc: string, amt: number, date: string, paymentMethod: string) => ipcRenderer.invoke('updateFixedCost', { id, desc, amt, date, paymentMethod }),
     deleteFixedCost: (id: number) => ipcRenderer.invoke('deleteFixedCost', id),
+
+    // Categories
+    fetchCategories: () => ipcRenderer.invoke('fetchCategories'),
+    addCategory: (name: string) => ipcRenderer.invoke('addCategory', name),
+    updateCategory: (id: number, name: string) => ipcRenderer.invoke('updateCategory', { id, name }),
+    deleteCategory: (id: number) => ipcRenderer.invoke('deleteCategory', id),
   });
 
   console.log("preload.ts 完了");

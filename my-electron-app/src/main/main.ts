@@ -12,7 +12,11 @@ import { fetchExpenses,
           fetchFixedCosts,
           addFixedCost,
           deleteFixedCost,
-          updateFixedCost
+          updateFixedCost,
+          fetchCategories,
+          addCategory,
+          updateCategory,
+          deleteCategory
         } from './db';
 
 let mainWindow: BrowserWindow | null;
@@ -230,3 +234,50 @@ ipcMain.handle('updateFixedCost', async (_event, { id, desc, amt, date, paymentM
   }
 });
 
+// カテゴリ一覧を取得
+ipcMain.handle('fetchCategories', async () => {
+  try {
+    const categories = await fetchCategories();
+    return categories;
+  } catch (error) {
+    console.error('fetchCategories エラー:', error);
+    throw new Error('カテゴリの取得に失敗しました');
+  }
+});
+
+// カテゴリを追加
+ipcMain.handle('addCategory', async (_event, name: string) => {
+  try {
+    const id = await addCategory(name);
+    return { message: 'カテゴリの追加に成功しました', id };
+  } catch (error) {
+    console.error('addCategory エラー:', error);
+    throw new Error('カテゴリの追加に失敗しました');
+  }
+});
+
+// カテゴリを更新
+ipcMain.handle('updateCategory', async (_event, { id, name }) => {
+  try {
+    await updateCategory(id, name);
+    return { message: 'カテゴリの更新に成功しました' };
+  } catch (error) {
+    console.error('updateCategory エラー:', error);
+    return { message: 'カテゴリの更新に失敗しました' };
+  }
+});
+
+// カテゴリを削除
+ipcMain.handle('deleteCategory', async (_event, id: number) => {
+  try {
+    const result = await deleteCategory(id);
+    if (result.changes > 0) {
+      return { message: `カテゴリ ID ${id} が削除されました`, changes: result.changes };
+    } else {
+      return { message: `カテゴリ ID ${id} は見つかりませんでした`, changes: result.changes };
+    }
+  } catch (error) {
+    console.error('deleteCategory エラー:', error);
+    throw new Error('カテゴリの削除に失敗しました');
+  }
+});
