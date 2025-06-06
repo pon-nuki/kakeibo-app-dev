@@ -117,7 +117,7 @@ const createTableIfNotExists = () => {
 };
 
 // デフォルトカテゴリを挿入
-const insertDefaultCategories = () => {
+const insertDefaultCategories = async () => {
   return new Promise((resolve, reject) => {
     const defaultCategories = ['食費', '交通費', '光熱費', '交際費', '住宅費', '娯楽費'];
 
@@ -135,19 +135,19 @@ const insertDefaultCategories = () => {
 };
 
 // サーバ起動時にテーブルを作成
-createTableIfNotExists()
-  .then(() => {
+const startApp = async () => {
+  try {
+    await createTableIfNotExists();
     console.log('全テーブル作成完了');
-    // 初回起動時にカテゴリ挿入
-    return insertDefaultCategories();
-  })
-  .then(() => {
+    await insertDefaultCategories();
     console.log('デフォルトカテゴリの挿入完了');
-  })
-  .catch((error) => {
+  } catch (error) {
     console.error('エラー:', error);
-  });
+  }
+};
 
+// サーバの起動処理を実行
+startApp();
 
 // 取得エンドポイント (費用)
 app.get('/expenses', (req, res) => {
