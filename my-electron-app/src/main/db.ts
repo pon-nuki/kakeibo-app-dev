@@ -222,14 +222,15 @@ export const addFixedCost = (
   description: string,
   amount: number,
   rawDate: string,
-  paymentMethod: string
+  paymentMethod: string,
+  categoryId: number
 ): Promise<number> => {
   const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
     const stmt = db.prepare(
-      'INSERT INTO fixed_costs (description, amount, date, payment_method) VALUES (?, ?, ?, ?)'
+      'INSERT INTO fixed_costs (description, amount, date, payment_method, category_id) VALUES (?, ?, ?, ?, ?)'
     );
-    stmt.run(description, amount, date, paymentMethod, function (this: sqlite3.RunResult, err: Error | null) {
+    stmt.run(description, amount, date, paymentMethod, categoryId, function (this: sqlite3.RunResult, err: Error | null) {
       if (err) {
         console.error('[addFixedCost] SQL実行エラー:', err);
         reject(err);
@@ -248,14 +249,15 @@ export const updateFixedCost = (
   description: string,
   amount: number,
   rawDate: string,
-  paymentMethod: string
+  paymentMethod: string,
+  categoryId: number
 ): Promise<void> => {
   const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
     const stmt = db.prepare(
-      'UPDATE fixed_costs SET description = ?, amount = ?, date = ?, payment_method = ? WHERE id = ?'
+      'UPDATE fixed_costs SET description = ?, amount = ?, date = ?, payment_method = ?, category_id = ? WHERE id = ?'
     );
-    stmt.run(description, amount, date, paymentMethod, id, (err: Error | null) =>
+    stmt.run(description, amount, date, paymentMethod, categoryId, id, (err: Error | null) =>
       err ? reject(err) : resolve()
     );
     stmt.finalize();

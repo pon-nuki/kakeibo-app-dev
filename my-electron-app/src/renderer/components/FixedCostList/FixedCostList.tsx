@@ -11,9 +11,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import '../ExpenseList/ExpenseList.css';
 import Pagination from '../Pagination/PaginationControls';
 import { FixedCostListProps } from '../../../types/fixedCostListTypes';
+import { FixedCost } from '../../../types/common';
 
 const ITEMS_PER_PAGE = 10;
 
+// 支払方法のラベルを取得
 const getPaymentMethodLabel = (method: string): string => {
   switch (method) {
     case 'bank': return '口座振替';
@@ -24,11 +26,21 @@ const getPaymentMethodLabel = (method: string): string => {
   }
 };
 
+// カテゴリ名を取得
+const getCategoryName = (cost: FixedCost, categories: { id: number, name: string }[]): string => {
+  if (cost.categoryId) {
+    const category = categories.find((cat) => cat.id === cost.categoryId);
+    return category ? category.name : '未設定';
+  }
+  return '未設定';
+};
+
 const FixedCostList: React.FC<FixedCostListProps> = ({
   filteredFixedCosts,
   startEditing,
   handleDeleteFixedCost,
   editId,
+  categories,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -41,8 +53,6 @@ const FixedCostList: React.FC<FixedCostListProps> = ({
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const selectedFixedCosts = filteredFixedCosts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  console.log('[FixedCostList] props.filteredFixedCosts:', filteredFixedCosts);
-
   return (
     <div>
       <List>
@@ -53,7 +63,7 @@ const FixedCostList: React.FC<FixedCostListProps> = ({
           >
             <ListItemText
               primary={cost.description}
-              secondary={`¥${cost.amount.toLocaleString()} / ${cost.date} / ${getPaymentMethodLabel(cost.paymentMethod)}`}
+              secondary={`¥${cost.amount.toLocaleString()} / ${cost.date} / カテゴリ: ${getCategoryName(cost, categories)} / 支払方法: ${getPaymentMethodLabel(cost.paymentMethod)}`}
             />
             <IconButton onClick={() => startEditing(cost)} color="primary">
               <EditIcon />
@@ -65,6 +75,7 @@ const FixedCostList: React.FC<FixedCostListProps> = ({
         ))}
       </List>
 
+      {/* ページネーション */}
       <Pagination
         currentPage={currentPage}
         pageCount={pageCount}

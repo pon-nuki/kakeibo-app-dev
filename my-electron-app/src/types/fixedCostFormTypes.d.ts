@@ -3,11 +3,14 @@ export interface FixedCostFormProps {
   amount: string;
   startDate: Date | null;
   paymentMethod: string;
+  categories: { id: number; name: string }[];
+  selectedCategory: number | null;
   editId: number | null;
-  onSubmit: () => Promise<void>;
+  onDescriptionChange: (value: string) => void;
+  onAmountChange: (value: string) => void;
+  onStartDateChange: (value: Date | null) => void;
+  onPaymentMethodChange: (value: string) => void;
+  onCategoryChange: (value: number | null) => void;
+  onSubmit: () => void;
   onCancel: () => void;
-  onDescriptionChange: (description: string) => void;
-  onAmountChange: (amount: string) => void;
-  onStartDateChange: (date: Date | null) => void;
-  onPaymentMethodChange: (method: string) => void;
 }

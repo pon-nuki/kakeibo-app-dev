@@ -18,17 +18,21 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
   amount,
   startDate,
   paymentMethod,
+  categories,
+  selectedCategory,
   editId,
-  onSubmit,
-  onCancel,
   onDescriptionChange,
   onAmountChange,
   onStartDateChange,
-  onPaymentMethodChange
+  onPaymentMethodChange,
+  onCategoryChange,
+  onSubmit,
+  onCancel,
 }) => {
   return (
     <div>
       <div className="input-row">
+        {/* 固定費名 */}
         <TextField
           label="固定費名"
           variant="outlined"
@@ -36,6 +40,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
           onChange={(e) => onDescriptionChange(e.target.value)}
           className={`input-field ${editId ? 'editing' : ''}`}
         />
+        {/* 金額 */}
         <TextField
           label="金額"
           variant="outlined"
@@ -44,6 +49,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
           onChange={(e) => onAmountChange(e.target.value)}
           className={`input-field ${editId ? 'editing' : ''}`}
         />
+        {/* 支払方法 */}
         <FormControl className={`input-field ${editId ? 'editing' : ''}`}>
           <InputLabel>支払方法</InputLabel>
           <Select
@@ -57,6 +63,35 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             <MenuItem value="other">その他</MenuItem>
           </Select>
         </FormControl>
+        {/* カテゴリ選択 */}
+        <FormControl className={`input-field ${editId ? 'editing' : ''}`}>
+          <InputLabel>カテゴリ</InputLabel>
+          <Select
+            value={selectedCategory || ''}
+            label="カテゴリ"
+            onChange={(e) => onCategoryChange(Number(e.target.value))}
+          >
+            {categories.map((category) => (
+              <MenuItem key={category.id} value={category.id}>
+                {category.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        {/* 支払日 */}
+        <div className="date-picker-row">
+          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
+            <DatePicker
+              label="支払日"
+              value={startDate}
+              onChange={onStartDateChange}
+              enableAccessibleFieldDOMStructure={false}
+              slots={{ textField: TextField }}
+              slotProps={{ textField: { className: 'date-picker-input' } }}
+            />
+          </LocalizationProvider>
+        </div>
+        {/* 追加・更新ボタン */}
         {editId === null ? (
           <Button onClick={onSubmit} variant="contained">
             追加
@@ -71,19 +106,6 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             </Button>
           </>
         )}
-      </div>
-
-      <div className="date-picker-row">
-        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
-          <DatePicker
-            label="支払日"
-            value={startDate}
-            onChange={onStartDateChange}
-            enableAccessibleFieldDOMStructure={false}
-            slots={{ textField: TextField }}
-            slotProps={{ textField: { className: 'date-picker-input' } }}
-          />
-        </LocalizationProvider>
       </div>
     </div>
   );

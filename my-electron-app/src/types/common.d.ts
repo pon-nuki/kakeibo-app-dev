@@ -4,6 +4,8 @@ export interface FixedCost {
   amount: number;
   date: string;
   paymentMethod: string;
+  categoryId: number;
+  category: { id: number; name: string };
 }
 
 export type Expense = {

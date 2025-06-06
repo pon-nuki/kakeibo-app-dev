@@ -17,8 +17,8 @@ declare global {
 
       // 固定費
       fetchFixedCosts: () => Promise<FixedCost[]>;
-      addFixedCost: (description: string, amount: number, startDate: string, paymentMethod: string) => Promise<void>;
-      updateFixedCost: (id: number, description: string, amount: number, startDate: string, paymentMethod: string) => Promise<void>;
+      addFixedCost: (description: string, amount: number, startDate: string, paymentMethod: string, categoryId: number) => Promise<void>;
+      updateFixedCost: (id: number, description: string, amount: number, startDate: string, paymentMethod: string, categoryId: number) => Promise<void>;
       deleteFixedCost: (id: number) => Promise<DeleteResult>;
 
       // カテゴリ管理

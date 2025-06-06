@@ -141,13 +141,6 @@ const Home: React.FC = () => {
       }
 
       return true;
-    })
-    .filter((expense) => {
-      // カテゴリフィルタリング
-      if (selectedCategory) {
-        return expense.categoryId === selectedCategory;
-      }
-      return true;
     });
 
   const totalFilteredAmount = filteredExpenses.reduce(

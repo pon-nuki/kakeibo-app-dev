@@ -5,4 +5,5 @@ export interface FixedCostListProps {
   startEditing: (cost: FixedCost) => void;
   handleDeleteFixedCost: (id: number) => void;
   editId: number | null;
+  categories: { id: number; name: string }[];
 }

@@ -22,6 +22,8 @@ const FixedCosts: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState('bank');
   const [editId, setEditId] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   // フィルター
   const [filterDate, setFilterDate] = useState<Date | null>(null);
@@ -33,8 +35,18 @@ const FixedCosts: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
+  const fetchAndSetCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/categories');
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      setErrorMessage('カテゴリの取得に失敗しました');
+    }
+  };
+
   useEffect(() => {
-    fetchAndSetFixedCosts();
+    fetchAndSetCategories();
   }, []);
 
   const fetchAndSetFixedCosts = async () => {
@@ -47,10 +59,14 @@ const FixedCosts: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    fetchAndSetFixedCosts();
+  }, []);
+
   const handleAdd = async () => {
-    if (name && amount && date && paymentMethod) {
+    if (name && amount && date && paymentMethod && selectedCategory) {
       try {
-        await addFixedCost(name, parseFloat(amount), date.toISOString().slice(0, 10), paymentMethod);
+        await addFixedCost(name, parseFloat(amount), date.toISOString().slice(0, 10), paymentMethod, selectedCategory);
         await fetchAndSetFixedCosts();
         resetForm();
       } catch {
@@ -62,9 +78,9 @@ const FixedCosts: React.FC = () => {
   };
 
   const handleUpdate = async () => {
-    if (editId !== null && name && amount && date && paymentMethod) {
+    if (editId !== null && name && amount && date && paymentMethod && selectedCategory) {
       try {
-        await updateFixedCost(editId, name, parseFloat(amount), date.toISOString().slice(0, 10), paymentMethod);
+        await updateFixedCost(editId, name, parseFloat(amount), date.toISOString().slice(0, 10), paymentMethod, selectedCategory);
         await fetchAndSetFixedCosts();
         resetForm();
       } catch {
@@ -88,6 +104,7 @@ const FixedCosts: React.FC = () => {
     setAmount(cost.amount.toString());
     setDate(new Date(cost.date));
     setPaymentMethod(cost.paymentMethod);
+    setSelectedCategory(cost.categoryId);
   };
 
   const resetForm = () => {
@@ -96,21 +113,24 @@ const FixedCosts: React.FC = () => {
     setAmount('');
     setDate(null);
     setPaymentMethod('');
+    setSelectedCategory(null);
     setErrorMessage(null);
   };
 
-  const filteredCosts = fixedCosts.filter(cost => {
-    const costDate = new Date(cost.date);
-    if (searchType === 'exact' && filterDate) {
-      return costDate.toDateString() === filterDate.toDateString();
-    }
-    if (searchType === 'range') {
-      if (rangeStartDate && rangeEndDate) return costDate >= rangeStartDate && costDate <= rangeEndDate;
-      if (rangeStartDate) return costDate >= rangeStartDate;
-      if (rangeEndDate) return costDate <= rangeEndDate;
-    }
-    return true;
-  });
+const filteredCosts = fixedCosts.filter(cost => {
+  const costDate = new Date(cost.date);
+
+  // 日付のフィルタリング
+  if (searchType === 'exact' && filterDate) {
+    return costDate.toDateString() === filterDate.toDateString();
+  }
+  if (searchType === 'range') {
+    if (rangeStartDate && rangeEndDate) return costDate >= rangeStartDate && costDate <= rangeEndDate;
+    if (rangeStartDate) return costDate >= rangeStartDate;
+    if (rangeEndDate) return costDate <= rangeEndDate;
+  }
+  return true;
+});
 
   const normalizeFixedCosts = (rows: any[]): FixedCost[] =>
     rows.map(row => ({
@@ -119,6 +139,8 @@ const FixedCosts: React.FC = () => {
       amount: row.amount,
       date: row.date,
       paymentMethod: row.payment_method,
+      categoryId: row.category_id,
+      category: { id: row.category_id, name: row.category_name },
   }));
 
   const totalAmount = filteredCosts.reduce((sum, cost) => sum + cost.amount, 0);
@@ -141,10 +163,13 @@ const FixedCosts: React.FC = () => {
         amount={amount}
         startDate={date}
         paymentMethod={paymentMethod}
+        selectedCategory={selectedCategory}
+        categories={categories}
         onDescriptionChange={setName}
         onAmountChange={setAmount}
         onStartDateChange={setDate}
         onPaymentMethodChange={setPaymentMethod}
+        onCategoryChange={setSelectedCategory}
         onSubmit={editId === null ? handleAdd : handleUpdate}
         onCancel={resetForm}
         editId={editId}
@@ -166,6 +191,7 @@ const FixedCosts: React.FC = () => {
         startEditing={startEditing}
         handleDeleteFixedCost={handleDelete}
         editId={editId}
+        categories={categories}
       />
 
       <Pagination
