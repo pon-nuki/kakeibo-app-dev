@@ -295,10 +295,6 @@ app.delete('/fixed-costs/:id', (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
-
 // カテゴリ取得エンドポイント
 app.get('/categories', (req, res) => {
   try {
@@ -354,3 +350,6 @@ app.delete('/categories/:id', (req, res) => {
   });
 });
 
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
