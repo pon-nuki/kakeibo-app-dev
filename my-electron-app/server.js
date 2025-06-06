@@ -118,20 +118,26 @@ const createTableIfNotExists = () => {
 
 // デフォルトカテゴリを挿入
 const insertDefaultCategories = async () => {
-  return new Promise((resolve, reject) => {
-    const defaultCategories = ['食費', '交通費', '光熱費', '交際費', '住宅費', '娯楽費'];
+  const defaultCategories = ['食費', '交通費', '光熱費', '交際費', '住宅費', '娯楽費'];
 
-    defaultCategories.forEach((category, index) => {
-      db.run("INSERT OR IGNORE INTO categories (name) VALUES (?)", [category], (err) => {
-        if (err) {
-          console.error('カテゴリ挿入エラー:', err.message);
-        }
-        if (index === defaultCategories.length - 1) {
+  // 順番に処理
+  for (const category of defaultCategories) {
+    try {
+      // 非同期でカテゴリ挿入
+      await new Promise((resolve, reject) => {
+        db.run("INSERT OR IGNORE INTO categories (name) VALUES (?)", [category], function(err) {
+          if (err) {
+            console.error('カテゴリ挿入エラー:', err.message);
+            reject(err);
+          }
           resolve();
-        }
+        });
       });
-    });
-  });
+      console.log(`カテゴリ "${category}" が挿入されました`);
+    } catch (err) {
+      console.error(`カテゴリ "${category}" 挿入時にエラー:`, err.message);
+    }
+  }
 };
 
 // サーバ起動時にテーブルを作成
