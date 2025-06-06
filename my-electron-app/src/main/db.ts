@@ -126,11 +126,11 @@ export const fetchExpenses = (): Promise<any[]> => {
 };
 
 // 費用追加
-export const addExpense = (description: string, amount: number, rawDate: string): Promise<number> => {
+export const addExpense = (description: string, amount: number, rawDate: string, categoryId: number): Promise<number> => {
   const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
-    const stmt = db.prepare('INSERT INTO expenses (description, amount, date) VALUES (?, ?, ?)');
-    stmt.run(description, amount, date, function (this: sqlite3.RunResult, err: Error | null) {
+    const stmt = db.prepare('INSERT INTO expenses (description, amount, date, category_id) VALUES (?, ?, ?, ?)');
+    stmt.run(description, amount, date, categoryId, function (this: sqlite3.RunResult, err: Error | null) {
       err ? reject(err) : resolve(this.lastID);
     });
     stmt.finalize();
@@ -149,11 +149,11 @@ export const deleteExpense = (id: number): Promise<{ message: string; changes: n
 };
 
 // 費用更新
-export const updateExpense = (id: number, description: string, amount: number, rawDate: string): Promise<void> => {
+export const updateExpense = (id: number, description: string, amount: number, rawDate: string, categoryId: number): Promise<void> => {
   const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
-    const stmt = db.prepare('UPDATE expenses SET description = ?, amount = ?, date = ? WHERE id = ?');
-    stmt.run(description, amount, date, id, (err: Error | null) => (err ? reject(err) : resolve()));
+    const stmt = db.prepare('UPDATE expenses SET description = ?, amount = ?, date = ?, category_id = ? WHERE id = ?');
+    stmt.run(description, amount, date, categoryId, id, (err: Error | null) => (err ? reject(err) : resolve()));
     stmt.finalize();
   });
 };

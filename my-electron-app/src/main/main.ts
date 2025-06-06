@@ -105,9 +105,9 @@ ipcMain.handle('fetchExpenses', async () => {
 });
 
 // 追加: 費用を追加
-ipcMain.handle('addExpense', async (event, description, amount, date) => {
+ipcMain.handle('addExpense', async (event, description, amount, date, categoryId) => {
   try {
-    const id = await addExpense(description, amount, date);
+    const id = await addExpense(description, amount, date, categoryId);
     return { message: '費用の追加に成功しました', id };
   } catch (error) {
     console.error('addExpenseエラー:', error);
@@ -137,9 +137,9 @@ ipcMain.handle('deleteExpense', async (event, id) => {
 });
 
 // 更新: 費用を更新
-ipcMain.handle('updateExpense', async (_event, { id, desc, amt, date }) => {
+ipcMain.handle('updateExpense', async (_event, { id, desc, amt, date, categoryId }) => {
   try {
-    await updateExpense(id, desc, amt, date);
+    await updateExpense(id, desc, amt, date, categoryId);
     return { message: '更新に成功しました' };
   } catch (error) {
     console.error('updateExpenseエラー:', error);

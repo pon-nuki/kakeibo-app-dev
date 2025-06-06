@@ -5,4 +5,5 @@ export interface ExpenseListProps {
   startEditing: (expense: Expense) => void;
   handleDeleteExpense: (id: number) => void;
   editId: number | null;
+  categories: { id: number; name: string }[];
 }

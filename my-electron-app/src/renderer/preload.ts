@@ -8,8 +8,8 @@ try {
     // Expenses
     fetchExpenses: () => ipcRenderer.invoke('fetchExpenses'),
     deleteExpense: (id: number) => ipcRenderer.invoke('deleteExpense', id),
-    addExpense: (description: string, amount: number, date: string) => ipcRenderer.invoke('addExpense', description, amount, date),
-    updateExpense: (id: number, desc: string, amt: number, date: string) => ipcRenderer.invoke('updateExpense', { id, desc, amt, date }),
+    addExpense: (description: string, amount: number, date: string, categoryId: number) => ipcRenderer.invoke('addExpense', description, amount, date, categoryId),
+    updateExpense: (id: number, desc: string, amt: number, date: string, categoryId: number) => ipcRenderer.invoke('updateExpense', { id, desc, amt, date, categoryId }),
 
     // Budgets
     getBudget: (month: string) => ipcRenderer.invoke('getBudget', month),

@@ -20,7 +20,26 @@ const Home: React.FC = () => {
   const [filterDate, setFilterDate] = useState<Date | null>(null);
   const [rangeStartDate, setRangeStartDate] = useState<Date | null>(null);
   const [rangeEndDate, setRangeEndDate] = useState<Date | null>(null);
-  const [searchType, setSearchType] = useState<'exact' | 'range'>('exact'); // 検索タイプ
+  const [searchType, setSearchType] = useState<'exact' | 'range'>('exact');
+
+  // カテゴリ用
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+
+  // カテゴリを取得する
+  const fetchAndSetCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/categories');
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      setErrorMessage('カテゴリの取得に失敗しました');
+    }
+  };
+
+  useEffect(() => {
+    fetchAndSetCategories();
+  }, []);
 
   // データを取得する
   const fetchAndSetExpenses = async () => {
@@ -37,13 +56,14 @@ const Home: React.FC = () => {
   }, []);
 
   const handleAddExpense = async () => {
-    if (description && amount && startDate) {
+    if (description && amount && startDate && selectedCategory !== null) {
       try {
-        await addExpense(description, parseFloat(amount), startDate.toISOString().slice(0, 10));
+        await addExpense(description, parseFloat(amount), startDate.toISOString().slice(0, 10), selectedCategory);
         await fetchAndSetExpenses();
         setDescription('');
         setAmount('');
         setStartDate(null);
+        setSelectedCategory(null); 
         setErrorMessage('');
       } catch (err) {
         setErrorMessage('追加に失敗しました');
@@ -54,14 +74,15 @@ const Home: React.FC = () => {
   };
 
   const handleUpdateExpense = async () => {
-    if (editId !== null && description && amount && startDate) {
+    if (editId !== null && description && amount && startDate && selectedCategory !== null) {
       try {
-        await updateExpense(editId, description, parseFloat(amount), startDate.toISOString().slice(0, 10));
+        await updateExpense(editId, description, parseFloat(amount), startDate.toISOString().slice(0, 10), selectedCategory);
         await fetchAndSetExpenses();
         setEditId(null);
         setDescription('');
         setAmount('');
         setStartDate(null);
+        setSelectedCategory(null); 
         setErrorMessage('');
       } catch (err) {
         setErrorMessage('費用の更新に失敗しました。');
@@ -87,6 +108,7 @@ const Home: React.FC = () => {
     setDescription(expense.description);
     setAmount(expense.amount.toString());
     setStartDate(new Date(expense.date));
+    setSelectedCategory(expense.categoryId);
   };
 
   const cancelEdit = () => {
@@ -96,29 +118,37 @@ const Home: React.FC = () => {
     setStartDate(null);
   };
 
-  const filteredExpenses = expenses.filter((expense) => {
-    const expenseDate = new Date(expense.date);
+  const filteredExpenses = expenses
+    .filter((expense) => {
+      const expenseDate = new Date(expense.date);
 
-    if (searchType === 'exact' && filterDate) {
-      const selectedDate = filterDate.toLocaleDateString('ja-JP');
-      const expenseDateFormatted = expenseDate.toLocaleDateString('ja-JP');
-      return selectedDate === expenseDateFormatted;
-    }
+      if (searchType === 'exact' && filterDate) {
+        const selectedDate = filterDate.toLocaleDateString('ja-JP');
+        const expenseDateFormatted = expenseDate.toLocaleDateString('ja-JP');
+        return selectedDate === expenseDateFormatted;
+      }
 
-    if (searchType === 'range') {
-      if (rangeStartDate && rangeEndDate) {
-        return expenseDate >= rangeStartDate && expenseDate <= rangeEndDate;
+      if (searchType === 'range') {
+        if (rangeStartDate && rangeEndDate) {
+          return expenseDate >= rangeStartDate && expenseDate <= rangeEndDate;
+        }
+        if (rangeStartDate && !rangeEndDate) {
+          return expenseDate >= rangeStartDate;
+        }
+        if (!rangeStartDate && rangeEndDate) {
+          return expenseDate <= rangeEndDate;
+        }
       }
-      if (rangeStartDate && !rangeEndDate) {
-        return expenseDate >= rangeStartDate;
-      }
-      if (!rangeStartDate && rangeEndDate) {
-        return expenseDate <= rangeEndDate;
-      }
-    }
 
-    return true;
-  });
+      return true;
+    })
+    .filter((expense) => {
+      // カテゴリフィルタリング
+      if (selectedCategory) {
+        return expense.categoryId === selectedCategory;
+      }
+      return true;
+    });
 
   const totalFilteredAmount = filteredExpenses.reduce(
     (total, expense) => total + expense.amount,
@@ -142,11 +172,14 @@ const Home: React.FC = () => {
         amount={amount}
         startDate={startDate}
         editId={editId}
+        selectedCategory={selectedCategory}
+        categories={categories}
         onSubmit={editId === null ? handleAddExpense : handleUpdateExpense}
         onCancel={cancelEdit}
         onDescriptionChange={setDescription}
         onAmountChange={setAmount}
         onStartDateChange={setStartDate}
+        onCategoryChange={setSelectedCategory}
       />
 
       <hr />
@@ -167,6 +200,7 @@ const Home: React.FC = () => {
         startEditing={startEditing}
         handleDeleteExpense={handleDeleteExpense}
         editId={editId}
+        categories={categories}
       />
 
       <h3>合計: ¥{totalFilteredAmount.toLocaleString()}</h3>

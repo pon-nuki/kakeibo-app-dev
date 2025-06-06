@@ -29,7 +29,7 @@ const CategoriesForm: React.FC<CategoriesFormProps> = ({
   onCategoryChange
 }) => {
   return (
-    <div className="sticky-input-container">
+    <div>
       <div className="input-row">
         <TextField
           label="内容"

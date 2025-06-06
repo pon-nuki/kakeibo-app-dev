@@ -27,7 +27,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
   onPaymentMethodChange
 }) => {
   return (
-    <div className="sticky-input-container">
+    <div>
       <div className="input-row">
         <TextField
           label="固定費名"

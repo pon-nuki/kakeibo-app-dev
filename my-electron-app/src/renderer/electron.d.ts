@@ -7,8 +7,8 @@ declare global {
       // 通常の費用
       fetchExpenses: () => Promise<Expense[]>;
       deleteExpense: (id: number) => Promise<DeleteResult>;
-      addExpense: (description: string, amount: number, startDate: string) => Promise<void>;
-      updateExpense: (id: number, description: string, amount: number, startDate: string) => Promise<void>;
+      addExpense: (description: string, amount: number, startDate: string, categoryId: number) => Promise<void>;
+      updateExpense: (id: number, description: string, amount: number, startDate: string, categoryId: number) => Promise<void>;
 
       // 予算管理
       getBudget: (month: string) => Promise<number | null>;

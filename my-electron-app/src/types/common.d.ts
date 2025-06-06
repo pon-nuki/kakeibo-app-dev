@@ -6,12 +6,14 @@ export interface FixedCost {
   paymentMethod: string;
 }
 
-export interface Expense {
+export type Expense = {
   id: number;
   description: string;
   amount: number;
   date: string;
-}
+  categoryId: number;
+  category: { id: number; name: string };
+};
 
 export interface DeleteResult {
   message: string;
