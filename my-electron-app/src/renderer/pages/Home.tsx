@@ -7,6 +7,7 @@ import ExpenseList from '../components/ExpenseList/ExpenseList';
 import ExpenseForm from '../components/ExpenseForm/ExpenseForm';
 import { fetchExpenses, addExpense, updateExpense, deleteExpense } from '../services/expenseService';
 import { Expense } from '../../types/common.d';
+import { fetchCategories } from '../services/categoriesService';
 
 const Home: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -29,9 +30,9 @@ const Home: React.FC = () => {
   // カテゴリを取得する
   const fetchAndSetCategories = async () => {
     try {
-      const response = await fetch('http://localhost:3000/categories');
-      const data = await response.json();
-      setCategories(data);
+      // fetchCategories関数を呼び出し、取得したカテゴリデータをsetCategoriesに格納
+      const categories = await fetchCategories();
+      setCategories(categories);
     } catch (error) {
       setErrorMessage('カテゴリの取得に失敗しました');
     }

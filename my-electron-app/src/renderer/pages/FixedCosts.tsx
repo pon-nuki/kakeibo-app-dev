@@ -7,6 +7,7 @@ import Pagination from '../components/Pagination/PaginationControls';
 import FixedCostForm from '../components/FixedCostForm/FixedCostForm';
 import FixedCostList from '../components/FixedCostList/FixedCostList';
 import { FixedCost } from '../../types/common.d';
+import { fetchCategories } from '../services/categoriesService';
 import {
   fetchFixedCosts,
   addFixedCost,
@@ -37,9 +38,9 @@ const FixedCosts: React.FC = () => {
 
   const fetchAndSetCategories = async () => {
     try {
-      const response = await fetch('http://localhost:3000/categories');
-      const data = await response.json();
-      setCategories(data);
+      // fetchCategories関数を呼び出し、取得したカテゴリデータをsetCategoriesに格納
+      const categories = await fetchCategories();
+      setCategories(categories);
     } catch (error) {
       setErrorMessage('カテゴリの取得に失敗しました');
     }
