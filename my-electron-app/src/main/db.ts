@@ -78,9 +78,9 @@ export const createTablesIfNotExists = async (): Promise<void> => {
   `;
 
   // SQLを実行する関数を作成（共通化）
-  const runSQL = (sql: string): Promise<void> => {
+  const runSQL = (sql: string, params: any[] = []): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
-      db.run(sql, (err: Error | null) => {
+      db.run(sql, params, (err: Error | null) => {
         if (err) {
           reject(err);
         } else {
@@ -113,8 +113,59 @@ export const createTablesIfNotExists = async (): Promise<void> => {
   }
 };
 
+// デフォルトカテゴリの挿入
+export const insertDefaultCategories = async (): Promise<void> => {
+  const defaultCategories = ['食費', '交通費', '光熱費', '交際費', '住宅費', '娯楽費'];
+
+  const runSQL = (sql: string, params: any[]): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      db.run(sql, params, (err: Error | null) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  };
+
+  try {
+    // 各カテゴリを挿入
+    for (const category of defaultCategories) {
+      const checkCategoryExistsSQL = 'SELECT id FROM categories WHERE name = ?';
+      const insertCategorySQL = 'INSERT INTO categories (name) VALUES (?)';
+
+      const categoryExists = await new Promise<boolean>((resolve, reject) => {
+        db.get(checkCategoryExistsSQL, [category], (err: Error | null, row: any) => {
+          if (err) reject(err);
+          resolve(row ? true : false);
+        });
+      });
+
+      if (!categoryExists) {
+        await runSQL(insertCategorySQL, [category]);
+      } else {
+      }
+    }
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+    } else {
+    }
+  }
+};
+
 // DB初期化
-export const initializeDatabase = () => createTablesIfNotExists();
+export const initializeDatabase = async (): Promise<void> => {
+  try {
+    await createTablesIfNotExists();
+
+    await insertDefaultCategories();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+    } else {
+    }
+  }
+};
 
 // 費用取得
 export const fetchExpenses = (): Promise<any[]> => {
