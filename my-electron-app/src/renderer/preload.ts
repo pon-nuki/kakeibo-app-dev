@@ -27,6 +27,12 @@ try {
     addCategory: (name: string) => ipcRenderer.invoke('addCategory', name),
     updateCategory: (id: number, name: string) => ipcRenderer.invoke('updateCategory', { id, name }),
     deleteCategory: (id: number) => ipcRenderer.invoke('deleteCategory', id),
+
+    // Diary
+    fetchDiaries: () => ipcRenderer.invoke('fetchDiaries'),
+    getDiaryByDate: (date: string) => ipcRenderer.invoke('getDiaryByDate', date),
+    upsertDiary: (date: string, content: string, mood: number | null, tags: string[] | null) => ipcRenderer.invoke('upsertDiary', { date, content, mood, tags }),
+    deleteDiary: (date: string) => ipcRenderer.invoke('deleteDiary', date),
   });
 
   console.log("preload.ts 完了");

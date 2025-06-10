@@ -1,0 +1,38 @@
+.diary-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif;
+  background-color: #fafafa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+/* 日付入力ラベル */
+.diary-container label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+/* テキストフィールド共通設定 */
+.diary-container .MuiTextField-root {
+  background-color: #fff;
+}
+
+/* ボタン行 */
+.diary-container .MuiBox-root {
+  margin-top: 8px;
+}
+
+/* アラートメッセージ */
+.diary-container .MuiAlert-root {
+  margin-bottom: 16px;
+}
+
+/* 日付ピッカーとテキストフィールドのスペース調整 */
+.diary-container .MuiTextField-root:not(:last-child) {
+  margin-bottom: 16px;
+}

@@ -77,6 +77,16 @@ export const createTablesIfNotExists = async (): Promise<void> => {
     );
   `;
 
+  const createDiarySQL = `
+    CREATE TABLE IF NOT EXISTS diary (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL UNIQUE,
+      content TEXT NOT NULL,
+      mood INTEGER,
+      tags TEXT
+    );
+  `;
+
   // SQLを実行する関数を作成（共通化）
   const runSQL = (sql: string, params: any[] = []): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
@@ -105,6 +115,10 @@ export const createTablesIfNotExists = async (): Promise<void> => {
 
     // fixed_costsテーブル
     await runSQL(createFixedCostsSQL);
+    console.log('fixed_costsテーブル作成成功');
+
+    // diaryテーブル
+    await runSQL(createDiarySQL);
     console.log('fixed_costsテーブル作成成功');
     
     console.log('全テーブル作成完了');
@@ -365,6 +379,54 @@ export const updateCategory = (id: number, name: string): Promise<void> => {
 export const deleteCategory = (id: number): Promise<{ message: string; changes: number }> => {
   return new Promise((resolve, reject) => {
     db.run('DELETE FROM categories WHERE id = ?', [id], function (this: sqlite3.RunResult, err) {
+      err
+        ? reject(err)
+        : resolve({ message: `削除されました。${this.changes} 行が影響を受けました。`, changes: this.changes });
+    });
+  });
+};
+
+// 日記全件取得
+export const fetchDiaries = (): Promise<any[]> => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM diary ORDER BY date DESC', (err, rows) => {
+      err ? reject(err) : resolve(rows);
+    });
+  });
+};
+
+// 特定日付の取得
+export const getDiaryByDate = (date: string): Promise<any | null> => {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT * FROM diary WHERE date = ?', [date], (err, row) => {
+      err ? reject(err) : resolve(row || null);
+    });
+  });
+};
+
+// 日記の追加又は更新
+export const upsertDiary = (
+  date: string,
+  content: string,
+  mood: number,
+  tags: string
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      INSERT INTO diary (date, content, mood, tags)
+      VALUES (?, ?, ?, ?)
+      ON CONFLICT(date) DO UPDATE SET content = excluded.content, mood = excluded.mood, tags = excluded.tags;
+    `;
+    db.run(sql, [date, content, mood, tags], (err) => {
+      err ? reject(err) : resolve();
+    });
+  });
+};
+
+// 日記の削除
+export const deleteDiary = (date: string): Promise<{ message: string; changes: number }> => {
+  return new Promise((resolve, reject) => {
+    db.run('DELETE FROM diary WHERE date = ?', [date], function (this: sqlite3.RunResult, err) {
       err
         ? reject(err)
         : resolve({ message: `削除されました。${this.changes} 行が影響を受けました。`, changes: this.changes });

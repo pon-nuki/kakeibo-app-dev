@@ -32,3 +32,11 @@ export interface Category {
   id: number;
   name: string;
 }
+
+export interface Diary {
+  id?: number;
+  date: string;
+  content: string;
+  mood: number | null;
+  tags: string[] | null;
+}

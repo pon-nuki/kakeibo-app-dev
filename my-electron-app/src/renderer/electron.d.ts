@@ -26,6 +26,12 @@ declare global {
       addCategory: (name: string) => Promise<void>;
       updateCategory: (id: number, name: string) => Promise<void>;
       deleteCategory: (id: number) => Promise<DeleteResult>;
+
+      // 日記管理
+      fetchDiaries: () => Promise<Diary[]>;
+      getDiaryByDate: (date: string) => Promise<Diary | null>;
+      upsertDiary: (date: string, content: string, mood: number | null, tags: string[] | null) => Promise<void>;
+      deleteDiary: (date: string) => Promise<DeleteResult>;
     };
   }
 }

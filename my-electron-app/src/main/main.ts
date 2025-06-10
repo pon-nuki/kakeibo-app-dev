@@ -16,7 +16,11 @@ import { fetchExpenses,
           fetchCategories,
           addCategory,
           updateCategory,
-          deleteCategory
+          deleteCategory,
+          fetchDiaries,
+          getDiaryByDate,
+          upsertDiary,
+          deleteDiary
         } from './db';
 
 let mainWindow: BrowserWindow | null;
@@ -279,5 +283,53 @@ ipcMain.handle('deleteCategory', async (_event, id: number) => {
   } catch (error) {
     console.error('deleteCategory エラー:', error);
     throw new Error('カテゴリの削除に失敗しました');
+  }
+});
+
+// 日記一覧を取得
+ipcMain.handle('fetchDiaries', async () => {
+  try {
+    const diaries = await fetchDiaries();
+    return diaries;
+  } catch (error) {
+    console.error('fetchDiaries エラー:', error);
+    throw new Error('日記の取得に失敗しました');
+  }
+});
+
+// 特定日付の日記を取得
+ipcMain.handle('getDiaryByDate', async (_event, date: string) => {
+  try {
+    const diary = await getDiaryByDate(date);
+    return diary;
+  } catch (error) {
+    console.error('getDiaryByDate エラー:', error);
+    throw new Error('指定日の取得に失敗しました');
+  }
+});
+
+// 日記を追加または更新（UPSERT）
+ipcMain.handle('upsertDiary', async (_event, { date, content, mood, tags }) => {
+  try {
+    await upsertDiary(date, content, mood, tags);
+    return { message: '日記が保存されました' };
+  } catch (error) {
+    console.error('upsertDiary エラー:', error);
+    throw new Error('日記の保存に失敗しました');
+  }
+});
+
+// 日記を削除
+ipcMain.handle('deleteDiary', async (_event, date: string) => {
+  try {
+    const result = await deleteDiary(date);
+    if (result.changes > 0) {
+      return { message: `日記（${date}）が削除されました`, changes: result.changes };
+    } else {
+      return { message: `日記（${date}）は見つかりませんでした`, changes: result.changes };
+    }
+  } catch (error) {
+    console.error('deleteDiary エラー:', error);
+    throw new Error('日記の削除に失敗しました');
   }
 });

@@ -27,14 +27,14 @@ if (!fs.existsSync(path.dirname(dbPath))) {
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('データベース接続エラー:', err.message);
-    process.exit(1); // エラー発生時にアプリを終了
+    process.exit(1);
   } else {
     console.log('データベース接続成功:', dbPath);
   }
 });
 
 app.use(express.json());
-app.use(require('cors')({ origin: 'http://localhost:8080' }));  // 特定のオリジンからのアクセスのみ許可
+app.use(require('cors')({ origin: 'http://localhost:8080' }));
 
 // テーブルが存在しない場合は作成
 const createTableIfNotExists = () => {
@@ -77,6 +77,16 @@ const createTableIfNotExists = () => {
       );
     `;
 
+    const createDiarySQL = `
+      CREATE TABLE IF NOT EXISTS diary (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NOT NULL UNIQUE,
+        content TEXT NOT NULL,
+        mood INTEGER,
+        tags TEXT
+      );
+    `;
+
     // categoriesテーブル作成
     db.run(createCategoriesSQL, (err) => {
       if (err) {
@@ -104,7 +114,16 @@ const createTableIfNotExists = () => {
                     reject('fixed_costsテーブル作成エラー: ' + err.message);
                   } else {
                     console.log('fixed_costsテーブル作成成功');
-                    resolve();
+
+                    // diaryテーブル作成
+                    db.run(createDiarySQL, (err) => {
+                      if (err) {
+                        reject('diaryテーブル作成エラー: ' + err.message);
+                      } else {
+                        console.log('diaryテーブル作成成功');
+                        resolve();
+                      }
+                    });
                   }
                 });
               }
@@ -353,6 +372,64 @@ app.delete('/categories/:id', (req, res) => {
       return res.status(404).json({ error: '指定されたカテゴリが見つかりませんでした' });
     }
     res.json({ message: `カテゴリ ID ${id} が削除されました` });
+  });
+});
+
+// 日記一覧（全件又は日付付き）取得
+app.get('/diary', (req, res) => {
+  const { date } = req.query;
+  const sql = date ? 'SELECT * FROM diary WHERE date = ?' : 'SELECT * FROM diary ORDER BY date DESC';
+  const params = date ? [date] : [];
+
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      console.error('日記取得エラー:', err.message);
+      return res.status(500).json({ error: '日記の取得に失敗しました' });
+    }
+    res.json(rows);
+  });
+});
+
+// 日記の登録または更新
+app.post('/diary', (req, res) => {
+  const { date, content } = req.body;
+
+  if (!date || !content) {
+    return res.status(400).json({ error: 'dateとcontentは必須です' });
+  }
+
+  const sql = `
+    INSERT INTO diary (date, content)
+    VALUES (?, ?)
+    ON CONFLICT(date) DO UPDATE SET content = excluded.content
+  `;
+
+  db.run(sql, [date, content], function (err) {
+    if (err) {
+      console.error('日記登録エラー:', err.message);
+      return res.status(500).json({ error: '日記の登録に失敗しました' });
+    }
+    res.json({ message: `日記が保存されました`, date });
+  });
+});
+
+// 日記の削除
+app.delete('/diary/:date', (req, res) => {
+  const { date } = req.params;
+
+  const sql = 'DELETE FROM diary WHERE date = ?';
+
+  db.run(sql, [date], function (err) {
+    if (err) {
+      console.error('日記削除エラー:', err.message);
+      return res.status(500).json({ error: '日記の削除に失敗しました' });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ error: '指定された日記が見つかりませんでした' });
+    }
+
+    res.json({ message: `日記（${date}）が削除されました` });
   });
 });
 

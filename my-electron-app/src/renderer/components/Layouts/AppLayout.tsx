@@ -32,6 +32,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <List>
           {[
             { path: '/', label: '家計簿' },
+            { path: '/diary', label: '日記' },
             { path: '/budget', label: '予算設定' },
             { path: '/fixed-costs', label: '固定費設定' },
             { path: '/categories', label: 'カテゴリ設定' },

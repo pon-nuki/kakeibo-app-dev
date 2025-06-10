@@ -4,13 +4,8 @@ import './Categories.css';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Filter from '../components/CategoriesFilter/CategoriesFilter';
 import CategoryList from '../components/CategoriesList/CategoriesList';
+import { Category}  from '../../types/common'
 import { fetchCategories, addCategory, updateCategory, deleteCategory } from '../services/categoriesService';
-
-// カテゴリ関連のインターフェースを追加
-interface Category {
-  id: number;
-  name: string;
-}
 
 const Categories: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
