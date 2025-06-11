@@ -433,3 +433,55 @@ export const deleteDiary = (date: string): Promise<{ message: string; changes: n
     });
   });
 };
+
+// カテゴリ別支出合計
+export const getCategorySummary = (): Promise<{ category: string; total: number }[]> => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT c.name AS category, SUM(e.amount) AS total
+      FROM expenses e
+      LEFT JOIN categories c ON e.category_id = c.id
+      GROUP BY e.category_id
+      ORDER BY total DESC;
+    `;
+    db.all(sql, [], (err, rows: { category: string; total: number }[]) => {
+      err ? reject(err) : resolve(rows);
+    });
+  });
+};
+
+// 月別支出合計
+export const getMonthlySpending = (): Promise<{ month: string; total: number }[]> => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT SUBSTR(date, 1, 7) AS month, SUM(amount) AS total
+      FROM expenses
+      GROUP BY month
+      ORDER BY month ASC;
+    `;
+    db.all(sql, [], (err, rows: { month: string; total: number }[]) => {
+      err ? reject(err) : resolve(rows);
+    });
+  });
+};
+
+// 予算と実支出の比較
+export const getBudgetVsActual = (): Promise<{ month: string; budget: number; actual: number }[]> => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT
+        b.month,
+        b.amount AS budget,
+        IFNULL(SUM(e.amount), 0) AS actual
+      FROM budgets b
+      LEFT JOIN expenses e ON SUBSTR(e.date, 1, 7) = b.month
+      GROUP BY b.month
+      ORDER BY b.month ASC;
+    `;
+    db.all(sql, [], (err, rows: { month: string; budget: number; actual: number }[]) => {
+      err ? reject(err) : resolve(rows);
+    });
+  });
+};
+
+

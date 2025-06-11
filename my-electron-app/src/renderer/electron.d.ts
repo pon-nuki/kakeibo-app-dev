@@ -32,6 +32,11 @@ declare global {
       getDiaryByDate: (date: string) => Promise<Diary | null>;
       upsertDiary: (date: string, content: string, mood: number | null, tags: string[] | null) => Promise<void>;
       deleteDiary: (date: string) => Promise<DeleteResult>;
+
+      // グラフ
+      getCategorySummary: () => Promise<{ category: string; total: number }[]>;
+      getMonthlySpending: () => Promise<{ month: string; total: number }[]>;
+      getBudgetVsActual: () => Promise<{ month: string; budget: number; actual: number }[]>;
     };
   }
 }

@@ -1,0 +1,57 @@
+/* Graphs.css */
+
+.home-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header-wrapper {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.header-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.error-message {
+  color: #d32f2f; /* 赤色 */
+  background-color: #ffebee;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.graph-tab-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.graph-display-area {
+  min-height: 320px;
+  padding: 1rem;
+}
+
+.MuiToggleButton-root {
+  text-transform: none;
+  font-weight: 500;
+  color: #555;
+}
+
+.MuiToggleButton-root.Mui-selected {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.MuiToggleButton-root:hover {
+  background-color: #1565c0;
+  color: #fff;
+}

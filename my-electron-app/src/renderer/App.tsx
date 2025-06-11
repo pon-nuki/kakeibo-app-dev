@@ -7,6 +7,7 @@ import FixedCosts from './pages/FixedCosts';
 import Categories from './pages/Categories'; 
 import ErrorBoundary from './components/ErrorBoundary';
 import Diary from './pages/Diary';
+import Graphs from './pages/Graphs';
 import AppLayout from './components/Layouts/AppLayout';
 
 const App: React.FC = () => {
@@ -28,6 +29,7 @@ const App: React.FC = () => {
           <Route path="/fixed-costs" element={<FixedCosts />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/diary" element={<Diary />} />
+          <Route path="/graphs" element={<Graphs />} />
         </Routes>
       </AppLayout>
     </ErrorBoundary>

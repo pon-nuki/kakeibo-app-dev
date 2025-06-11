@@ -20,7 +20,10 @@ import { fetchExpenses,
           fetchDiaries,
           getDiaryByDate,
           upsertDiary,
-          deleteDiary
+          deleteDiary,
+          getCategorySummary,
+          getMonthlySpending, 
+          getBudgetVsActual
         } from './db';
 
 let mainWindow: BrowserWindow | null;
@@ -331,5 +334,38 @@ ipcMain.handle('deleteDiary', async (_event, date: string) => {
   } catch (error) {
     console.error('deleteDiary エラー:', error);
     throw new Error('日記の削除に失敗しました');
+  }
+});
+
+// カテゴリ別支出合計を取得
+ipcMain.handle('getCategorySummary', async () => {
+  try {
+    const summary = await getCategorySummary();
+    return summary;
+  } catch (error) {
+    console.error('getCategorySummary エラー:', error);
+    throw new Error('カテゴリ別支出合計の取得に失敗しました');
+  }
+});
+
+// 月別支出合計を取得
+ipcMain.handle('getMonthlySpending', async () => {
+  try {
+    const monthlySpending = await getMonthlySpending();
+    return monthlySpending;
+  } catch (error) {
+    console.error('getMonthlySpending エラー:', error);
+    throw new Error('月別支出合計の取得に失敗しました');
+  }
+});
+
+// 予算と実支出の比較を取得
+ipcMain.handle('getBudgetVsActual', async () => {
+  try {
+    const budgetVsActual = await getBudgetVsActual();
+    return budgetVsActual;
+  } catch (error) {
+    console.error('getBudgetVsActual エラー:', error);
+    throw new Error('予算と実支出の比較の取得に失敗しました');
   }
 });

@@ -436,3 +436,60 @@ app.delete('/diary/:date', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
+// カテゴリ別支出合計
+app.get('/summary/category', (req, res) => {
+  const sql = `
+    SELECT c.name AS category, SUM(e.amount) AS total
+    FROM expenses e
+    LEFT JOIN categories c ON e.category_id = c.id
+    GROUP BY e.category_id
+    ORDER BY total DESC;
+  `;
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error('カテゴリ別支出合計取得エラー:', err.message);
+      return res.status(500).json({ error: 'カテゴリ別支出合計の取得に失敗しました' });
+    }
+    res.json(rows);
+  });
+});
+
+// 月別支出合計
+app.get('/summary/monthly', (req, res) => {
+  const sql = `
+    SELECT SUBSTR(date, 1, 7) AS month, SUM(amount) AS total
+    FROM expenses
+    GROUP BY month
+    ORDER BY month ASC;
+  `;
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error('月別支出合計取得エラー:', err.message);
+      return res.status(500).json({ error: '月別支出合計の取得に失敗しました' });
+    }
+    res.json(rows);
+  });
+});
+
+// 予算と実支出の比較
+app.get('/summary/budget-vs-actual', (req, res) => {
+  const sql = `
+    SELECT
+      b.month,
+      b.amount AS budget,
+      IFNULL(SUM(e.amount), 0) AS actual
+    FROM budgets b
+    LEFT JOIN expenses e ON SUBSTR(e.date, 1, 7) = b.month
+    GROUP BY b.month
+    ORDER BY b.month ASC;
+  `;
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error('予算と実支出比較取得エラー:', err.message);
+      return res.status(500).json({ error: '予算と実支出比較の取得に失敗しました' });
+    }
+    res.json(rows);
+  });
+});
+

@@ -40,3 +40,19 @@ export interface Diary {
   mood: number | null;
   tags: string[] | null;
 }
+
+export interface CategorySummary {
+  category: string;
+  total: number;
+}
+
+export interface MonthlySpending {
+  month: string;
+  total: number;
+}
+
+export interface BudgetVsActual {
+  month: string;
+  budget: number;
+  actual: number;
+}

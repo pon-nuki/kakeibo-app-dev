@@ -1,4 +1,3 @@
-// src/renderer/preload.ts
 import { contextBridge, ipcRenderer } from 'electron';
 
 console.log("preload.ts 実行開始");
@@ -33,6 +32,11 @@ try {
     getDiaryByDate: (date: string) => ipcRenderer.invoke('getDiaryByDate', date),
     upsertDiary: (date: string, content: string, mood: number | null, tags: string[] | null) => ipcRenderer.invoke('upsertDiary', { date, content, mood, tags }),
     deleteDiary: (date: string) => ipcRenderer.invoke('deleteDiary', date),
+
+    // Graph
+    getCategorySummary: () => ipcRenderer.invoke('getCategorySummary'),
+    getMonthlySpending: () => ipcRenderer.invoke('getMonthlySpending'),
+    getBudgetVsActual: () => ipcRenderer.invoke('getBudgetVsActual'),
   });
 
   console.log("preload.ts 完了");
