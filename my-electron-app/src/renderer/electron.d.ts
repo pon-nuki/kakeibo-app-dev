@@ -17,8 +17,8 @@ declare global {
 
       // 固定費
       fetchFixedCosts: () => Promise<FixedCost[]>;
-      addFixedCost: (description: string, amount: number, startDate: string, paymentMethod: string, categoryId: number) => Promise<void>;
-      updateFixedCost: (id: number, description: string, amount: number, startDate: string, paymentMethod: string, categoryId: number) => Promise<void>;
+      addFixedCost: (description: string, amount: number, startDate: string, nextPaymentDate: string, paymentMethod: string, categoryId: number, frequency: string) => Promise<void>;
+      updateFixedCost: (id: number, description: string, amount: number, startDate: string, nextPaymentDate: string, paymentMethod: string, categoryId: number, frequency: string) => Promise<void>;
       deleteFixedCost: (id: number) => Promise<DeleteResult>;
 
       // カテゴリ管理
@@ -37,6 +37,9 @@ declare global {
       getCategorySummary: () => Promise<{ category: string; total: number }[]>;
       getMonthlySpending: () => Promise<{ month: string; total: number }[]>;
       getBudgetVsActual: () => Promise<{ month: string; budget: number; actual: number }[]>;
+
+      // 固定費の自動登録
+      autoRegisterFixedCosts: () => Promise<void>;
     };
   }
 }

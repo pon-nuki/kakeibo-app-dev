@@ -1,4 +1,3 @@
-// FixedCosts.tsx
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -20,7 +19,9 @@ const FixedCosts: React.FC = () => {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState<Date | null>(null);
+  const [nextPaymentDate, setNextPaymentDate] = useState<Date | null>(null); // 次回支払日
   const [paymentMethod, setPaymentMethod] = useState('bank');
+  const [frequency, setFrequency] = useState<'monthly' | 'quarterly' | 'annually' | 'other'>('monthly'); // 支払頻度
   const [editId, setEditId] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
@@ -38,7 +39,6 @@ const FixedCosts: React.FC = () => {
 
   const fetchAndSetCategories = async () => {
     try {
-      // fetchCategories関数を呼び出し、取得したカテゴリデータをsetCategoriesに格納
       const categories = await fetchCategories();
       setCategories(categories);
     } catch (error) {
@@ -65,9 +65,9 @@ const FixedCosts: React.FC = () => {
   }, []);
 
   const handleAdd = async () => {
-    if (name && amount && date && paymentMethod && selectedCategory) {
+    if (name && amount && date && paymentMethod && selectedCategory && nextPaymentDate && frequency) {
       try {
-        await addFixedCost(name, parseFloat(amount), date.toISOString().slice(0, 10), paymentMethod, selectedCategory);
+        await addFixedCost(name, parseFloat(amount), date.toISOString().slice(0, 10), nextPaymentDate?.toISOString().slice(0, 10), paymentMethod, selectedCategory, frequency);
         await fetchAndSetFixedCosts();
         resetForm();
       } catch {
@@ -79,9 +79,9 @@ const FixedCosts: React.FC = () => {
   };
 
   const handleUpdate = async () => {
-    if (editId !== null && name && amount && date && paymentMethod && selectedCategory) {
+    if (editId !== null && name && amount && date && paymentMethod && selectedCategory && nextPaymentDate && frequency) {
       try {
-        await updateFixedCost(editId, name, parseFloat(amount), date.toISOString().slice(0, 10), paymentMethod, selectedCategory);
+        await updateFixedCost(editId, name, parseFloat(amount), date.toISOString().slice(0, 10), nextPaymentDate?.toISOString().slice(0, 10), paymentMethod, selectedCategory, frequency);
         await fetchAndSetFixedCosts();
         resetForm();
       } catch {
@@ -104,7 +104,9 @@ const FixedCosts: React.FC = () => {
     setName(cost.description);
     setAmount(cost.amount.toString());
     setDate(new Date(cost.date));
+    setNextPaymentDate(new Date(cost.nextPaymentDate)); // 次回支払日を設定
     setPaymentMethod(cost.paymentMethod);
+    setFrequency(cost.frequency); // 支払頻度を設定
     setSelectedCategory(cost.categoryId);
   };
 
@@ -113,25 +115,26 @@ const FixedCosts: React.FC = () => {
     setName('');
     setAmount('');
     setDate(null);
-    setPaymentMethod('');
+    setNextPaymentDate(null); // 次回支払日リセット
+    setPaymentMethod('bank');
+    setFrequency('monthly'); // 支払頻度リセット
     setSelectedCategory(null);
     setErrorMessage(null);
   };
 
-const filteredCosts = fixedCosts.filter(cost => {
-  const costDate = new Date(cost.date);
+  const filteredCosts = fixedCosts.filter(cost => {
+    const costDate = new Date(cost.date);
 
-  // 日付のフィルタリング
-  if (searchType === 'exact' && filterDate) {
-    return costDate.toDateString() === filterDate.toDateString();
-  }
-  if (searchType === 'range') {
-    if (rangeStartDate && rangeEndDate) return costDate >= rangeStartDate && costDate <= rangeEndDate;
-    if (rangeStartDate) return costDate >= rangeStartDate;
-    if (rangeEndDate) return costDate <= rangeEndDate;
-  }
-  return true;
-});
+    if (searchType === 'exact' && filterDate) {
+      return costDate.toDateString() === filterDate.toDateString();
+    }
+    if (searchType === 'range') {
+      if (rangeStartDate && rangeEndDate) return costDate >= rangeStartDate && costDate <= rangeEndDate;
+      if (rangeStartDate) return costDate >= rangeStartDate;
+      if (rangeEndDate) return costDate <= rangeEndDate;
+    }
+    return true;
+  });
 
   const normalizeFixedCosts = (rows: any[]): FixedCost[] =>
     rows.map(row => ({
@@ -139,10 +142,12 @@ const filteredCosts = fixedCosts.filter(cost => {
       description: row.description,
       amount: row.amount,
       date: row.date,
+      nextPaymentDate: row.next_payment_date, // 次回支払日
       paymentMethod: row.payment_method,
+      frequency: row.frequency, // 支払頻度
       categoryId: row.category_id,
       category: { id: row.category_id, name: row.category_name },
-  }));
+    }));
 
   const totalAmount = filteredCosts.reduce((sum, cost) => sum + cost.amount, 0);
   const totalPages = Math.ceil(filteredCosts.length / itemsPerPage);
@@ -163,13 +168,17 @@ const filteredCosts = fixedCosts.filter(cost => {
         description={name}
         amount={amount}
         startDate={date}
+        nextPaymentDate={nextPaymentDate} // 次回支払日
         paymentMethod={paymentMethod}
+        frequency={frequency} // 支払頻度
         selectedCategory={selectedCategory}
         categories={categories}
         onDescriptionChange={setName}
         onAmountChange={setAmount}
         onStartDateChange={setDate}
+        onNextPaymentDateChange={setNextPaymentDate} // 次回支払日変更用
         onPaymentMethodChange={setPaymentMethod}
+        onFrequencyChange={setFrequency} // 支払頻度変更用
         onCategoryChange={setSelectedCategory}
         onSubmit={editId === null ? handleAdd : handleUpdate}
         onCancel={resetForm}

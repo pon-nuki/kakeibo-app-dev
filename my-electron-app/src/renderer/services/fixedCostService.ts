@@ -31,14 +31,16 @@ export const addFixedCost = async (
   description: string,
   amount: number,
   startDate: string,
+  nextPaymentDate: string,
   paymentMethod: string,
-  categoryId: number
+  categoryId: number,
+  frequency: 'monthly' | 'quarterly' | 'annually' | 'other' // 支払頻度
 ) => {
   if (!window.electron || !window.electron.addFixedCost) {
     throw new Error('Electron API が使えません。');
   }
   try {
-    await window.electron.addFixedCost(description, amount, startDate, paymentMethod, categoryId);
+    await window.electron.addFixedCost(description, amount, startDate, nextPaymentDate, paymentMethod, categoryId, frequency);
   } catch (err) {
     throw new Error('固定費の追加に失敗しました');
   }
@@ -50,14 +52,16 @@ export const updateFixedCost = async (
   description: string,
   amount: number,
   startDate: string,
+  nextPaymentDate: string,
   paymentMethod: string,
-  categoryId: number
+  categoryId: number,
+  frequency: 'monthly' | 'quarterly' | 'annually' | 'other' // 支払頻度
 ) => {
   if (!window.electron || !window.electron.updateFixedCost) {
     throw new Error('Electron API が使えません。');
   }
   try {
-    await window.electron.updateFixedCost(editId, description, amount, startDate, paymentMethod, categoryId);
+    await window.electron.updateFixedCost(editId, description, amount, startDate, nextPaymentDate, paymentMethod, categoryId, frequency);
   } catch (err) {
     throw new Error('固定費の更新に失敗しました。');
   }

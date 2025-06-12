@@ -1,6 +1,8 @@
 // src/main/main.ts
 import * as path from 'path';
 import { app, BrowserWindow, ipcMain } from 'electron';
+import cron from 'node-cron';
+import { registerFixedCosts } from './services/autoRegister';
 import { fetchExpenses,
           addExpense,
           deleteExpense,
@@ -23,15 +25,27 @@ import { fetchExpenses,
           deleteDiary,
           getCategorySummary,
           getMonthlySpending, 
-          getBudgetVsActual
+          getBudgetVsActual,
+          updateNextPaymentDate
         } from './db';
 
 let mainWindow: BrowserWindow | null;
 
 console.log('App is starting');
 
-// データベースの初期化
-initializeDatabase();
+// アプリケーション初期化関数
+const initializeApp = async () => {
+  try {
+    // データベース初期化
+    await initializeDatabase();
+    console.log('データベース初期化完了');
+
+    // 定期的な固定費登録ジョブをスケジュール
+    scheduleAutoRegisterFixedCosts();
+  } catch (error) {
+    console.error('アプリケーションの初期化エラー:', error);
+  }
+};
 
 function createWindow() {
   const preloadPath = path.join(__dirname, '..', 'renderer', 'preload.js');
@@ -199,9 +213,9 @@ ipcMain.handle('fetchFixedCosts', async () => {
 });
 
 // 固定費を追加
-ipcMain.handle('addFixedCost', async (event, description, amount, date, paymentMethod, categoryId) => {
+ipcMain.handle('addFixedCost', async (event, description, amount, date, nextPaymentDate, paymentMethod, categoryId, frequency) => {
   try {
-    const id = await addFixedCost(description, amount, date, paymentMethod, categoryId);
+    const id = await addFixedCost(description, amount, date, nextPaymentDate, paymentMethod, categoryId, frequency);
     return { message: '固定費の追加に成功しました', id };
   } catch (error) {
     console.error('addFixedCost エラー:', error);
@@ -231,9 +245,9 @@ ipcMain.handle('deleteFixedCost', async (_event, id: number) => {
 });
 
 // 固定費を更新
-ipcMain.handle('updateFixedCost', async (_event, { id, desc, amt, date, paymentMethod, categoryId }) => {
+ipcMain.handle('updateFixedCost', async (_event, { id, description, amount, date, nextPaymentDate, paymentMethod, categoryId, frequency }) => {
   try {
-    await updateFixedCost(id, desc, amt, date, paymentMethod, categoryId);
+    await updateFixedCost(id, description, amount, date, nextPaymentDate, paymentMethod, categoryId, frequency);
     return { message: '固定費の更新に成功しました' };
   } catch (error) {
     console.error('updateFixedCost エラー:', error);
@@ -369,3 +383,16 @@ ipcMain.handle('getBudgetVsActual', async () => {
     throw new Error('予算と実支出の比較の取得に失敗しました');
   }
 });
+
+// 定期的に固定費を登録するcronジョブの設定
+const scheduleAutoRegisterFixedCosts = () => {
+  cron.schedule('0 1 1 * *', async () => {  // 毎月1日の午前1時に実行
+    console.log('自動固定費登録を開始します');
+    
+    // autoRegister.tsの関数を呼び出して、固定費登録を実行
+    await registerFixedCosts();
+  });
+};
+
+// アプリケーション開始
+initializeApp();

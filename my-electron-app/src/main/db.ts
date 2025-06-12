@@ -63,9 +63,11 @@ export const createTablesIfNotExists = async (): Promise<void> => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       description TEXT NOT NULL,
       amount REAL NOT NULL,
-      date TEXT NOT NULL,
       payment_method TEXT NOT NULL,
       category_id INTEGER,
+      frequency TEXT NOT NULL,   -- 支払い頻度
+      date TEXT NOT NULL,  -- 初回支払日
+      next_payment_date TEXT NOT NULL,  -- 次回支払日
       FOREIGN KEY (category_id) REFERENCES categories(id)
     );
   `;
@@ -287,15 +289,17 @@ export const addFixedCost = (
   description: string,
   amount: number,
   rawDate: string,
+  nextPaymentDate: string,
   paymentMethod: string,
-  categoryId: number
+  categoryId: number,
+  frequency: 'monthly' | 'quarterly' | 'annually' | 'other' // 支払頻度
 ): Promise<number> => {
   const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
     const stmt = db.prepare(
-      'INSERT INTO fixed_costs (description, amount, date, payment_method, category_id) VALUES (?, ?, ?, ?, ?)'
+      'INSERT INTO fixed_costs (description, amount, payment_method, category_id, frequency, date, next_payment_date) VALUES (?, ?, ?, ?, ?, ?, ?)'
     );
-    stmt.run(description, amount, date, paymentMethod, categoryId, function (this: sqlite3.RunResult, err: Error | null) {
+    stmt.run(description, amount, paymentMethod, categoryId, frequency, date, nextPaymentDate, function (this: sqlite3.RunResult, err: Error | null) {
       if (err) {
         console.error('[addFixedCost] SQL実行エラー:', err);
         reject(err);
@@ -314,15 +318,17 @@ export const updateFixedCost = (
   description: string,
   amount: number,
   rawDate: string,
+  nextPaymentDate: string,
   paymentMethod: string,
-  categoryId: number
+  categoryId: number,
+  frequency: 'monthly' | 'quarterly' | 'annually' | 'other' // 支払頻度
 ): Promise<void> => {
   const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
     const stmt = db.prepare(
-      'UPDATE fixed_costs SET description = ?, amount = ?, date = ?, payment_method = ?, category_id = ? WHERE id = ?'
+      'UPDATE fixed_costs SET description = ?, amount = ?, payment_method = ?, category_id = ?, frequency = ?, date = ?, next_payment_date = ?, WHERE id = ?'
     );
-    stmt.run(description, amount, date, paymentMethod, categoryId, id, (err: Error | null) =>
+    stmt.run(description, amount, paymentMethod, categoryId, frequency, date, nextPaymentDate, id, (err: Error | null) =>
       err ? reject(err) : resolve()
     );
     stmt.finalize();
@@ -483,5 +489,28 @@ export const getBudgetVsActual = (): Promise<{ month: string; budget: number; ac
     });
   });
 };
+
+// 固定費の次回支払日を更新する関数
+export const updateNextPaymentDate = (costId: number, newNextPaymentDate: Date): Promise<void> => {
+  const updateQuery = `
+    UPDATE fixed_costs 
+    SET next_payment_date = ? 
+    WHERE id = ?
+  `;
+  return new Promise((resolve, reject) => {
+    db.run(updateQuery, [
+      newNextPaymentDate.toISOString(),
+      costId
+    ], (err) => {
+      if (err) {
+        console.error('固定費の次回支払日更新エラー:', err);
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
 
 

@@ -17,8 +17,8 @@ try {
 
     // Fixed Costs
     fetchFixedCosts: () => ipcRenderer.invoke('fetchFixedCosts'),
-    addFixedCost: (description: string, amount: number, date: string, paymentMethod: string, categoryId: number) => ipcRenderer.invoke('addFixedCost', description, amount, date, paymentMethod, categoryId),
-    updateFixedCost: (id: number, desc: string, amt: number, date: string, paymentMethod: string, categoryId: number) => ipcRenderer.invoke('updateFixedCost', { id, desc, amt, date, paymentMethod, categoryId }),
+    addFixedCost: (description: string, amount: number, startDate: string, nextPaymentDate: string, paymentMethod: string, categoryId: number, frequency: string) => ipcRenderer.invoke('addFixedCost', description, amount, startDate, nextPaymentDate, paymentMethod, categoryId, frequency),
+    updateFixedCost: (id: number, description: string, amount: number, startDate: string, nextPaymentDate: string, paymentMethod: string, categoryId: number, frequency: string) => ipcRenderer.invoke('updateFixedCost', { id, description, amount, startDate, nextPaymentDate, paymentMethod, categoryId, frequency }),
     deleteFixedCost: (id: number) => ipcRenderer.invoke('deleteFixedCost', id),
 
     // Categories
@@ -37,6 +37,9 @@ try {
     getCategorySummary: () => ipcRenderer.invoke('getCategorySummary'),
     getMonthlySpending: () => ipcRenderer.invoke('getMonthlySpending'),
     getBudgetVsActual: () => ipcRenderer.invoke('getBudgetVsActual'),
+
+    // Auto Register Fixed Costs
+    autoRegisterFixedCosts: () => ipcRenderer.invoke('autoRegisterFixedCosts')
   });
 
   console.log("preload.ts 完了");

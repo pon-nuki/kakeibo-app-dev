@@ -70,9 +70,11 @@ const createTableIfNotExists = () => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         description TEXT NOT NULL,
         amount REAL NOT NULL,
-        date TEXT NOT NULL,
         payment_method TEXT NOT NULL,
         category_id INTEGER,
+        frequency TEXT NOT NULL,   -- 支払い頻度
+        date TEXT NOT NULL,  -- 初回支払日
+        next_payment_date TEXT NOT NULL,  -- 次回支払日
         FOREIGN KEY (category_id) REFERENCES categories(id)
       );
     `;

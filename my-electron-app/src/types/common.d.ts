@@ -2,8 +2,10 @@ export interface FixedCost {
   id: number;
   description: string;
   amount: number;
-  date: string;
+  date: string; // 現在の支払日
+  nextPaymentDate: string; // 次回支払日
   paymentMethod: string;
+  frequency: 'monthly' | 'quarterly' | 'annually' | 'other'; // 支払頻度
   categoryId: number;
   category: { id: number; name: string };
 }
