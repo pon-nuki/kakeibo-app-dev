@@ -86,7 +86,7 @@ const Graphs: React.FC = () => {
         >
           <ToggleButton value="category">カテゴリー別</ToggleButton>
           <ToggleButton value="monthly">月別支出</ToggleButton>
-          <ToggleButton value="budget">予算 vs 実支出</ToggleButton>
+          <ToggleButton value="budget">予算と出費の比較</ToggleButton>
         </ToggleButtonGroup>
       </Box>
 
@@ -105,7 +105,7 @@ const Graphs: React.FC = () => {
         )}
         {tab === 'budget' && (
           <>
-            <Typography variant="h6" sx={{ mb: 2 }}>予算と実支出の比較</Typography>
+            <Typography variant="h6" sx={{ mb: 2 }}>予算と出費の比較</Typography>
             <Bar data={barData} />
           </>
         )}

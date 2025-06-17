@@ -1,74 +1,89 @@
 .home-container {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  font-family: 'Arial', sans-serif;
-  background-color: #fafafa;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
+  padding: 24px;
+  max-width: 880px;
+  margin: 32px auto;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  background-color: #ffffff;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
 }
 
-/* 入力フォームの行設定 */
+/* 入力フォームの行 */
 .input-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
-/* 各入力フィールドの幅 */
+/* 入力フィールド共通 */
 .input-field {
-  width: 200px;
-  padding: 6px 8px;
+  width: 240px;
+  padding: 10px 12px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 6px;
+  font-size: 15px;
   margin-right: 1rem;
   box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-/* 日付ピッカーの行設定 */
+.input-field:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+  outline: none;
+}
+
+/* 日付ピッカー */
 .date-picker-row {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin: 16px 0;
+  margin: 20px 0;
   flex-wrap: wrap;
 }
 
-/* 日付ピッカーの入力フィールド */
 .date-picker-input {
-  width: 180px;
-  padding: 6px 8px;
+  width: 220px;
+  padding: 10px 12px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 6px;
+  font-size: 15px;
   box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-/* ボタンのスタイル統一 */
+.date-picker-input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+  outline: none;
+}
+
+/* ボタン共通スタイル */
 button {
-  background-color: #1976d2; /* MUIプライマリーブルー */
+  background-color: #1976d2;
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  font-family: 'Arial', sans-serif;
-  box-shadow: 0 2px 5px rgba(25, 118, 210, 0.4);
+  font-size: 15px;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+  font-family: inherit;
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
 }
 
 button:hover {
   background-color: #115293;
-  transform: scale(1.05);
+  transform: translateY(-2px);
 }
 
 button:active {
   background-color: #0d3c71;
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
 button:focus {
@@ -76,7 +91,6 @@ button:focus {
   outline-offset: 2px;
 }
 
-/* 無効ボタンのスタイル */
 button:disabled {
   background-color: #ddd;
   cursor: not-allowed;
@@ -85,26 +99,26 @@ button:disabled {
   transform: none;
 }
 
-/* タイトルとアイコンを横並びに */
+/* ヘッダー（タイトル+アイコン） */
 .header-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-bottom: 24px;
 }
 
 .title-icon-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* 家計簿タイトル */
 .header-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
+  color: #333;
 }
 
 /* アイコンボタン */
@@ -113,22 +127,31 @@ button:disabled {
   transition: transform 0.2s ease;
   background: none;
   border: none;
-  padding: 0;
+  padding: 4px;
+  color: #1976d2;
 }
 
 .icon-button:hover {
   transform: scale(1.1);
 }
 
-/* メッセージのスタイル */
+/* メッセージ表示 */
 .error-message {
-  color: red;
-  font-weight: bold;
-  margin-top: 10px;
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-top: 16px;
+  border: 1px solid #f8bbd0;
 }
 
 .success-message {
-  color: green;
-  font-weight: bold;
-  margin-top: 10px;
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-top: 16px;
+  border: 1px solid #a5d6a7;
 }
