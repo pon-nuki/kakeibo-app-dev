@@ -40,12 +40,16 @@ const initializeApp = async () => {
     await initializeDatabase();
     console.log('データベース初期化完了');
 
-    // 定期的な固定費登録ジョブをスケジュール
+    // アプリ起動時に固定費を登録
+    await registerFixedCosts();
+
+    // 定期的な固定費登録（アプリ起動中に毎月1日1時）
     scheduleAutoRegisterFixedCosts();
   } catch (error) {
     console.error('アプリケーションの初期化エラー:', error);
   }
 };
+
 
 function createWindow() {
   const preloadPath = path.join(__dirname, '..', 'renderer', 'preload.js');
@@ -386,7 +390,8 @@ ipcMain.handle('getBudgetVsActual', async () => {
 
 // 定期的に固定費を登録するcronジョブの設定
 const scheduleAutoRegisterFixedCosts = () => {
-  cron.schedule('0 1 1 * *', async () => {  // 毎月1日の午前1時に実行
+  // 毎月1日の午前1時に実行
+  cron.schedule('0 1 1 * *', async () => {
     console.log('自動固定費登録を開始します');
     
     // autoRegister.tsの関数を呼び出して、固定費登録を実行

@@ -37,7 +37,7 @@ export const registerFixedCosts = async () => {
     for (const cost of fixedCosts) {
       const nextPaymentDate = new Date(cost.next_payment_date);
 
-      // 支払い期日が今日以下の場合、自動登録
+      // 次回支払日が今日を過ぎていた場合、自動登録
       if (nextPaymentDate <= today) {
         // 固定費の登録
         await addFixedCost(cost.description, cost.amount, todayISO, cost.next_payment_date, cost.payment_method, cost.category_id, cost.frequency);
