@@ -26,7 +26,8 @@ import { fetchExpenses,
           getCategorySummary,
           getMonthlySpending, 
           getBudgetVsActual,
-          updateNextPaymentDate
+          getSettingValue,
+          setSettingValue
         } from './db';
 
 let mainWindow: BrowserWindow | null;
@@ -40,16 +41,22 @@ const initializeApp = async () => {
     await initializeDatabase();
     console.log('データベース初期化完了');
 
-    // アプリ起動時に固定費を登録
-    await registerFixedCosts();
+    // 設定を確認して固定費自動登録がONなら登録
+    const autoRegister = await getSettingValue('autoRegisterFixedCosts');
+    if (autoRegister === 'true') {
+      console.log('設定により起動時に固定費を自動登録します');
+      await registerFixedCosts();
+    } else {
+      console.log('固定費の自動登録は無効です');
+    }
 
     // 定期的な固定費登録（アプリ起動中に毎月1日1時）
     scheduleAutoRegisterFixedCosts();
+
   } catch (error) {
     console.error('アプリケーションの初期化エラー:', error);
   }
 };
-
 
 function createWindow() {
   const preloadPath = path.join(__dirname, '..', 'renderer', 'preload.js');
@@ -398,6 +405,28 @@ const scheduleAutoRegisterFixedCosts = () => {
     await registerFixedCosts();
   });
 };
+
+// 設定取得
+ipcMain.handle('getSetting', async (_event, key: string) => {
+  try {
+    const value = await getSettingValue(key);
+    return { value };
+  } catch (error) {
+    console.error('getSetting エラー:', error);
+    throw new Error('設定の取得に失敗しました');
+  }
+});
+
+// 設定保存
+ipcMain.handle('setSetting', async (_event, key: string, value: string) => {
+  try {
+    await setSettingValue(key, value);
+    return { message: '設定の保存に成功しました' };
+  } catch (error) {
+    console.error('setSetting エラー:', error);
+    throw new Error('設定の保存に失敗しました');
+  }
+});
 
 // アプリケーション開始
 initializeApp();

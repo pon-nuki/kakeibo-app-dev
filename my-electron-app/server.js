@@ -89,6 +89,13 @@ const createTableIfNotExists = () => {
       );
     `;
 
+    const createSettingsSQL = `
+      CREATE TABLE IF NOT EXISTS settings (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      );
+    `;
+
     // categoriesテーブル作成
     db.run(createCategoriesSQL, (err) => {
       if (err) {
@@ -123,7 +130,16 @@ const createTableIfNotExists = () => {
                         reject('diaryテーブル作成エラー: ' + err.message);
                       } else {
                         console.log('diaryテーブル作成成功');
-                        resolve();
+
+                        // settingsテーブル作成
+                        db.run(createSettingsSQL, (err) => {
+                          if (err) {
+                            reject('settingsテーブル作成エラー: ' + err.message);
+                          } else {
+                            console.log('settingsテーブル作成成功');
+                            resolve();
+                          }
+                        });
                       }
                     });
                   }
@@ -161,6 +177,30 @@ const insertDefaultCategories = async () => {
   }
 };
 
+// デフォルト設定を挿入
+const insertDefaultSettings = async () => {
+  const defaultSettings = {
+    autoRegisterFixedCosts: 'true',
+  };
+
+  for (const [key, value] of Object.entries(defaultSettings)) {
+    await new Promise((resolve, reject) => {
+      const sql = `
+        INSERT OR IGNORE INTO settings (key, value)
+        VALUES (?, ?)
+      `;
+      db.run(sql, [key, value], function (err) {
+        if (err) {
+          console.error(`設定 "${key}" の挿入エラー:`, err.message);
+          return reject(err);
+        }
+        console.log(`設定 "${key}" が初期化されました`);
+        resolve();
+      });
+    });
+  }
+};
+
 // サーバ起動時にテーブルを作成
 const startApp = async () => {
   try {
@@ -168,6 +208,8 @@ const startApp = async () => {
     console.log('全テーブル作成完了');
     await insertDefaultCategories();
     console.log('デフォルトカテゴリの挿入完了');
+    await insertDefaultSettings();
+    console.log('デフォルト設定の挿入完了');
   } catch (error) {
     console.error('エラー:', error);
   }
@@ -495,3 +537,45 @@ app.get('/summary/budget-vs-actual', (req, res) => {
   });
 });
 
+// 設定取得エンドポイント
+app.get('/settings/:key', (req, res) => {
+  const { key } = req.params;
+
+  const sql = 'SELECT value FROM settings WHERE key = ?';
+  db.get(sql, [key], (err, row) => {
+    if (err) {
+      console.error('設定取得エラー:', err.message);
+      return res.status(500).json({ error: '設定の取得に失敗しました' });
+    }
+
+    if (!row) {
+      return res.status(404).json({ message: `設定 "${key}" は存在しません` });
+    }
+
+    res.json({ key, value: row.value });
+  });
+});
+
+// 設定保存・更新エンドポイント
+app.post('/settings/:key', (req, res) => {
+  const { key } = req.params;
+  const { value } = req.body;
+
+  if (typeof value !== 'string') {
+    return res.status(400).json({ error: 'value は文字列である必要があります' });
+  }
+
+  const sql = `
+    INSERT INTO settings (key, value)
+    VALUES (?, ?)
+    ON CONFLICT(key) DO UPDATE SET value = excluded.value
+  `;
+
+  db.run(sql, [key, value], function (err) {
+    if (err) {
+      console.error('設定保存エラー:', err.message);
+      return res.status(500).json({ error: '設定の保存に失敗しました' });
+    }
+    res.json({ message: `設定 "${key}" を保存しました`, key, value });
+  });
+});

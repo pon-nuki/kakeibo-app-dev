@@ -39,7 +39,11 @@ try {
     getBudgetVsActual: () => ipcRenderer.invoke('getBudgetVsActual'),
 
     // Auto Register Fixed Costs
-    autoRegisterFixedCosts: () => ipcRenderer.invoke('autoRegisterFixedCosts')
+    autoRegisterFixedCosts: () => ipcRenderer.invoke('autoRegisterFixedCosts'),
+
+    // Settings
+    getSetting: (key: string) => ipcRenderer.invoke('getSetting', key),
+    setSetting: (key: string, value: string) => ipcRenderer.invoke('setSetting', key, value),
   });
 
   console.log("preload.ts 完了");

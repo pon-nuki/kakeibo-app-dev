@@ -40,6 +40,10 @@ declare global {
 
       // 固定費の自動登録
       autoRegisterFixedCosts: () => Promise<void>;
+
+      // 設定取得・保存
+      getSetting: (key: string) => Promise<{ key: string; value: string | null }>;
+      setSetting: (key: string, value: string) => Promise<{ message: string; key: string; value: string }>;
     };
   }
 }

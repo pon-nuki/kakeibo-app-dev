@@ -89,6 +89,13 @@ export const createTablesIfNotExists = async (): Promise<void> => {
     );
   `;
 
+  const createSettingsSQL = `
+    CREATE TABLE IF NOT EXISTS settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
+  `;
+
   // SQLを実行する関数を作成（共通化）
   const runSQL = (sql: string, params: any[] = []): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
@@ -122,6 +129,10 @@ export const createTablesIfNotExists = async (): Promise<void> => {
     // diaryテーブル
     await runSQL(createDiarySQL);
     console.log('fixed_costsテーブル作成成功');
+
+    // settingsテーブル
+    await runSQL(createSettingsSQL);
+    console.log('settingsテーブル作成成功');
     
     console.log('全テーブル作成完了');
   } catch (error) {
@@ -170,15 +181,53 @@ export const insertDefaultCategories = async (): Promise<void> => {
   }
 };
 
-// DB初期化
+// デフォルト設定の挿入
+export const insertDefaultSettings = async (): Promise<void> => {
+  const sqlCreate = `
+    CREATE TABLE IF NOT EXISTS settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
+  `;
+  const sqlInsert = `
+    INSERT OR IGNORE INTO settings (key, value)
+    VALUES ('autoRegisterFixedCosts', 'true');
+  `;
+
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.run(sqlCreate, (err) => {
+        if (err) {
+          console.error('settingsテーブル作成失敗:', err);
+          return reject(err);
+        }
+
+        db.run(sqlInsert, (err) => {
+          if (err) {
+            console.error('初期設定の挿入失敗:', err);
+            return reject(err);
+          }
+
+          console.log('settings テーブルに初期値を挿入');
+          resolve();
+        });
+      });
+    });
+  });
+};
+
 export const initializeDatabase = async (): Promise<void> => {
   try {
     await createTablesIfNotExists();
-
     await insertDefaultCategories();
+    await insertDefaultSettings();
+
+    console.log('データベース初期化完了');
   } catch (error: unknown) {
     if (error instanceof Error) {
+      console.error('データベース初期化エラー:', error.message);
     } else {
+      console.error('データベース初期化エラー: 不明なエラー');
     }
   }
 };
@@ -512,5 +561,36 @@ export const updateNextPaymentDate = (costId: number, newNextPaymentDate: Date):
   });
 };
 
+// 設定値を取得する関数
+export const getSettingValue = (key: string): Promise<string | null> => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT value FROM settings WHERE key = ?';
+    db.get(sql, [key], (err: Error | null, row: { value?: string } | undefined) => {
+      if (err) {
+        console.error('設定値取得エラー:', err);
+        reject(err);
+      } else {
+        resolve(row?.value ?? null);
+      }
+    });
+  });
+};
 
-
+// 設定値を保存・更新する関数
+export const setSettingValue = (key: string, value: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      INSERT INTO settings (key, value)
+      VALUES (?, ?)
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value
+    `;
+    db.run(sql, [key, value], (err) => {
+      if (err) {
+        console.error('設定値保存エラー:', err);
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
