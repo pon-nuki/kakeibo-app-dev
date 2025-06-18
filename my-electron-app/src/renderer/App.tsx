@@ -1,16 +1,14 @@
-import React, { useEffect, Suspense, lazy } from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home'; 
+import Settings from './pages/Settings';
+import Budget from './pages/Budget';
+import FixedCosts from './pages/FixedCosts';
+import Categories from './pages/Categories'; 
 import ErrorBoundary from './components/ErrorBoundary';
+import Diary from './pages/Diary';
+import Graphs from './pages/Graphs';
 import AppLayout from './components/Layouts/AppLayout';
-
-// lazy load
-const Home = lazy(() => import('./pages/Home'));
-const Settings = lazy(() => import('./pages/Settings'));
-const Budget = lazy(() => import('./pages/Budget'));
-const FixedCosts = lazy(() => import('./pages/FixedCosts'));
-const Categories = lazy(() => import('./pages/Categories'));
-const Diary = lazy(() => import('./pages/Diary'));
-const Graphs = lazy(() => import('./pages/Graphs'));
 
 const App: React.FC = () => {
   useEffect(() => {
