@@ -1,40 +1,40 @@
 # Kakeibo App (In Development)
 
-## Screenshots / スクリーンショット
+## 📸 Screenshots / スクリーンショット / Скриншоты
 
-### 家計簿
+### Personal Budget / 家計簿 / Личный бюджет
 <p align="center">
-  <img src="images/kakeibo.png" alt="家計簿画面" width="600" />
+  <img src="images/kakeibo.png" alt="Personal Budget screen" width="600" />
 </p>
 
-### 日記
+### Journal / 日記 / Дневник
 <p align="center">
-  <img src="images/nikki.png" alt="日記画面" width="600" />
+  <img src="images/nikki.png" alt="Journal screen" width="600" />
 </p>
 
-### カテゴリ設定
+### Category Management / カテゴリ設定 / Управление категориями
 <p align="center">
-  <img src="images/kategori.png" alt="カテゴリ画面" width="600" />
+  <img src="images/kategori.png" alt="Category management screen" width="600" />
 </p>
 
-### 固定費設定
+### Recurring Expenses / 固定費設定 / Регулярные расходы
 <p align="center">
-  <img src="images/koteihi.png" alt="固定費画面" width="600" />
+  <img src="images/koteihi.png" alt="Recurring expenses screen" width="600" />
 </p>
 
-### 予算設定
+### Budget Planning / 予算設定 / Планирование бюджета
 <p align="center">
-  <img src="images/yosan.png" alt="予算画面" width="600" />
+  <img src="images/yosan.png" alt="Budget planning screen" width="600" />
 </p>
 
-### グラフで見る
+### Analytics (Graphs) / グラフで見る / Аналитика (графики)
 <p align="center">
-  <img src="images/gurafu.png" alt="グラフ画面" width="600" />
+  <img src="images/gurafu.png" alt="Analytics and graphs screen" width="600" />
 </p>
 
-### アプリ設定
+### App Settings / アプリ設定 / Настройки приложения
 <p align="center">
-  <img src="images/settei.png" alt="設定画面" width="600" />
+  <img src="images/settei.png" alt="App settings screen" width="600" />
 </p>
 
 
