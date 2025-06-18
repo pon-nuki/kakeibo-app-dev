@@ -1,0 +1,28 @@
+[1] React 画面 (例: home.tsx) ← UI層
+  ↓        ↑  
+  サービス関数（fetchExpensesなど）を経由してデータ取得・登録・更新などを呼び出す
+
+[2] サービス層 (/services/*.ts)
+  ↓        ↑  
+  ・開発環境（開発中）では → fetch() でローカルサーバ（server.js）にアクセス  
+  ・本番環境（Electron実行時）では → window.electron 経由でElectron APIを呼び出す  
+    ※ 環境判定（process.env.NODE_ENV）もこの層で行う
+
+[3] preload.js
+  ↓        ↑  
+  ipcRenderer + contextBridge.exposeInMainWorld を使って  
+  mainプロセスのAPI（例: addExpense）をwindow.electron経由で公開  
+  → サービス層はwindow.electron.xxx()を通して呼び出す
+
+[4] main.ts
+  ↓        ↑  
+  ipcMainで preload からのリクエストを受け取り、処理をdb.tsへ振り分ける
+
+[5] db.ts（SQLite に直接アクセス）
+  SQLiteを使ってデータの登録・取得・更新・削除などを行うロジックを記述  
+  テーブル作成・初期データ挿入・設定保存などもここで実装
+
+補足:
+・UI層はサービス関数を使うだけでよい（window.electron を直接呼ばない）
+・サービス層が開発／本番環境に応じて処理を切り替える
+・開発時にはserver.jsを起動しておくことで、HTTP経由で動作確認可能
