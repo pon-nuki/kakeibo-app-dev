@@ -1,130 +1,129 @@
 # Kakeibo App (In Development)
 
-## 📸 Screenshots / スクリーンショット / Скриншоты
+## Screenshots / スクリーンショット / Скриншоты
 
 ### Personal Budget / 家計簿 / Личный бюджет
+
 <p align="center">
   <img src="images/kakeibo.png" alt="Personal Budget screen" width="600" />
 </p>
 
 ### Journal / 日記 / Дневник
+
 <p align="center">
   <img src="images/nikki.png" alt="Journal screen" width="600" />
 </p>
 
 ### Category Management / カテゴリ設定 / Управление категориями
+
 <p align="center">
   <img src="images/kategori.png" alt="Category management screen" width="600" />
 </p>
 
 ### Recurring Expenses / 固定費設定 / Регулярные расходы
+
 <p align="center">
   <img src="images/koteihi.png" alt="Recurring expenses screen" width="600" />
 </p>
 
 ### Budget Planning / 予算設定 / Планирование бюджета
+
 <p align="center">
   <img src="images/yosan.png" alt="Budget planning screen" width="600" />
 </p>
 
 ### Analytics (Graphs) / グラフで見る / Аналитика (графики)
+
 <p align="center">
   <img src="images/gurafu.png" alt="Analytics and graphs screen" width="600" />
 </p>
 
 ### App Settings / アプリ設定 / Настройки приложения
+
 <p align="center">
   <img src="images/settei.png" alt="App settings screen" width="600" />
 </p>
 
+---
 
-## English
+## Overview / 概要 / Обзор
 
-🐱 Kakeibo App  
-Kakeibo is a personal budgeting app currently under development using React, Electron, TypeScript, Node.js, and SQLite.  
-Our goal is to create a simple yet effective tool for managing your day-to-day finances, making it easy to track your income and expenses.
+**Kakeibo App** is a personal budgeting application built with **React**, **Electron**, **TypeScript**, **Node.js**, and **SQLite**.
+
+* *English*: A simple, effective tool for tracking income and expenses.
+* *日本語*: 収支を簡単に記録・管理できる家計簿アプリです。
+* *Русский*: Простое приложение для ведения личного бюджета.
 
 ---
 
-### Current Progress
+## Development Status / 開発状況 / Статус разработки
 
-The app is still in the early stages of development.  
-Right now, we’ve implemented basic features like adding and displaying income and expenses.  
-Moving forward, we plan to add:
+* Basic expense tracking implemented
+* Fixed cost registration
+* Diary feature
+* Monthly budget comparison
+* Graph-based analytics
+* Configurable settings
 
-- Data analysis tools  
-- Visual reports  
-- Improved UI/UX  
-- More useful features
+Planned features:
 
-Ultimately, we want to help users keep track of their finances easily and get a clear overview of their budget.
-
----
-
-### Tech Stack
-
-- React  
-- Electron  
-- TypeScript  
-- Node.js  
-- SQLite
+* Export options (CSV, PDF)
+* Password protection
+* Cloud sync (TBD)
 
 ---
 
-## 日本語 (Japanese)
+## Tech Stack / 技術構成 / Технологии
 
-🐱 Kakeibo App  
-このプロジェクトは、React、Electron、TypeScript、Node.js、SQLiteを使用して作成中の家計簿アプリです。  
-現在、アプリの基本機能を構築中で、家計の収支を簡単に管理できる機能を提供することを目指しています。
-
----
-
-### 進行状況
-
-現在、アプリの開発は途中であり、基本的な収支の入力や表示機能が実装されています。  
-今後は、データの分析機能やレポート表示、ユーザーインターフェースの改善など、さらに多くの機能を追加予定です。
-
-このアプリは、日々の支出や収入を簡単に管理し、家計の状況を把握できるようにすることを目的としています。
+* React
+* Electron
+* TypeScript
+* Node.js
+* SQLite
+* MUI (Material UI)
+* Chart.js
 
 ---
 
-### 使用技術
+## Installation / インストール方法 / Установка
 
-- React  
-- Electron  
-- TypeScript  
-- Node.js  
-- SQLite
+```bash
+# Clone the repository / リポジトリをクローン / Клонируйте репозиторий
+$ git clone https://github.com/pon-nuki/kakeibo-app-dev.git
+$ cd my-electron-app
 
----
+# Install dependencies / 依存関係のインストール / Установка зависимостей
+$ npm install
 
-## Русский (Russian)
+# Start the application (for development) / アプリを起動（開発用） / Запуск приложения (для разработки)
+$ npm run start
 
-🐱 Kakeibo App  
-Это приложение для учёта доходов и расходов, разрабатываемое с использованием технологий React, Electron, TypeScript, Node.js и SQLite.  
-Мы стремимся создать удобный инструмент, который позволит легко управлять личными финансами и отслеживать состояние бюджета.
-
----
-
-### Текущий статус
-
-Разработка приложения находится на начальной стадии.  
-На данный момент реализованы базовые функции — ввод и отображение записей о доходах и расходах.  
-В будущем планируется добавить:
-
-- функции анализа данных,  
-- визуальные отчёты,  
-- улучшенный пользовательский интерфейс,  
-- и другие полезные возможности.
-
-Цель проекта — помочь пользователям просто и эффективно управлять повседневными финансами.
+# For production build (if packaging) / 本番ビルド（パッケージ化する場合） / Сборка для продакшн (при упаковке)
+$ npm run build
+$ npm run package
+```
 
 ---
 
-### Используемые технологии
+## Directory Structure / ディレクトリ構成 / Структура проекта
 
-- React  
-- Electron  
-- TypeScript  
-- Node.js  
-- SQLite
+```
+my-electron-app/
+├─ dist/               # Production build / 本番ビルド / Продакшн сборка
+├─ public/             # Static files / 静的ファイル / Статические файлы
+├─ src/
+│  ├─ main/            # Electron main process / Electronメインプロセス / Главный процесс
+│  ├─ renderer/        # React frontend / Reactフロントエンド / Интерфейс
+│  ├─ services/        # Business logic / ビジネスロジック / Логика приложения
+│  ├─ pages/           # UI pages / 画面ページ / Страницы интерфейса
+│  └─ components/      # UI components / UIコンポーネント / Компоненты
+├─ server.js           # Express backend / バックエンド / Сервер Express
+├─ webpack.config.js   # Webpack configuration
+└─ package.json        # Scripts and dependencies
+```
+
+---
+
+## License / ライセンス / Лицензия
+
+[MIT](./LICENSE)
