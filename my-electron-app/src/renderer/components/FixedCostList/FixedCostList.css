@@ -29,31 +29,34 @@
   border-left: 4px solid #1976d2;
 }
 
-/* 各列 */
 .col {
   padding: 0 8px;
-  flex: 1;
   font-size: 14px;
+  flex: 1;
 }
 
-.col.amount {
+.col-description {
+  min-width: 140px;
+  flex: 2;
+}
+.col-amount {
+  min-width: 80px;
   text-align: right;
+}
+.col-start-date,
+.col-next-date {
+  min-width: 110px;
+}
+.col-category {
   min-width: 100px;
 }
-
-.col.date {
-  min-width: 120px;
-}
-
-.col.category {
-  min-width: 120px;
-}
-
-.col.frequency {
+.col-method {
   min-width: 100px;
 }
-
-.col.actions {
+.col-frequency {
+  min-width: 100px;
+}
+.col-actions {
   display: flex;
   justify-content: flex-end;
   min-width: 80px;
@@ -77,20 +80,17 @@
   color: #f44336;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .expense-list-item,
   .expense-list-header {
     flex-direction: column;
     align-items: flex-start;
   }
-
   .col {
     width: 100%;
-    text-align: left;
     margin-bottom: 4px;
   }
-
-  .col.actions {
+  .col-actions {
     justify-content: flex-start;
   }
 }

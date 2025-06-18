@@ -114,24 +114,39 @@ button:disabled {
 /* 各カラム共通 */
 .col {
   padding: 0 8px;
-  flex: 1;
   font-size: 14px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
-.col.amount {
+
+.col-description {
+  flex: 2;
+  min-width: 150px;
+  max-width: 300px;
+}
+
+.col-amount {
+  flex: 1;
+  min-width: 80px;
   text-align: right;
+}
+
+.col-date {
+  flex: 1;
+  min-width: 120px;
+}
+
+.col-category {
+  flex: 1;
   min-width: 100px;
 }
-.col.date {
-  min-width: 120px;
-}
-.col.category {
-  min-width: 120px;
-}
-.col.actions {
+
+.col-actions {
+  flex-shrink: 0;
   display: flex;
   justify-content: flex-end;
-  min-width: 80px;
   gap: 4px;
+  min-width: 80px;
 }
 
 @media (max-width: 600px) {

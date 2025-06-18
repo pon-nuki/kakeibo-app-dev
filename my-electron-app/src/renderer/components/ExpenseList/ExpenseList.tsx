@@ -38,11 +38,11 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
     <div>
       <List className="expense-list">
         <div className="expense-list-header">
-          <div className="col description">内容</div>
-          <div className="col amount">金額</div>
-          <div className="col date">日付</div>
-          <div className="col category">カテゴリ</div>
-          <div className="col actions">操作</div>
+          <div className="col col-description">内容</div>
+          <div className="col col-amount">金額</div>
+          <div className="col col-date">日付</div>
+          <div className="col col-category">カテゴリ</div>
+          <div className="col col-actions">操作</div>
         </div>
 
         {selectedExpenses.map((expense) => (
@@ -50,23 +50,15 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
             key={expense.id}
             className={`expense-list-item ${editId === expense.id ? 'editing-item' : ''}`}
           >
-            <div className="col description">{expense.description}</div>
-            <div className="col amount">¥{expense.amount.toLocaleString()}</div>
-            <div className="col date">{expense.date}</div>
-            <div className="col category">{getCategoryName(expense)}</div>
-            <div className="col actions">
-              <button
-                className="icon-button edit"
-                title="編集"
-                onClick={() => startEditing(expense)}
-              >
+            <div className="col col-description">{expense.description}</div>
+            <div className="col col-amount">¥{expense.amount.toLocaleString()}</div>
+            <div className="col col-date">{expense.date}</div>
+            <div className="col col-category">{getCategoryName(expense)}</div>
+            <div className="col col-actions">
+              <button className="icon-button edit" title="編集" onClick={() => startEditing(expense)}>
                 <EditIcon />
               </button>
-              <button
-                className="icon-button delete"
-                title="削除"
-                onClick={() => handleDeleteExpense(expense.id)}
-              >
+              <button className="icon-button delete" title="削除" onClick={() => handleDeleteExpense(expense.id)}>
                 <DeleteIcon />
               </button>
             </div>
