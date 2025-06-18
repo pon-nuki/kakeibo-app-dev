@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home'; 
-import Settings from './pages/Settings';
-import Budget from './pages/Budget';
-import FixedCosts from './pages/FixedCosts';
-import Categories from './pages/Categories'; 
 import ErrorBoundary from './components/ErrorBoundary';
-import Diary from './pages/Diary';
-import Graphs from './pages/Graphs';
 import AppLayout from './components/Layouts/AppLayout';
+
+// lazy load
+const Home = lazy(() => import('./pages/Home'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Budget = lazy(() => import('./pages/Budget'));
+const FixedCosts = lazy(() => import('./pages/FixedCosts'));
+const Categories = lazy(() => import('./pages/Categories'));
+const Diary = lazy(() => import('./pages/Diary'));
+const Graphs = lazy(() => import('./pages/Graphs'));
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -22,15 +24,17 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <AppLayout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/budget" element={<Budget />} />
-          <Route path="/fixed-costs" element={<FixedCosts />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/diary" element={<Diary />} />
-          <Route path="/graphs" element={<Graphs />} />
-        </Routes>
+        <Suspense fallback={<div>読み込み中...</div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/budget" element={<Budget />} />
+            <Route path="/fixed-costs" element={<FixedCosts />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/diary" element={<Diary />} />
+            <Route path="/graphs" element={<Graphs />} />
+          </Routes>
+        </Suspense>
       </AppLayout>
     </ErrorBoundary>
   );

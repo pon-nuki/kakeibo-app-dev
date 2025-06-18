@@ -13,6 +13,11 @@ module.exports = (env, argv) => {
       filename: 'renderer.js',
       path: path.resolve(__dirname, 'dist', 'renderer'),
     },
+    performance: {
+      maxAssetSize: 600 * 1024,
+      maxEntrypointSize: 600 * 1024,
+      hints: 'warning',
+    },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
       fallback: {
