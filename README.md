@@ -2,24 +2,41 @@
 
 ## Screenshots / スクリーンショット
 
+### 家計簿
 <p align="center">
-  <img src="images/kakeibo.png" alt="家計簿画面" width="400" />
-  <img src="images/nikki.png" alt="日記画面" width="400" />
+  <img src="images/kakeibo.png" alt="家計簿画面" width="600" />
 </p>
 
+### 日記
 <p align="center">
-  <img src="images/kategori.png" alt="カテゴリ画面" width="400" />
-  <img src="images/koteihi.png" alt="固定費画面" width="400" />
+  <img src="images/nikki.png" alt="日記画面" width="600" />
 </p>
 
+### カテゴリ設定
 <p align="center">
-  <img src="images/yosan.png" alt="予算画面" width="400" />
-  <img src="images/gurafu.png" alt="グラフ画面" width="400" />
+  <img src="images/kategori.png" alt="カテゴリ画面" width="600" />
 </p>
 
+### 固定費設定
 <p align="center">
-  <img src="images/settei.png" alt="設定画面" width="400" />
+  <img src="images/koteihi.png" alt="固定費画面" width="600" />
 </p>
+
+### 予算設定
+<p align="center">
+  <img src="images/yosan.png" alt="予算画面" width="600" />
+</p>
+
+### グラフで見る
+<p align="center">
+  <img src="images/gurafu.png" alt="グラフ画面" width="600" />
+</p>
+
+### アプリ設定
+<p align="center">
+  <img src="images/settei.png" alt="設定画面" width="600" />
+</p>
+
 
 ## English
 
