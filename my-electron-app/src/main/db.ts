@@ -375,7 +375,7 @@ export const updateFixedCost = (
   const date = toISODate(rawDate);
   return new Promise((resolve, reject) => {
     const stmt = db.prepare(
-      'UPDATE fixed_costs SET description = ?, amount = ?, payment_method = ?, category_id = ?, frequency = ?, date = ?, next_payment_date = ?, WHERE id = ?'
+      'UPDATE fixed_costs SET description = ?, amount = ?, payment_method = ?, category_id = ?, frequency = ?, date = ?, next_payment_date = ? WHERE id = ?'
     );
     stmt.run(description, amount, paymentMethod, categoryId, frequency, date, nextPaymentDate, id, (err: Error | null) =>
       err ? reject(err) : resolve()

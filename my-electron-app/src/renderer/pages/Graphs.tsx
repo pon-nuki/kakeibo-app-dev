@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { Pie, Line, Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
-import './Graphs.css'; // 必要であればスタイルファイル追加
+import './Graphs.css';
 
 Chart.register(...registerables);
 
@@ -21,7 +21,6 @@ const Graphs: React.FC = () => {
     try {
       if (!window.electron) throw new Error('Electron API が使えません。');
 
-      // preload.tsで定義した関数名に合わせて呼び出し
       const category = await window.electron.getCategorySummary();
       const monthly = await window.electron.getMonthlySpending();
       const budget = await window.electron.getBudgetVsActual();

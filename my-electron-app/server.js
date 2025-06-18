@@ -346,6 +346,48 @@ app.get('/fixed-costs', (req, res) => {
   }
 });
 
+// 固定費更新エンドポイント
+app.put('/fixed-costs/:id', (req, res) => {
+  const { id } = req.params;
+  const {
+    description,
+    amount,
+    paymentMethod,
+    categoryId,
+    frequency,
+    date,
+    nextPaymentDate,
+  } = req.body;
+
+  if (
+    !description || typeof amount !== 'number' ||
+    !paymentMethod || !categoryId || !frequency || !date || !nextPaymentDate
+  ) {
+    return res.status(400).json({ error: '全ての項目が必要です' });
+  }
+
+  const sql = `
+    UPDATE fixed_costs
+    SET description = ?, amount = ?, payment_method = ?, category_id = ?, frequency = ?, date = ?, next_payment_date = ?
+    WHERE id = ?
+  `;
+
+  db.run(
+    sql,
+    [description, amount, paymentMethod, categoryId, frequency, date, nextPaymentDate, id],
+    function (err) {
+      if (err) {
+        console.error('固定費更新エラー:', err.message);
+        return res.status(500).json({ error: '固定費の更新に失敗しました' });
+      }
+      if (this.changes === 0) {
+        return res.status(404).json({ error: '指定された固定費が見つかりませんでした' });
+      }
+      res.json({ message: `固定費 ID ${id} が更新されました` });
+    }
+  );
+});
+
 // 固定費削除エンドポイント
 app.delete('/fixed-costs/:id', (req, res) => {
   const { id } = req.params;
