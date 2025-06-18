@@ -26,21 +26,29 @@ const CategoryList: React.FC<CategoryListProps> = ({
 
   return (
     <div>
-      <List>
+      <List className="category-list">
         {selectedCategories.map((category) => (
           <ListItem
             key={category.id}
-            className={editCategoryId === category.id ? 'editing-item' : ''}
+            className={`category-list-item ${editCategoryId === category.id ? 'editing-item' : ''}`}
           >
-            <ListItemText
-              primary={category.name}
-            />
-            <IconButton onClick={() => startEditingCategory(category)} color="primary">
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={() => handleDeleteCategory(category.id)} color="secondary">
-              <DeleteIcon />
-            </IconButton>
+            <div className="category-name">{category.name}</div>
+            <div className="col-actions">
+              <IconButton
+                className="icon-button"
+                title="編集"
+                onClick={() => startEditingCategory(category)}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                className="icon-button"
+                title="削除"
+                onClick={() => handleDeleteCategory(category.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </div>
           </ListItem>
         ))}
       </List>

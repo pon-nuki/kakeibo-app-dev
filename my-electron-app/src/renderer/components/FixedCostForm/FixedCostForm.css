@@ -1,0 +1,90 @@
+.fixed-cost-form-container {
+  max-width: 720px;
+  margin: 32px auto;
+  padding: 32px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border: 1px solid #e0e0e0;
+}
+
+/* ラベル付きの入力ブロック */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* テキスト・セレクト共通 */
+.input-field {
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-field:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+  outline: none;
+}
+
+/* 日付ピッカー */
+.date-picker-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.date-picker-input {
+  width: 100%;
+}
+
+/* ボタン */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.form-button {
+  background-color: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+}
+
+.form-button:hover {
+  background-color: #115293;
+  transform: translateY(-2px);
+}
+
+.form-button:active {
+  background-color: #0d3c71;
+  transform: translateY(0);
+}
+
+.form-button:focus {
+  outline: 3px solid #90caf9;
+  outline-offset: 2px;
+}
+
+.form-button.cancel {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.form-button.cancel:hover {
+  background-color: #bdbdbd;
+}

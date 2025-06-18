@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { List } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './ExpenseList.css';
@@ -18,19 +18,14 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ページ数計算
   const pageCount = Math.ceil(filteredExpenses.length / ITEMS_PER_PAGE);
-
-  // ページ変更ハンドラ
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
-  // ページネーション用のデータ選択
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const selectedExpenses = filteredExpenses.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  // categoryオブジェクトからカテゴリ名を取得
   const getCategoryName = (expense: Expense): string => {
     if (expense.categoryId) {
       const category = categories.find((cat) => cat.id === expense.categoryId);
@@ -41,27 +36,44 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
 
   return (
     <div>
-      <List>
+      <List className="expense-list">
+        <div className="expense-list-header">
+          <div className="col description">内容</div>
+          <div className="col amount">金額</div>
+          <div className="col date">日付</div>
+          <div className="col category">カテゴリ</div>
+          <div className="col actions">操作</div>
+        </div>
+
         {selectedExpenses.map((expense) => (
-          <ListItem
+          <div
             key={expense.id}
-            className={editId === expense.id ? 'editing-item' : ''}
+            className={`expense-list-item ${editId === expense.id ? 'editing-item' : ''}`}
           >
-            <ListItemText
-              primary={expense.description}
-              secondary={`¥${expense.amount.toLocaleString()} / ${expense.date} / カテゴリ: ${getCategoryName(expense)}`}
-            />
-            <IconButton onClick={() => startEditing(expense)} color="primary">
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={() => handleDeleteExpense(expense.id)} color="secondary">
-              <DeleteIcon />
-            </IconButton>
-          </ListItem>
+            <div className="col description">{expense.description}</div>
+            <div className="col amount">¥{expense.amount.toLocaleString()}</div>
+            <div className="col date">{expense.date}</div>
+            <div className="col category">{getCategoryName(expense)}</div>
+            <div className="col actions">
+              <button
+                className="icon-button edit"
+                title="編集"
+                onClick={() => startEditing(expense)}
+              >
+                <EditIcon />
+              </button>
+              <button
+                className="icon-button delete"
+                title="削除"
+                onClick={() => handleDeleteExpense(expense.id)}
+              >
+                <DeleteIcon />
+              </button>
+            </div>
+          </div>
         ))}
       </List>
 
-      {/* ページネーション */}
       <Pagination
         currentPage={currentPage}
         pageCount={pageCount}

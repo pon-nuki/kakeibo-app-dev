@@ -1,4 +1,3 @@
-// src/renderer/components/Layouts/AppLayout.tsx
 import React from 'react';
 import {
   Drawer,
@@ -9,8 +8,9 @@ import {
   Box,
 } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
+import './AppLayout.css';
 
-const drawerWidth = 200;
+const drawerWidth = 160;
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -18,18 +18,19 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       {/* 左メニュー */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
+        <Drawer
+          variant="permanent"
+          sx={{
             width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-      >
-        <List>
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          classes={{ paper: 'drawer-paper' }}
+        >
+        <List className="menu-list">
           {[
             { path: '/', label: '家計簿' },
             { path: '/diary', label: '日記' },
@@ -38,17 +39,20 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             { path: '/categories', label: 'カテゴリ設定' },
             { path: '/graphs', label: 'グラフで見る' },
             { path: '/settings', label: 'アプリ設定' },
-          ].map((item) => (
-            <ListItem key={item.path} disablePadding>
-              <ListItemButton
-                component={Link}
-                to={item.path}
-                selected={location.pathname === item.path}
-              >
-                <ListItemText primary={item.label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          ].map((item) => {
+            const isSelected = location.pathname === item.path;
+            return (
+              <ListItem key={item.path} disablePadding>
+                <ListItemButton
+                  component={Link}
+                  to={item.path}
+                  className={`menu-item ${isSelected ? 'selected' : ''}`}
+                >
+                  <ListItemText primary={item.label} className="menu-text" />
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
         </List>
       </Drawer>
 

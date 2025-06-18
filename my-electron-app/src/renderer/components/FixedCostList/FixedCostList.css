@@ -1,9 +1,10 @@
-.category-list {
+.expense-list {
   margin-top: 24px;
   font-family: 'Arial', sans-serif;
 }
 
-.category-list-header {
+/* ヘッダー */
+.expense-list-header {
   display: flex;
   font-weight: bold;
   background-color: #f0f0f0;
@@ -11,14 +12,15 @@
   border-bottom: 1px solid #ddd;
 }
 
-.category-list-item {
+/* 各行 */
+.expense-list-item {
   display: flex;
   padding: 12px 16px;
   border-bottom: 1px solid #eee;
   align-items: center;
 }
 
-.category-list-item:hover {
+.expense-list-item:hover {
   background-color: #f9f9f9;
 }
 
@@ -27,13 +29,31 @@
   border-left: 4px solid #1976d2;
 }
 
-.category-name {
-  flex: 1;
+/* 各列 */
+.col {
   padding: 0 8px;
+  flex: 1;
   font-size: 14px;
 }
 
-.col-actions {
+.col.amount {
+  text-align: right;
+  min-width: 100px;
+}
+
+.col.date {
+  min-width: 120px;
+}
+
+.col.category {
+  min-width: 120px;
+}
+
+.col.frequency {
+  min-width: 100px;
+}
+
+.col.actions {
   display: flex;
   justify-content: flex-end;
   min-width: 80px;
@@ -42,16 +62,11 @@
 
 .icon-button {
   cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-  border-radius: 50%;
-  padding: 6px;
-  background-color: transparent;
-  border: none;
+  transition: transform 0.2s ease;
 }
 
 .icon-button:hover {
   transform: scale(1.1);
-  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .icon-button[title='編集'] {
@@ -63,19 +78,19 @@
 }
 
 @media (max-width: 600px) {
-  .category-list-item,
-  .category-list-header {
+  .expense-list-item,
+  .expense-list-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .category-name {
+  .col {
     width: 100%;
     text-align: left;
     margin-bottom: 4px;
   }
 
-  .col-actions {
+  .col.actions {
     justify-content: flex-start;
   }
 }

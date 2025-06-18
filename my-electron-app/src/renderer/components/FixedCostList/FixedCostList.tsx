@@ -1,21 +1,11 @@
-// src/renderer/components/FixedCostList/FixedCostList.tsx
-import React, { useState } from 'react';
-import {
-  List,
-  ListItem,
-  ListItemText,
-  IconButton
-} from '@mui/material';
+import React from 'react';
+import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import '../ExpenseList/ExpenseList.css';
-import Pagination from '../Pagination/PaginationControls';
 import { FixedCostListProps } from '../../../types/fixedCostListTypes';
 import { FixedCost } from '../../../types/common';
+import './FixedCostList.css';
 
-const ITEMS_PER_PAGE = 10;
-
-// 支払方法のラベルを取得
 const getPaymentMethodLabel = (method: string): string => {
   switch (method) {
     case 'bank': return '口座振替';
@@ -26,7 +16,16 @@ const getPaymentMethodLabel = (method: string): string => {
   }
 };
 
-// カテゴリ名を取得
+const getFrequencyLabel = (frequency: string): string => {
+  switch (frequency) {
+    case 'monthly': return '毎月';
+    case 'yearly': return '毎年';
+    case 'quarterly': return '四半期ごと';
+    case 'one-time': return '一回のみ';
+    default: return '不明';
+  }
+};
+
 const getCategoryName = (cost: FixedCost, categories: { id: number, name: string }[]): string => {
   if (cost.categoryId) {
     const category = categories.find((cat) => cat.id === cost.categoryId);
@@ -42,45 +41,49 @@ const FixedCostList: React.FC<FixedCostListProps> = ({
   editId,
   categories,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const pageCount = Math.ceil(filteredFixedCosts.length / ITEMS_PER_PAGE);
-
-  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
-    setCurrentPage(page);
-  };
-
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const selectedFixedCosts = filteredFixedCosts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
   return (
-    <div>
-      <List>
-        {selectedFixedCosts.map((cost) => (
-          <ListItem
-            key={cost.id}
-            className={editId === cost.id ? 'editing-item' : ''}
-          >
-            <ListItemText
-              primary={cost.description}
-              secondary={`¥${cost.amount.toLocaleString()} / ${cost.date} / カテゴリ: ${getCategoryName(cost, categories)} / 支払方法: ${getPaymentMethodLabel(cost.paymentMethod)}`}
-            />
-            <IconButton onClick={() => startEditing(cost)} color="primary">
+    <div className="expense-list">
+      <div className="expense-list-header">
+        <div className="col">項目</div>
+        <div className="col amount">金額</div>
+        <div className="col date">支払日</div>
+        <div className="col category">カテゴリ</div>
+        <div className="col category">支払方法</div>
+        <div className="col frequency">支払頻度</div>
+        <div className="col date">次回支払日</div>
+        <div className="col actions">操作</div>
+      </div>
+
+      {filteredFixedCosts.map((cost) => (
+        <div
+          key={cost.id}
+          className={`expense-list-item ${editId === cost.id ? 'editing-item' : ''}`}
+        >
+          <div className="col">{cost.description}</div>
+          <div className="col amount">¥{cost.amount.toLocaleString()}</div>
+          <div className="col date">{cost.date}</div>
+          <div className="col category">{getCategoryName(cost, categories)}</div>
+          <div className="col category">{getPaymentMethodLabel(cost.paymentMethod)}</div>
+          <div className="col frequency">{getFrequencyLabel(cost.frequency)}</div>
+          <div className="col date">{cost.nextPaymentDate || '未設定'}</div>
+          <div className="col actions">
+            <IconButton
+              className="icon-button"
+              title="編集"
+              onClick={() => startEditing(cost)}
+            >
               <EditIcon />
             </IconButton>
-            <IconButton onClick={() => handleDeleteFixedCost(cost.id)} color="secondary">
+            <IconButton
+              className="icon-button"
+              title="削除"
+              onClick={() => handleDeleteFixedCost(cost.id)}
+            >
               <DeleteIcon />
             </IconButton>
-          </ListItem>
-        ))}
-      </List>
-
-      {/* ページネーション */}
-      <Pagination
-        currentPage={currentPage}
-        pageCount={pageCount}
-        onPageChange={handlePageChange}
-      />
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

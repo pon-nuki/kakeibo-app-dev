@@ -13,6 +13,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ja } from 'date-fns/locale';
 import { FixedCostFormProps } from '../../../types/fixedCostFormTypes';
 import { addMonths } from 'date-fns';
+import './FixedCostForm.css';
 
 const FixedCostForm: React.FC<FixedCostFormProps> = ({
   description,
@@ -21,7 +22,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
   categories,
   selectedCategory,
   frequency,
-  startDate, // 現在の支払日
+  startDate,
   nextPaymentDate,
   editId,
   onDescriptionChange,
@@ -29,48 +30,44 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
   onPaymentMethodChange,
   onCategoryChange,
   onFrequencyChange,
-  onStartDateChange, // 現在の支払日変更
+  onStartDateChange,
   onNextPaymentDateChange,
   onSubmit,
   onCancel,
 }) => {
-  // 支払頻度に基づき次回支払日を自動計算
   useEffect(() => {
     if (startDate) {
       let nextDate = startDate;
       if (frequency === 'monthly') {
-        nextDate = addMonths(startDate, 1); // 毎月
+        nextDate = addMonths(startDate, 1);
       } else if (frequency === 'quarterly') {
-        nextDate = addMonths(startDate, 3); // 3ヶ月毎
+        nextDate = addMonths(startDate, 3);
       } else if (frequency === 'annually') {
-        nextDate = addMonths(startDate, 12); // 年一回
+        nextDate = addMonths(startDate, 12);
       }
-      onNextPaymentDateChange(nextDate); // 次回支払日を更新
+      onNextPaymentDateChange(nextDate);
     }
   }, [startDate, frequency, onNextPaymentDateChange]);
 
   return (
-    <div>
+    <div className="home-container">
       <div className="input-row">
-        {/* 固定費名 */}
         <TextField
           label="固定費名"
           variant="outlined"
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
-          className={`input-field ${editId ? 'editing' : ''}`}
+          className="input-field"
         />
-        {/* 金額 */}
         <TextField
           label="金額"
           variant="outlined"
           type="number"
           value={amount}
           onChange={(e) => onAmountChange(e.target.value)}
-          className={`input-field ${editId ? 'editing' : ''}`}
+          className="input-field"
         />
-        {/* 支払方法 */}
-        <FormControl className={`input-field ${editId ? 'editing' : ''}`}>
+        <FormControl className="input-field">
           <InputLabel>支払方法</InputLabel>
           <Select
             value={paymentMethod}
@@ -83,8 +80,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             <MenuItem value="other">その他</MenuItem>
           </Select>
         </FormControl>
-        {/* カテゴリ選択 */}
-        <FormControl className={`input-field ${editId ? 'editing' : ''}`}>
+        <FormControl className="input-field">
           <InputLabel>カテゴリ</InputLabel>
           <Select
             value={selectedCategory || ''}
@@ -98,8 +94,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             ))}
           </Select>
         </FormControl>
-        {/* 支払頻度 */}
-        <FormControl className={`input-field ${editId ? 'editing' : ''}`}>
+        <FormControl className="input-field">
           <InputLabel>支払頻度</InputLabel>
           <Select
             value={frequency}
@@ -112,33 +107,22 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             <MenuItem value="other">その他</MenuItem>
           </Select>
         </FormControl>
-        {/* 現在の支払日 */}
-        <div className="date-picker-row">
-          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
-            <DatePicker
-              label="現在の支払日"
-              value={startDate}
-              onChange={onStartDateChange}
-              enableAccessibleFieldDOMStructure={false}
-              slots={{ textField: TextField }}
-              slotProps={{ textField: { className: 'date-picker-input' } }}
-            />
-          </LocalizationProvider>
-        </div>
-        {/* 次回支払日 */}
-        <div className="date-picker-row">
-          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
-            <DatePicker
-              label="次回支払日"
-              value={nextPaymentDate}
-              onChange={onNextPaymentDateChange}
-              enableAccessibleFieldDOMStructure={false}
-              slots={{ textField: TextField }}
-              slotProps={{ textField: { className: 'date-picker-input' } }}
-            />
-          </LocalizationProvider>
-        </div>
-        {/* 追加・更新ボタン */}
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
+          <DatePicker
+            label="現在の支払日"
+            value={startDate}
+            onChange={onStartDateChange}
+            slotProps={{ textField: { className: 'date-picker-input' } }}
+          />
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
+          <DatePicker
+            label="次回支払日"
+            value={nextPaymentDate}
+            onChange={onNextPaymentDateChange}
+            slotProps={{ textField: { className: 'date-picker-input' } }}
+          />
+        </LocalizationProvider>
         {editId === null ? (
           <Button onClick={onSubmit} variant="contained">
             追加
