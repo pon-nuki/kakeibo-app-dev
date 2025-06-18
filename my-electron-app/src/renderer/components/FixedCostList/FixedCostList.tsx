@@ -19,10 +19,9 @@ const getPaymentMethodLabel = (method: string): string => {
 const getFrequencyLabel = (frequency: string): string => {
   switch (frequency) {
     case 'monthly': return '毎月';
-    case 'yearly': return '毎年';
-    case 'quarterly': return '四半期ごと';
-    case 'one-time': return '一回のみ';
-    default: return '不明';
+    case 'quarterly': return '三ヶ月毎';
+    case 'annually': return '毎年';
+    default: return 'その他';
   }
 };
 

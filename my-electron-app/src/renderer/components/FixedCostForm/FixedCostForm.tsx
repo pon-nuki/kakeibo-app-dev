@@ -102,8 +102,8 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             onChange={(e) => onFrequencyChange(e.target.value)}
           >
             <MenuItem value="monthly">毎月</MenuItem>
-            <MenuItem value="quarterly">四半期ごと</MenuItem>
-            <MenuItem value="annually">年一回</MenuItem>
+            <MenuItem value="quarterly">三ヶ月毎</MenuItem>
+            <MenuItem value="annually">毎年</MenuItem>
             <MenuItem value="other">その他</MenuItem>
           </Select>
         </FormControl>
