@@ -1,5 +1,26 @@
 # Kakeibo App (In Development)
 
+## Screenshots / スクリーンショット
+
+<p align="center">
+  <img src="images/kakeibo.png" alt="家計簿画面" width="400" />
+  <img src="images/nikki.png" alt="日記画面" width="400" />
+</p>
+
+<p align="center">
+  <img src="images/kategori.png" alt="カテゴリ画面" width="400" />
+  <img src="images/koteihi.png" alt="固定費画面" width="400" />
+</p>
+
+<p align="center">
+  <img src="images/yosan.png" alt="予算画面" width="400" />
+  <img src="images/gurafu.png" alt="グラフ画面" width="400" />
+</p>
+
+<p align="center">
+  <img src="images/settei.png" alt="設定画面" width="400" />
+</p>
+
 ## English
 
 🐱 Kakeibo App  
