@@ -21,7 +21,8 @@
     "productName": "稼ぐに追いつく貧乏なし",
     "files": [
       "dist/**/*",
-      "server.js"
+      "server.js",
+      "icon.ico"
     ],
     "directories": {
       "output": "release"

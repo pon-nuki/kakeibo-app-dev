@@ -434,7 +434,7 @@ ipcMain.handle('setSetting', async (_event, key: string, value: string) => {
 });
 
 // 固定費の支払いが3日以内の場合に通知を出す
-const iconPath = path.join(__dirname, '..', '..', 'icon.png');
+const iconPath = path.join(__dirname, '..', '..', 'icon.ico');
 const checkUpcomingFixedCostNotifications = async () => {
   try {
     const notifications = await getUpcomingFixedCostNotifications(3);
