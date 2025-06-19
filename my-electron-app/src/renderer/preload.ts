@@ -7,8 +7,10 @@ try {
     // Expenses
     fetchExpenses: () => ipcRenderer.invoke('fetchExpenses'),
     deleteExpense: (id: number) => ipcRenderer.invoke('deleteExpense', id),
-    addExpense: (description: string, amount: number, date: string, categoryId: number) => ipcRenderer.invoke('addExpense', description, amount, date, categoryId),
-    updateExpense: (id: number, desc: string, amt: number, date: string, categoryId: number) => ipcRenderer.invoke('updateExpense', { id, desc, amt, date, categoryId }),
+    addExpense: (description: string, amount: number, date: string, categoryId: number) =>
+      ipcRenderer.invoke('addExpense', description, amount, date, categoryId),
+    updateExpense: (id: number, desc: string, amt: number, date: string, categoryId: number) =>
+      ipcRenderer.invoke('updateExpense', { id, desc, amt, date, categoryId }),
 
     // Budgets
     getBudget: (month: string) => ipcRenderer.invoke('getBudget', month),
@@ -17,8 +19,45 @@ try {
 
     // Fixed Costs
     fetchFixedCosts: () => ipcRenderer.invoke('fetchFixedCosts'),
-    addFixedCost: (description: string, amount: number, startDate: string, nextPaymentDate: string, paymentMethod: string, categoryId: number, frequency: string) => ipcRenderer.invoke('addFixedCost', description, amount, startDate, nextPaymentDate, paymentMethod, categoryId, frequency),
-    updateFixedCost: (id: number, description: string, amount: number, startDate: string, nextPaymentDate: string, paymentMethod: string, categoryId: number, frequency: string) => ipcRenderer.invoke('updateFixedCost', { id, description, amount, startDate, nextPaymentDate, paymentMethod, categoryId, frequency }),
+    addFixedCost: (
+      description: string,
+      amount: number,
+      startDate: string,
+      nextPaymentDate: string,
+      paymentMethod: string,
+      categoryId: number,
+      frequency: string
+    ) =>
+      ipcRenderer.invoke(
+        'addFixedCost',
+        description,
+        amount,
+        startDate,
+        nextPaymentDate,
+        paymentMethod,
+        categoryId,
+        frequency
+      ),
+    updateFixedCost: (
+      id: number,
+      description: string,
+      amount: number,
+      startDate: string,
+      nextPaymentDate: string,
+      paymentMethod: string,
+      categoryId: number,
+      frequency: string
+    ) =>
+      ipcRenderer.invoke('updateFixedCost', {
+        id,
+        description,
+        amount,
+        startDate,
+        nextPaymentDate,
+        paymentMethod,
+        categoryId,
+        frequency,
+      }),
     deleteFixedCost: (id: number) => ipcRenderer.invoke('deleteFixedCost', id),
 
     // Categories
@@ -30,7 +69,8 @@ try {
     // Diary
     fetchDiaries: () => ipcRenderer.invoke('fetchDiaries'),
     getDiaryByDate: (date: string) => ipcRenderer.invoke('getDiaryByDate', date),
-    upsertDiary: (date: string, content: string, mood: number | null, tags: string[] | null) => ipcRenderer.invoke('upsertDiary', { date, content, mood, tags }),
+    upsertDiary: (date: string, content: string, mood: number | null, tags: string[] | null) =>
+      ipcRenderer.invoke('upsertDiary', { date, content, mood, tags }),
     deleteDiary: (date: string) => ipcRenderer.invoke('deleteDiary', date),
 
     // Graph
@@ -44,6 +84,19 @@ try {
     // Settings
     getSetting: (key: string) => ipcRenderer.invoke('getSetting', key),
     setSetting: (key: string, value: string) => ipcRenderer.invoke('setSetting', key, value),
+
+    // Settings (booleanを文字列に変換する)
+    getBooleanSetting: async (key: string) => {
+      const res = await ipcRenderer.invoke('getSetting', key);
+      return res.value === 'true';
+    },
+    setBooleanSetting: (key: string, value: boolean) =>
+      ipcRenderer.invoke('setSetting', key, value ? 'true' : 'false'),
+
+    // 通知設定
+    getNotifySetting: () => ipcRenderer.invoke('getSetting', 'notifyFixedCost'),
+    setNotifySetting: (enabled: boolean) =>
+      ipcRenderer.invoke('setSetting', 'notifyFixedCost', enabled ? 'true' : 'false'),
   });
 
   console.log("preload.ts 完了");

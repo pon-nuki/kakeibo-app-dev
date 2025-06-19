@@ -1,8 +1,15 @@
-import { fetchFixedCosts } from '../db';
+import { fetchFixedCosts, getSettingValue } from '../db';
 
 export const getUpcomingFixedCostNotifications = async (
   thresholdDays: number = 3
 ): Promise<{ title: string; body: string }[]> => {
+  // 通知設定を確認
+  const notifyEnabled = await getSettingValue('notifyFixedCost');
+  if (notifyEnabled !== 'true') {
+    console.log('ユーザー設定により通知はスキップされました');
+    return [];
+  }
+
   const fixedCosts = await fetchFixedCosts();
   const today = new Date();
 

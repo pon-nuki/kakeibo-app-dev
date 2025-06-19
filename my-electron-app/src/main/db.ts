@@ -189,10 +189,12 @@ export const insertDefaultSettings = async (): Promise<void> => {
       value TEXT NOT NULL
     );
   `;
-  const sqlInsert = `
-    INSERT OR IGNORE INTO settings (key, value)
-    VALUES ('autoRegisterFixedCosts', 'true');
-  `;
+
+  // デフォルト設定
+  const defaultSettings = [
+    ['autoRegisterFixedCosts', 'true'],
+    ['notifyFixedCost', 'true'],
+  ];
 
   return new Promise((resolve, reject) => {
     db.serialize(() => {
@@ -202,7 +204,16 @@ export const insertDefaultSettings = async (): Promise<void> => {
           return reject(err);
         }
 
-        db.run(sqlInsert, (err) => {
+        const stmt = db.prepare(`
+          INSERT OR IGNORE INTO settings (key, value)
+          VALUES (?, ?)
+        `);
+
+        for (const [key, value] of defaultSettings) {
+          stmt.run(key, value);
+        }
+
+        stmt.finalize((err) => {
           if (err) {
             console.error('初期設定の挿入失敗:', err);
             return reject(err);
