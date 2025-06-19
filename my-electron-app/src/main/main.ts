@@ -3,6 +3,8 @@ import * as path from 'path';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import cron from 'node-cron';
 import { registerFixedCosts } from './services/autoRegister';
+import { getUpcomingFixedCostNotifications } from './services/notificationService';
+import { Notification } from 'electron';
 import { fetchExpenses,
           addExpense,
           deleteExpense,
@@ -52,6 +54,9 @@ const initializeApp = async () => {
 
     // 定期的な固定費登録（アプリ起動中に毎月1日1時）
     scheduleAutoRegisterFixedCosts();
+
+    // 3日以内の固定費の支払いがある場合に通知を行う
+    checkUpcomingFixedCostNotifications();
 
   } catch (error) {
     console.error('アプリケーションの初期化エラー:', error);
@@ -427,6 +432,34 @@ ipcMain.handle('setSetting', async (_event, key: string, value: string) => {
     throw new Error('設定の保存に失敗しました');
   }
 });
+
+// 固定費の支払いが3日以内の場合に通知を出す
+const iconPath = path.join(__dirname, '..', '..', 'icon.png');
+const checkUpcomingFixedCostNotifications = async () => {
+  try {
+    const notifications = await getUpcomingFixedCostNotifications(3);
+
+    notifications.forEach(({ title, body }) => {
+      const notification = new Notification({
+        title,
+        body,
+        icon: iconPath,
+        silent: false,
+        urgency: 'critical',
+      });
+
+      notification.on('click', () => {
+        if (mainWindow) {
+          mainWindow.show();
+        }
+      });
+
+      notification.show();
+    });
+  } catch (error) {
+    console.error('通知の表示エラー:', error);
+  }
+};
 
 // アプリケーション開始
 initializeApp();
