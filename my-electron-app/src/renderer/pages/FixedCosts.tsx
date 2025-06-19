@@ -7,6 +7,7 @@ import FixedCostForm from '../components/FixedCostForm/FixedCostForm';
 import FixedCostList from '../components/FixedCostList/FixedCostList';
 import { FixedCost } from '../../types/common.d';
 import { fetchCategories } from '../services/categoriesService';
+import { normalizeFixedCosts } from '../../utils/normalizers';
 import {
   fetchFixedCosts,
   addFixedCost,
@@ -135,19 +136,6 @@ const FixedCosts: React.FC = () => {
     }
     return true;
   });
-
-  const normalizeFixedCosts = (rows: any[]): FixedCost[] =>
-    rows.map(row => ({
-      id: row.id,
-      description: row.description,
-      amount: row.amount,
-      date: row.date,
-      nextPaymentDate: row.next_payment_date, // 次回支払日
-      paymentMethod: row.payment_method,
-      frequency: row.frequency, // 支払頻度
-      categoryId: row.category_id,
-      category: { id: row.category_id, name: row.category_name },
-    }));
 
   const totalAmount = filteredCosts.reduce((sum, cost) => sum + cost.amount, 0);
   const totalPages = Math.ceil(filteredCosts.length / itemsPerPage);

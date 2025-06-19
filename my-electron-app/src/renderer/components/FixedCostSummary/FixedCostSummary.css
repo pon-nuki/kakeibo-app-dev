@@ -1,0 +1,31 @@
+.fixed-costs-section {
+  margin-top: 32px;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.fixed-costs-section h4 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.fixed-cost-item {
+  margin: 6px 0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  font-size: 15px;
+  color: #444;
+}
+
+.fixed-costs-totals {
+  margin-top: 12px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #222;
+}

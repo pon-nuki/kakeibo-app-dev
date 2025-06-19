@@ -8,6 +8,10 @@ import ExpenseForm from '../components/ExpenseForm/ExpenseForm';
 import { fetchExpenses, addExpense, updateExpense, deleteExpense } from '../services/expenseService';
 import { Expense } from '../../types/common.d';
 import { fetchCategories } from '../services/categoriesService';
+import { normalizeFixedCosts } from '../../utils/normalizers';
+import { fetchFixedCosts } from '../services/fixedCostService';
+import { FixedCost } from '../../types/common.d';
+import FixedCostSummary from '../components/FixedCostSummary/FixedCostSummary';
 
 const Home: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -17,42 +21,46 @@ const Home: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // フィルター用
   const [filterDate, setFilterDate] = useState<Date | null>(null);
   const [rangeStartDate, setRangeStartDate] = useState<Date | null>(null);
   const [rangeEndDate, setRangeEndDate] = useState<Date | null>(null);
   const [searchType, setSearchType] = useState<'exact' | 'range'>('exact');
 
-  // カテゴリ用
   const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [fixedCosts, setFixedCosts] = useState<FixedCost[]>([]);
 
-  // カテゴリを取得する
+  const fetchAndSetFixedCosts = async () => {
+    try {
+      const data = await fetchFixedCosts();
+      const normalized = normalizeFixedCosts(data);
+      setFixedCosts(normalized);
+    } catch {
+      setErrorMessage('固定費の取得に失敗しました。');
+    }
+  };
+
   const fetchAndSetCategories = async () => {
     try {
-      // fetchCategories関数を呼び出し、取得したカテゴリデータをsetCategoriesに格納
       const categories = await fetchCategories();
       setCategories(categories);
-    } catch (error) {
+    } catch {
       setErrorMessage('カテゴリの取得に失敗しました');
     }
   };
 
-  useEffect(() => {
-    fetchAndSetCategories();
-  }, []);
-
-  // データを取得する
   const fetchAndSetExpenses = async () => {
     try {
       const data = await fetchExpenses();
       setExpenses(data);
-    } catch (error) {
+    } catch {
       setErrorMessage('データの取得に失敗しました。');
     }
   };
 
   useEffect(() => {
+    fetchAndSetFixedCosts();
+    fetchAndSetCategories();
     fetchAndSetExpenses();
   }, []);
 
@@ -64,9 +72,9 @@ const Home: React.FC = () => {
         setDescription('');
         setAmount('');
         setStartDate(null);
-        setSelectedCategory(null); 
+        setSelectedCategory(null);
         setErrorMessage('');
-      } catch (err) {
+      } catch {
         setErrorMessage('追加に失敗しました');
       }
     } else {
@@ -83,9 +91,9 @@ const Home: React.FC = () => {
         setDescription('');
         setAmount('');
         setStartDate(null);
-        setSelectedCategory(null); 
+        setSelectedCategory(null);
         setErrorMessage('');
-      } catch (err) {
+      } catch {
         setErrorMessage('費用の更新に失敗しました。');
       }
     } else {
@@ -99,7 +107,7 @@ const Home: React.FC = () => {
       if (success) {
         await fetchAndSetExpenses();
       }
-    } catch (error) {
+    } catch {
       setErrorMessage('費用の削除に失敗しました。');
     }
   };
@@ -119,46 +127,43 @@ const Home: React.FC = () => {
     setStartDate(null);
   };
 
-  const filteredExpenses = expenses
-    .filter((expense) => {
-      const expenseDate = new Date(expense.date);
+  const filteredExpenses = expenses.filter((expense) => {
+    const expenseDate = new Date(expense.date);
+    if (searchType === 'exact' && filterDate) {
+      return expenseDate.toDateString() === filterDate.toDateString();
+    }
+    if (searchType === 'range') {
+      if (rangeStartDate && rangeEndDate) return expenseDate >= rangeStartDate && expenseDate <= rangeEndDate;
+      if (rangeStartDate) return expenseDate >= rangeStartDate;
+      if (rangeEndDate) return expenseDate <= rangeEndDate;
+    }
+    return true;
+  });
 
-      if (searchType === 'exact' && filterDate) {
-        const selectedDate = filterDate.toLocaleDateString('ja-JP');
-        const expenseDateFormatted = expenseDate.toLocaleDateString('ja-JP');
-        return selectedDate === expenseDateFormatted;
-      }
+  const filteredFixedCosts = fixedCosts.filter((fc) => {
+    const costDate = new Date(fc.date);
+    if (searchType === 'exact' && filterDate) {
+      return costDate.toDateString() === filterDate.toDateString();
+    }
+    if (searchType === 'range') {
+      if (rangeStartDate && rangeEndDate) return costDate >= rangeStartDate && costDate <= rangeEndDate;
+      if (rangeStartDate) return costDate >= rangeStartDate;
+      if (rangeEndDate) return costDate <= rangeEndDate;
+    }
+    return true;
+  });
 
-      if (searchType === 'range') {
-        if (rangeStartDate && rangeEndDate) {
-          return expenseDate >= rangeStartDate && expenseDate <= rangeEndDate;
-        }
-        if (rangeStartDate && !rangeEndDate) {
-          return expenseDate >= rangeStartDate;
-        }
-        if (!rangeStartDate && rangeEndDate) {
-          return expenseDate <= rangeEndDate;
-        }
-      }
-
-      return true;
-    });
-
-  const totalFilteredAmount = filteredExpenses.reduce(
-    (total, expense) => total + expense.amount,
-    0
-  );
+  const totalFilteredAmount = filteredExpenses.reduce((total, expense) => total + expense.amount, 0);
 
   return (
     <div className="home-container">
       <Box className="header-wrapper">
         <Box className="title-icon-row">
           <Typography variant="h5" className="header-title">家計簿</Typography>
-          <IconButton className="filter-icon-button">
-            <FilterListIcon />
-          </IconButton>
+          <IconButton className="filter-icon-button"><FilterListIcon /></IconButton>
         </Box>
       </Box>
+
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <ExpenseForm
@@ -197,7 +202,14 @@ const Home: React.FC = () => {
         categories={categories}
       />
 
-      <h3>合計: ¥{totalFilteredAmount.toLocaleString()}</h3>
+      <Box sx={{ mt: 4 }}>
+        <h3>変動費合計: ¥{totalFilteredAmount.toLocaleString()}</h3>
+        <FixedCostSummary
+          fixedCosts={filteredFixedCosts}
+          categories={categories}
+          totalVariable={totalFilteredAmount}
+        />
+      </Box>
     </div>
   );
 };
