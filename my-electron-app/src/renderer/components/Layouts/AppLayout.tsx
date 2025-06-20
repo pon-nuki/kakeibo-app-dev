@@ -11,7 +11,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './AppLayout.css';
 
-const drawerWidth = 160;
+const drawerWidth = 240;
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
