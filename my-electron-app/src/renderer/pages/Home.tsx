@@ -12,8 +12,10 @@ import { normalizeFixedCosts } from '../../utils/normalizers';
 import { fetchFixedCosts } from '../services/fixedCostService';
 import { FixedCost } from '../../types/common.d';
 import FixedCostSummary from '../components/FixedCostSummary/FixedCostSummary';
+import { useTranslation } from 'react-i18next';
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
@@ -36,7 +38,7 @@ const Home: React.FC = () => {
       const normalized = normalizeFixedCosts(data);
       setFixedCosts(normalized);
     } catch {
-      setErrorMessage('固定費の取得に失敗しました。');
+      setErrorMessage(t('home.errorFetchFixedCosts'));
     }
   };
 
@@ -45,7 +47,7 @@ const Home: React.FC = () => {
       const categories = await fetchCategories();
       setCategories(categories);
     } catch {
-      setErrorMessage('カテゴリの取得に失敗しました');
+      setErrorMessage(t('home.errorFetchCategories'));
     }
   };
 
@@ -54,7 +56,7 @@ const Home: React.FC = () => {
       const data = await fetchExpenses();
       setExpenses(data);
     } catch {
-      setErrorMessage('データの取得に失敗しました。');
+      setErrorMessage(t('home.errorFetchExpenses'));
     }
   };
 
@@ -75,10 +77,10 @@ const Home: React.FC = () => {
         setSelectedCategory(null);
         setErrorMessage('');
       } catch {
-        setErrorMessage('追加に失敗しました');
+        setErrorMessage(t('home.errorAdd'));
       }
     } else {
-      setErrorMessage('内容・金額・日付は必須です。');
+      setErrorMessage(t('home.errorMissingFields'));
     }
   };
 
@@ -94,10 +96,10 @@ const Home: React.FC = () => {
         setSelectedCategory(null);
         setErrorMessage('');
       } catch {
-        setErrorMessage('費用の更新に失敗しました。');
+        setErrorMessage(t('home.errorUpdate'));
       }
     } else {
-      setErrorMessage('編集する費用が選ばれていません。');
+      setErrorMessage(t('home.errorNoEditTarget'));
     }
   };
 
@@ -108,7 +110,7 @@ const Home: React.FC = () => {
         await fetchAndSetExpenses();
       }
     } catch {
-      setErrorMessage('費用の削除に失敗しました。');
+      setErrorMessage(t('home.errorDelete'));
     }
   };
 
@@ -159,7 +161,7 @@ const Home: React.FC = () => {
     <div className="home-container">
       <Box className="header-wrapper">
         <Box className="title-icon-row">
-          <Typography variant="h5" className="header-title">家計簿</Typography>
+          <Typography variant="h5" className="header-title">{t('home.title')}</Typography>
           <IconButton className="filter-icon-button"><FilterListIcon /></IconButton>
         </Box>
       </Box>
@@ -203,7 +205,7 @@ const Home: React.FC = () => {
       />
 
       <Box sx={{ mt: 4 }}>
-        <h3>変動費合計: ¥{totalFilteredAmount.toLocaleString()}</h3>
+        <h3>{t('home.totalVariable')}: ¥{totalFilteredAmount.toLocaleString()}</h3>
         <FixedCostSummary
           fixedCosts={filteredFixedCosts}
           categories={categories}

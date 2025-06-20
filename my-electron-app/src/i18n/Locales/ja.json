@@ -1,38 +1,57 @@
 {
-  "settings.title": "設定",
-  "settings.description": "ここではアプリの設定を行えます。",
-  "settings.autoRegister": "毎月自動で固定費を登録",
-  "settings.notifyFixedCost": "固定費支払日前に通知を受け取る",
-  "settings.language": "表示言語",
-  "settings.loading": "読み込み中...",
-  "graphs.title": "支出グラフ",
-  "graphs.category": "カテゴリー別",
-  "graphs.monthly": "月別支出",
-  "graphs.budget": "予算と出費の比較",
-  "graphs.categoryTitle": "カテゴリー別支出",
-  "graphs.monthlyTitle": "月別支出推移",
-  "graphs.budgetTitle": "予算と出費の比較",
-  "graphs.error": "データの取得に失敗しました。",
-  "categories.title": "カテゴリ設定",
-  "categories.inputLabel": "カテゴリ名",
-  "categories.add": "追加",
-  "categories.update": "更新",
-  "categories.cancel": "キャンセル",
-  "categories.total": "合計カテゴリ数",
-  "categories.fetchError": "カテゴリの取得に失敗しました。",
-  "categories.addError": "カテゴリの追加に失敗しました。",
-  "categories.updateError": "カテゴリの更新に失敗しました。",
-  "categories.deleteError": "カテゴリの削除に失敗しました。",
-  "categories.nameRequired": "カテゴリ名は必須です。",
-  "categories.noEditTarget": "編集するカテゴリが選ばれていません。",
-  "fixedCosts.title": "固定費管理",
-  "fixedCosts.total": "合計",
-  "fixedCosts.error.fetchCategories": "カテゴリの取得に失敗しました",
-  "fixedCosts.error.fetchFixedCosts": "固定費の取得に失敗しました。",
-  "fixedCosts.error.add": "追加に失敗しました。",
-  "fixedCosts.error.update": "更新に失敗しました。",
-  "fixedCosts.error.delete": "削除に失敗しました。",
-  "fixedCosts.error.required": "すべての項目を入力してください。",
+  "settings": {
+    "title": "設定",
+    "description": "ここではアプリの設定を行えます。",
+    "autoRegister": "毎月自動で固定費を登録",
+    "notifyFixedCost": "固定費支払日前に通知を受け取る",
+    "language": "表示言語",
+    "loading": "読み込み中..."
+  },
+  "menu": {
+    "home": "家計簿",
+    "diary": "日記",
+    "budget": "予算設定",
+    "fixedCosts": "固定費設定",
+    "categories": "カテゴリ設定",
+    "graphs": "グラフで見る",
+    "settings": "アプリ設定"
+  },
+  "graphs": {
+    "title": "支出グラフ",
+    "category": "カテゴリー別",
+    "monthly": "月別支出",
+    "budget": "予算と出費の比較",
+    "categoryTitle": "カテゴリー別支出",
+    "monthlyTitle": "月別支出推移",
+    "budgetTitle": "予算と出費の比較",
+    "error": "データの取得に失敗しました。"
+  },
+  "categories": {
+    "title": "カテゴリ設定",
+    "inputLabel": "カテゴリ名",
+    "add": "追加",
+    "update": "更新",
+    "cancel": "キャンセル",
+    "total": "合計カテゴリ数",
+    "fetchError": "カテゴリの取得に失敗しました。",
+    "addError": "カテゴリの追加に失敗しました。",
+    "updateError": "カテゴリの更新に失敗しました。",
+    "deleteError": "カテゴリの削除に失敗しました。",
+    "nameRequired": "カテゴリ名は必須です。",
+    "noEditTarget": "編集するカテゴリが選ばれていません。"
+  },
+  "fixedCosts": {
+    "title": "固定費管理",
+    "total": "合計",
+    "error": {
+      "fetchCategories": "カテゴリの取得に失敗しました",
+      "fetchFixedCosts": "固定費の取得に失敗しました。",
+      "add": "追加に失敗しました。",
+      "update": "更新に失敗しました。",
+      "delete": "削除に失敗しました。",
+      "required": "すべての項目を入力してください。"
+    }
+  },
   "fixedCostForm": {
     "name": "固定費名",
     "amount": "金額",
@@ -54,20 +73,6 @@
       "other": "その他"
     }
   },
-  "common": {
-    "add": "追加",
-    "update": "更新",
-    "cancel": "キャンセル"
-  },
-  "filter": {
-    "title": "フィルター",
-    "searchType": "検索タイプ",
-    "exact": "日付で検索（完全一致）",
-    "range": "期間で検索（範囲指定）",
-    "start": "開始日",
-    "end": "終了日",
-    "clear": "クリア"
-  },
   "fixedCostList": {
     "description": "項目",
     "amount": "金額",
@@ -81,24 +86,84 @@
     "delete": "削除",
     "notSet": "未設定"
   },
-"budget.title": "月別予算管理",
-"budget.selectMonth": "設定月",
-"budget.setBudget": "設定済み予算",
-"budget.totalExpenses": "支出合計",
-"budget.difference": "差額",
-"budget.enterBudget": "予算を入力",
-"budget.saveBudget": "予算を保存",
-"budget.invalidAmountAlert": "有効な数値を入力してください",
-  "diary.title": "日記",
-  "diary.date": "日付",
-  "diary.editTab": "編集",
-  "diary.previewTab": "プレビュー",
-  "diary.contentLabel": "内容（Markdown対応）",
-  "diary.saveButton": "保存",
-  "diary.deleteButton": "削除",
-  "diary.message.saved": "保存しました",
-  "diary.message.deleted": "削除しました",
-  "diary.message.deleteFailed": "削除に失敗しました",
-  "diary.message.saveFailed": "保存に失敗しました",
-  "diary.message.loadFailed": "日記の読み込みに失敗しました"
+  "fixedCostSummary": {
+    "title": "固定費一覧",
+    "noData": "該当する固定費はありません。",
+    "totalFixed": "固定費合計",
+    "totalCombined": "総合計（変動費 + 固定費）"
+  },
+  "budget": {
+    "title": "月別予算管理",
+    "selectMonth": "設定月",
+    "setBudget": "設定済み予算",
+    "totalExpenses": "支出合計",
+    "difference": "差額",
+    "enterBudget": "予算を入力",
+    "saveBudget": "予算を保存",
+    "invalidAmountAlert": "有効な数値を入力してください"
+  },
+  "diary": {
+    "title": "日記",
+    "date": "日付",
+    "editTab": "編集",
+    "previewTab": "プレビュー",
+    "contentLabel": "内容（Markdown対応）",
+    "saveButton": "保存",
+    "deleteButton": "削除",
+    "message": {
+      "saved": "保存しました",
+      "deleted": "削除しました",
+      "deleteFailed": "削除に失敗しました",
+      "saveFailed": "保存に失敗しました",
+      "loadFailed": "日記の読み込みに失敗しました"
+    }
+  },
+  "home": {
+    "title": "家計簿",
+    "errorFetchFixedCosts": "固定費の取得に失敗しました。",
+    "errorFetchCategories": "カテゴリの取得に失敗しました。",
+    "errorFetchExpenses": "データの取得に失敗しました。",
+    "errorAdd": "追加に失敗しました",
+    "errorMissingFields": "内容・金額・日付は必須です。",
+    "errorUpdate": "費用の更新に失敗しました。",
+    "errorNoEditTarget": "編集する費用が選ばれていません。",
+    "errorDelete": "費用の削除に失敗しました。",
+    "totalVariable": "変動費合計"
+  },
+  "expenseForm": {
+    "description": "内容",
+    "amount": "金額",
+    "category": "カテゴリ",
+    "selectCategory": "カテゴリを選択",
+    "date": "支出日",
+    "add": "追加",
+    "update": "更新",
+    "cancel": "キャンセル"
+  },
+  "expenseList": {
+    "description": "内容",
+    "amount": "金額",
+    "date": "日付",
+    "category": "カテゴリ",
+    "actions": "操作",
+    "unassigned": "未設定"
+  },
+  "filter": {
+    "title": "フィルター",
+    "searchType": "検索タイプ",
+    "exact": "日付で検索（完全一致）",
+    "range": "期間で検索（範囲指定）",
+    "start": "開始日",
+    "end": "終了日",
+    "clear": "クリア"
+  },
+  "common": {
+    "add": "追加",
+    "update": "更新",
+    "cancel": "キャンセル"
+  },
+  "actions": {
+    "edit": "編集",
+    "delete": "削除"
+  }
 }

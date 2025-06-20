@@ -1,39 +1,60 @@
 {
-  "app.title": "No Poverty Catching Up with Income",
-  "settings.title": "Settings",
-  "settings.description": "You can configure the app settings here.",
-  "settings.autoRegister": "Automatically register fixed costs monthly",
-  "settings.notifyFixedCost": "Receive a reminder before fixed costs are due",
-  "settings.language": "Display Language",
-  "settings.loading": "Loading...",
-  "graphs.title": "Spending Graphs",
-  "graphs.category": "By Category",
-  "graphs.monthly": "Monthly Spending",
-  "graphs.budget": "Budget vs Actual",
-  "graphs.categoryTitle": "Spending by Category",
-  "graphs.monthlyTitle": "Monthly Spending Trend",
-  "graphs.budgetTitle": "Comparison of Budget and Spending",
-  "graphs.error": "Failed to fetch data.",
-  "categories.title": "Category Settings",
-  "categories.inputLabel": "Category Name",
-  "categories.add": "Add",
-  "categories.update": "Update",
-  "categories.cancel": "Cancel",
-  "categories.total": "Total Categories",
-  "categories.fetchError": "Failed to fetch categories.",
-  "categories.addError": "Failed to add category.",
-  "categories.updateError": "Failed to update category.",
-  "categories.deleteError": "Failed to delete category.",
-  "categories.nameRequired": "Category name is required.",
-  "categories.noEditTarget": "No category selected for editing.",
-  "fixedCosts.title": "Fixed Costs Management",
-  "fixedCosts.total": "Total",
-  "fixedCosts.error.fetchCategories": "Failed to fetch categories",
-  "fixedCosts.error.fetchFixedCosts": "Failed to fetch fixed costs.",
-  "fixedCosts.error.add": "Failed to add.",
-  "fixedCosts.error.update": "Failed to update.",
-  "fixedCosts.error.delete": "Failed to delete.",
-  "fixedCosts.error.required": "Please fill in all required fields.",
+  "app": {
+    "title": "No Poverty Catching Up with Income"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "You can configure the app settings here.",
+    "autoRegister": "Automatically register fixed costs monthly",
+    "notifyFixedCost": "Receive a reminder before fixed costs are due",
+    "language": "Display Language",
+    "loading": "Loading..."
+  },
+  "menu": {
+    "home": "Home",
+    "diary": "Diary",
+    "budget": "Budget",
+    "fixedCosts": "Fixed Costs",
+    "categories": "Categories",
+    "graphs": "Graphs",
+    "settings": "Settings"
+  },
+  "graphs": {
+    "title": "Spending Graphs",
+    "category": "By Category",
+    "monthly": "Monthly Spending",
+    "budget": "Budget vs Actual",
+    "categoryTitle": "Spending by Category",
+    "monthlyTitle": "Monthly Spending Trend",
+    "budgetTitle": "Comparison of Budget and Spending",
+    "error": "Failed to fetch data."
+  },
+  "categories": {
+    "title": "Category Settings",
+    "inputLabel": "Category Name",
+    "add": "Add",
+    "update": "Update",
+    "cancel": "Cancel",
+    "total": "Total Categories",
+    "fetchError": "Failed to fetch categories.",
+    "addError": "Failed to add category.",
+    "updateError": "Failed to update category.",
+    "deleteError": "Failed to delete category.",
+    "nameRequired": "Category name is required.",
+    "noEditTarget": "No category selected for editing."
+  },
+  "fixedCosts": {
+    "title": "Fixed Costs Management",
+    "total": "Total",
+    "error": {
+      "fetchCategories": "Failed to fetch categories",
+      "fetchFixedCosts": "Failed to fetch fixed costs.",
+      "add": "Failed to add.",
+      "update": "Failed to update.",
+      "delete": "Failed to delete.",
+      "required": "Please fill in all required fields."
+    }
+  },
   "fixedCostForm": {
     "name": "Fixed Cost Name",
     "amount": "Amount",
@@ -55,20 +76,6 @@
       "other": "Other"
     }
   },
-  "common": {
-    "add": "Add",
-    "update": "Update",
-    "cancel": "Cancel"
-  },
-  "filter": {
-    "title": "Filter",
-    "searchType": "Search Type",
-    "exact": "Search by Exact Date",
-    "range": "Search by Date Range",
-    "start": "Start Date",
-    "end": "End Date",
-    "clear": "Clear"
-  },
   "fixedCostList": {
     "description": "Item",
     "amount": "Amount",
@@ -82,24 +89,84 @@
     "delete": "Delete",
     "notSet": "Not Set"
   },
-"budget.title": "Monthly Budget Management",
-"budget.selectMonth": "Select Month",
-"budget.setBudget": "Set Budget",
-"budget.totalExpenses": "Total Expenses",
-"budget.difference": "Difference",
-"budget.enterBudget": "Enter Budget",
-"budget.saveBudget": "Save Budget",
-"budget.invalidAmountAlert": "Please enter a valid number",
-  "diary.title": "Diary",
-  "diary.date": "Date",
-  "diary.editTab": "Edit",
-  "diary.previewTab": "Preview",
-  "diary.contentLabel": "Content (Markdown supported)",
-  "diary.saveButton": "Save",
-  "diary.deleteButton": "Delete",
-  "diary.message.saved": "Saved successfully",
-  "diary.message.deleted": "Deleted successfully",
-  "diary.message.deleteFailed": "Failed to delete",
-  "diary.message.saveFailed": "Failed to save",
-  "diary.message.loadFailed": "Failed to load diary entry"
+  "fixedCostSummary": {
+    "title": "Fixed Cost Summary",
+    "noData": "No fixed costs found.",
+    "totalFixed": "Total Fixed Costs",
+    "totalCombined": "Grand Total (Variable + Fixed)"
+  },
+  "budget": {
+    "title": "Monthly Budget Management",
+    "selectMonth": "Select Month",
+    "setBudget": "Set Budget",
+    "totalExpenses": "Total Expenses",
+    "difference": "Difference",
+    "enterBudget": "Enter Budget",
+    "saveBudget": "Save Budget",
+    "invalidAmountAlert": "Please enter a valid number"
+  },
+  "diary": {
+    "title": "Diary",
+    "date": "Date",
+    "editTab": "Edit",
+    "previewTab": "Preview",
+    "contentLabel": "Content (Markdown supported)",
+    "saveButton": "Save",
+    "deleteButton": "Delete",
+    "message": {
+      "saved": "Saved successfully",
+      "deleted": "Deleted successfully",
+      "deleteFailed": "Failed to delete",
+      "saveFailed": "Failed to save",
+      "loadFailed": "Failed to load diary entry"
+    }
+  },
+  "home": {
+    "title": "Household Account Book",
+    "errorFetchFixedCosts": "Failed to fetch fixed costs.",
+    "errorFetchCategories": "Failed to fetch categories.",
+    "errorFetchExpenses": "Failed to fetch expenses.",
+    "errorAdd": "Failed to add expense.",
+    "errorMissingFields": "Description, amount, and date are required.",
+    "errorUpdate": "Failed to update expense.",
+    "errorNoEditTarget": "No expense selected for editing.",
+    "errorDelete": "Failed to delete expense.",
+    "totalVariable": "Total Variable Expenses"
+  },
+  "expenseForm": {
+    "description": "Description",
+    "amount": "Amount",
+    "category": "Category",
+    "selectCategory": "Select a category",
+    "date": "Date of expense",
+    "add": "Add",
+    "update": "Update",
+    "cancel": "Cancel"
+  },
+  "expenseList": {
+    "description": "Description",
+    "amount": "Amount",
+    "date": "Date",
+    "category": "Category",
+    "actions": "Actions",
+    "unassigned": "Unassigned"
+  },
+  "filter": {
+    "title": "Filter",
+    "searchType": "Search Type",
+    "exact": "Search by Exact Date",
+    "range": "Search by Date Range",
+    "start": "Start Date",
+    "end": "End Date",
+    "clear": "Clear"
+  },
+  "common": {
+    "add": "Add",
+    "update": "Update",
+    "cancel": "Cancel"
+  },
+  "actions": {
+    "edit": "Edit",
+    "delete": "Delete"
+  }
 }

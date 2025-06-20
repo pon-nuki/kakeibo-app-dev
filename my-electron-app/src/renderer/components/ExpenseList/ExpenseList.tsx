@@ -6,6 +6,7 @@ import './ExpenseList.css';
 import Pagination from '../Pagination/PaginationControls';
 import { ExpenseListProps } from '../../../types/expenseListTypes';
 import { Expense } from '../../../types/common';
+import { useTranslation } from 'react-i18next';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -17,6 +18,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
   categories,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const { t } = useTranslation();
 
   const pageCount = Math.ceil(filteredExpenses.length / ITEMS_PER_PAGE);
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
@@ -29,20 +31,20 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
   const getCategoryName = (expense: Expense): string => {
     if (expense.categoryId) {
       const category = categories.find((cat) => cat.id === expense.categoryId);
-      return category ? category.name : '未設定';
+      return category ? category.name : t('expenseList.unassigned');
     }
-    return '未設定';
+    return t('expenseList.unassigned');
   };
 
   return (
     <div>
       <List className="expense-list">
         <div className="expense-list-header">
-          <div className="col col-description">内容</div>
-          <div className="col col-amount">金額</div>
-          <div className="col col-date">日付</div>
-          <div className="col col-category">カテゴリ</div>
-          <div className="col col-actions">操作</div>
+          <div className="col col-description">{t('expenseList.description')}</div>
+          <div className="col col-amount">{t('expenseList.amount')}</div>
+          <div className="col col-date">{t('expenseList.date')}</div>
+          <div className="col col-category">{t('expenseList.category')}</div>
+          <div className="col col-actions">{t('expenseList.actions')}</div>
         </div>
 
         {selectedExpenses.map((expense) => (
@@ -55,10 +57,19 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
             <div className="col col-date">{expense.date}</div>
             <div className="col col-category">{getCategoryName(expense)}</div>
             <div className="col col-actions">
-              <button className="icon-button edit" title="編集" onClick={() => startEditing(expense)}>
+              <button
+                className="icon-button edit"
+                title={t('actions.edit')}
+                onClick={() => startEditing(expense)}
+              >
                 <EditIcon />
               </button>
-              <button className="icon-button delete" title="削除" onClick={() => handleDeleteExpense(expense.id)}>
+
+              <button
+                className="icon-button delete"
+                title={t('actions.delete')}
+                onClick={() => handleDeleteExpense(expense.id)}
+              >
                 <DeleteIcon />
               </button>
             </div>

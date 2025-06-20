@@ -61,11 +61,11 @@ button:disabled {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.icon-button[title='編集'] {
+.icon-button.edit {
   color: #3f51b5;
 }
 
-.icon-button[title='削除'] {
+.icon-button.delete {
   color: #f44336;
 }
 
