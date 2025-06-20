@@ -12,7 +12,7 @@ const dbPath = path.join(
   username,
   'AppData',
   'Roaming',
-  'my-electron-app',
+  'kakeibo',
   'expenses.db'
 );
 
@@ -141,44 +141,96 @@ export const createTablesIfNotExists = async (): Promise<void> => {
 };
 
 // デフォルトカテゴリの挿入
-export const insertDefaultCategories = async (): Promise<void> => {
-  const defaultCategories = ['食費', '交通費', '光熱費', '交際費', '住宅費', '娯楽費'];
+const categoriesByLang: Record<string, string[]> = {
+  ja: ['食費', '交通費', '光熱費', '交際費', '住宅費', '娯楽費'],
+  en: ['Food', 'Transport', 'Utilities', 'Social', 'Housing', 'Leisure'],
+  ru: ['Питание', 'Транспорт', 'Коммунальные услуги', 'Общение', 'Жильё', 'Досуг'],
+};
 
-  const runSQL = (sql: string, params: any[]): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      db.run(sql, params, (err: Error | null) => {
+const getCurrentLanguage = async (): Promise<string> => {
+  return new Promise((resolve) => {
+    db.get(
+      'SELECT value FROM settings WHERE key = ?',
+      ['language'],
+      (err, row: { value?: string } | undefined) => {
         if (err) {
+          console.error('言語取得失敗:', err.message);
+          resolve('ja');
+        } else {
+          resolve(row?.value || 'ja');
+        }
+      }
+    );
+  });
+};
+
+const hasInsertedDefaultCategories = async (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    db.get(
+      'SELECT value FROM settings WHERE key = ?',
+      ['defaultCategoriesInserted'],
+      (err, row: { value?: string } | undefined) => {
+        if (err) {
+          console.error('フラグ確認失敗:', err.message);
+          resolve(false);
+        } else {
+          resolve(row?.value === 'true');
+        }
+      }
+    );
+  });
+};
+
+const markDefaultCategoriesAsInserted = async (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      'INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)',
+      ['defaultCategoriesInserted', 'true'],
+      (err) => {
+        if (err) {
+          console.error('フラグ保存失敗:', err.message);
           reject(err);
         } else {
           resolve();
         }
-      });
-    });
-  };
-
-  try {
-    // 各カテゴリを挿入
-    for (const category of defaultCategories) {
-      const checkCategoryExistsSQL = 'SELECT id FROM categories WHERE name = ?';
-      const insertCategorySQL = 'INSERT INTO categories (name) VALUES (?)';
-
-      const categoryExists = await new Promise<boolean>((resolve, reject) => {
-        db.get(checkCategoryExistsSQL, [category], (err: Error | null, row: any) => {
-          if (err) reject(err);
-          resolve(row ? true : false);
-        });
-      });
-
-      if (!categoryExists) {
-        await runSQL(insertCategorySQL, [category]);
-      } else {
       }
-    }
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-    } else {
+    );
+  });
+};
+
+export const insertDefaultCategories = async (): Promise<void> => {
+  const alreadyInserted = await hasInsertedDefaultCategories();
+  if (alreadyInserted) {
+    console.log('デフォルトカテゴリはすでに挿入済みです。');
+    return;
+  }
+
+  const lang = await getCurrentLanguage();
+  const defaultCategories = categoriesByLang[lang] || categoriesByLang['ja'];
+
+  for (const category of defaultCategories) {
+    try {
+      await new Promise<void>((resolve, reject) => {
+        db.run(
+          'INSERT OR IGNORE INTO categories (name) VALUES (?)',
+          [category],
+          (err) => {
+            if (err) {
+              console.error(`カテゴリ "${category}" の挿入失敗:`, err.message);
+              reject(err);
+            } else {
+              console.log(`カテゴリ "${category}" を挿入しました`);
+              resolve();
+            }
+          }
+        );
+      });
+    } catch (err) {
+      console.error('カテゴリ挿入中の例外:', err);
     }
   }
+
+  await markDefaultCategoriesAsInserted();
 };
 
 // デフォルト設定の挿入

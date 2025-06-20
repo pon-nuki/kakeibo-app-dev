@@ -14,7 +14,7 @@ const dbPath = path.join(
   username,
   'AppData',
   'Roaming',
-  'my-electron-app',
+  'kakeibo',
   'expenses.db'
 );
 
@@ -154,27 +154,88 @@ const createTableIfNotExists = () => {
 };
 
 // デフォルトカテゴリを挿入
-const insertDefaultCategories = async () => {
-  const defaultCategories = ['食費', '交通費', '光熱費', '交際費', '住宅費', '娯楽費'];
+const defaultCategoriesByLang = {
+  ja: ['食費', '交通費', '光熱費', '交際費', '住宅費', '娯楽費'],
+  en: ['Food', 'Transport', 'Utilities', 'Social', 'Housing', 'Entertainment'],
+  ru: ['Еда', 'Транспорт', 'Коммунальные', 'Общение', 'Жильё', 'Развлечения'],
+};
 
-  // 順番に処理
+// 現在の言語を取得
+const getCurrentLanguage = () => {
+  return new Promise((resolve) => {
+    db.get('SELECT value FROM settings WHERE key = ?', ['language'], (err, row) => {
+      if (err) {
+        console.error('言語取得エラー:', err.message);
+        resolve('ja');
+      } else {
+        resolve((row && row.value) || 'ja');
+      }
+    });
+  });
+};
+
+// フラグチェック（初回かどうか）
+const hasInsertedDefaultCategories = () => {
+  return new Promise((resolve) => {
+    db.get('SELECT value FROM settings WHERE key = ?', ['defaultCategoriesInserted'], (err, row) => {
+      if (err) {
+        console.error('設定フラグ取得エラー:', err.message);
+        resolve(false);
+      } else {
+        resolve(row && row.value === 'true');
+      }
+    });
+  });
+};
+
+// フラグ保存（挿入済みマーク）
+const markDefaultCategoriesAsInserted = () => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      'INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)',
+      ['defaultCategoriesInserted', 'true'],
+      (err) => {
+        if (err) {
+          console.error('フラグ保存エラー:', err.message);
+          reject(err);
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
+};
+
+// デフォルトカテゴリ挿入
+const insertDefaultCategories = async () => {
+  const alreadyInserted = await hasInsertedDefaultCategories();
+  if (alreadyInserted) {
+    console.log('デフォルトカテゴリはすでに挿入されています');
+    return;
+  }
+
+  const lang = await getCurrentLanguage();
+  const defaultCategories = defaultCategoriesByLang[lang] || defaultCategoriesByLang['ja'];
+
   for (const category of defaultCategories) {
     try {
-      // 非同期でカテゴリ挿入
       await new Promise((resolve, reject) => {
-        db.run("INSERT OR IGNORE INTO categories (name) VALUES (?)", [category], function(err) {
+        db.run("INSERT OR IGNORE INTO categories (name) VALUES (?)", [category], (err) => {
           if (err) {
-            console.error('カテゴリ挿入エラー:', err.message);
+            console.error(`カテゴリ "${category}" の挿入エラー:`, err.message);
             reject(err);
+          } else {
+            console.log(`カテゴリ "${category}" を挿入しました`);
+            resolve();
           }
-          resolve();
         });
       });
-      console.log(`カテゴリ "${category}" が挿入されました`);
     } catch (err) {
-      console.error(`カテゴリ "${category}" 挿入時にエラー:`, err.message);
+      console.error(`カテゴリ "${category}" の挿入中にエラーが発生しました:`, err.message);
     }
   }
+
+  await markDefaultCategoriesAsInserted();
 };
 
 // デフォルト設定を挿入
