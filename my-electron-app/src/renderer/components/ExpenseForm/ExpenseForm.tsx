@@ -7,8 +7,9 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { ja } from 'date-fns/locale';
+import { ja, enUS, ru } from 'date-fns/locale';
 import { ExpenseFormProps } from '../../../types/expenseFormTypes';
+import { Locale } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 const ExpenseForm: React.FC<ExpenseFormProps> = ({
@@ -25,7 +26,14 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   onStartDateChange,
   onCategoryChange,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const localeMap: Record<string, Locale> = {
+    ja: ja,
+    en: enUS,
+    ru: ru
+  };
+  const currentLocale = localeMap[i18n.language] || ja;
 
   return (
     <div>
@@ -71,7 +79,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
       </div>
 
       <div className="date-picker-row">
-        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
           <DatePicker
             label={t('expenseForm.date')}
             value={startDate}

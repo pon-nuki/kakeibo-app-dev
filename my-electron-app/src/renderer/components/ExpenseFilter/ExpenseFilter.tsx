@@ -11,8 +11,9 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { ja } from 'date-fns/locale';
+import { ja, enUS, ru } from 'date-fns/locale';
 import { ExpenseFilterProps } from '../../../types/expenseFilterTypes';
+import { Locale } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
@@ -25,7 +26,14 @@ const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
   rangeEndDate,
   setRangeEndDate,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const localeMap: Record<string, Locale> = {
+    ja: ja,
+    en: enUS,
+    ru: ru
+  };
+  const currentLocale = localeMap[i18n.language] || ja;
 
   return (
     <div className="expense-filter-container">
@@ -43,7 +51,7 @@ const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
         </RadioGroup>
       </FormControl>
 
-      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
         {searchType === 'exact' && (
           <div className="date-picker-row">
             <DatePicker

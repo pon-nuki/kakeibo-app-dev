@@ -1,25 +1,41 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Box, Typography, TextField, Button, Alert,
-  FormLabel, Tabs, Tab, Paper
+  Box, Typography, Button, Alert,
+  FormLabel, Tabs, Tab, Paper, TextField
 } from '@mui/material';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { useTranslation } from 'react-i18next';
+import {
+  LocalizationProvider,
+  DatePicker,
+} from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { Locale } from 'date-fns';
+import { ja, enUS, ru } from 'date-fns/locale';
 import './Diary.css';
 import { getDiaryByDate, upsertDiary, deleteDiary } from '../services/diaryService';
 
 const Diary: React.FC = () => {
-  const { t } = useTranslation();
-  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const { t, i18n } = useTranslation();
+
+  const localeMap: Record<string, Locale> = {
+    ja: ja,
+    en: enUS,
+    ru: ru
+  };
+  const currentLocale = localeMap[i18n.language] || ja;
+
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [content, setContent] = useState('');
   const [message, setMessage] = useState<string | null>(null);
   const [tab, setTab] = useState(0); // 0 = 編集, 1 = プレビュー
 
   useEffect(() => {
-    const loadDiary = async (date: string) => {
+    const loadDiary = async (date: Date) => {
+      const dateStr = date.toISOString().slice(0, 10);
       try {
-        const entry = await getDiaryByDate(date);
+        const entry = await getDiaryByDate(dateStr);
         setContent(entry?.content || '');
         setMessage(null);
       } catch {
@@ -30,8 +46,9 @@ const Diary: React.FC = () => {
   }, [selectedDate, t]);
 
   const handleSave = async () => {
+    const dateStr = selectedDate.toISOString().slice(0, 10);
     try {
-      await upsertDiary(selectedDate, content);
+      await upsertDiary(dateStr, content);
       setMessage(t('diary.message.saved'));
     } catch {
       setMessage(t('diary.message.saveFailed'));
@@ -39,8 +56,9 @@ const Diary: React.FC = () => {
   };
 
   const handleDelete = async () => {
+    const dateStr = selectedDate.toISOString().slice(0, 10);
     try {
-      const deleted = await deleteDiary(selectedDate);
+      const deleted = await deleteDiary(dateStr);
       if (deleted) {
         setContent('');
         setMessage(t('diary.message.deleted'));
@@ -63,17 +81,19 @@ const Diary: React.FC = () => {
 
       {message && <Alert severity="info" sx={{ mb: 2 }}>{message}</Alert>}
 
-      <FormLabel htmlFor="date-input" sx={{ mb: 1 }}>{t('diary.date')}</FormLabel>
-      <TextField
-        id="date-input"
-        type="date"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
-        fullWidth
-        sx={{ mb: 2 }}
-      />
+      <FormLabel sx={{ mb: 1 }}>{t('diary.date')}</FormLabel>
 
-      <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)} sx={{ mb: 2 }}>
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
+        <DatePicker
+          value={selectedDate}
+          onChange={(newValue) => {
+            if (newValue) setSelectedDate(newValue);
+          }}
+          slotProps={{ textField: { fullWidth: true } }}
+        />
+      </LocalizationProvider>
+
+      <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)} sx={{ my: 2 }}>
         <Tab label={t('diary.editTab')} />
         <Tab label={t('diary.previewTab')} />
       </Tabs>

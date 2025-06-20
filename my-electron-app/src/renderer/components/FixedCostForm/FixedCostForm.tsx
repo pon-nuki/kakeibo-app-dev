@@ -10,9 +10,9 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { ja } from 'date-fns/locale';
+import { ja, enUS, ru } from 'date-fns/locale';
 import { FixedCostFormProps } from '../../../types/fixedCostFormTypes';
-import { addMonths } from 'date-fns';
+import { addMonths, Locale } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import './FixedCostForm.css';
 
@@ -36,8 +36,16 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
+  const localeMap: Record<string, Locale> = {
+    ja: ja,
+    en: enUS,
+    ru: ru
+  };
+  const currentLocale = localeMap[i18n.language] || ja;
+
+  // 次回支払日の自動計算
   useEffect(() => {
     if (startDate) {
       let nextDate = startDate;
@@ -58,6 +66,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
           onChange={(e) => onDescriptionChange(e.target.value)}
           className="input-field"
         />
+
         <TextField
           label={t('fixedCostForm.amount')}
           variant="outlined"
@@ -66,6 +75,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
           onChange={(e) => onAmountChange(e.target.value)}
           className="input-field"
         />
+
         <FormControl className="input-field">
           <InputLabel>{t('fixedCostForm.paymentMethod')}</InputLabel>
           <Select
@@ -79,6 +89,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             <MenuItem value="other">{t('fixedCostForm.method.other')}</MenuItem>
           </Select>
         </FormControl>
+
         <FormControl className="input-field">
           <InputLabel>{t('fixedCostForm.category')}</InputLabel>
           <Select
@@ -93,6 +104,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             ))}
           </Select>
         </FormControl>
+
         <FormControl className="input-field">
           <InputLabel>{t('fixedCostForm.frequency')}</InputLabel>
           <Select
@@ -106,15 +118,14 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             <MenuItem value="other">{t('fixedCostForm.freq.other')}</MenuItem>
           </Select>
         </FormControl>
-        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
+
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
           <DatePicker
             label={t('fixedCostForm.startDate')}
             value={startDate}
             onChange={onStartDateChange}
             slotProps={{ textField: { className: 'date-picker-input' } }}
           />
-        </LocalizationProvider>
-        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
           <DatePicker
             label={t('fixedCostForm.nextPaymentDate')}
             value={nextPaymentDate}
@@ -122,6 +133,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
             slotProps={{ textField: { className: 'date-picker-input' } }}
           />
         </LocalizationProvider>
+
         {editId === null ? (
           <Button onClick={onSubmit} variant="contained">
             {t('common.add')}
