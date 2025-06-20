@@ -13,6 +13,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ja } from 'date-fns/locale';
 import { FixedCostFormProps } from '../../../types/fixedCostFormTypes';
 import { addMonths } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import './FixedCostForm.css';
 
 const FixedCostForm: React.FC<FixedCostFormProps> = ({
@@ -35,16 +36,14 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (startDate) {
       let nextDate = startDate;
-      if (frequency === 'monthly') {
-        nextDate = addMonths(startDate, 1);
-      } else if (frequency === 'quarterly') {
-        nextDate = addMonths(startDate, 3);
-      } else if (frequency === 'annually') {
-        nextDate = addMonths(startDate, 12);
-      }
+      if (frequency === 'monthly') nextDate = addMonths(startDate, 1);
+      else if (frequency === 'quarterly') nextDate = addMonths(startDate, 3);
+      else if (frequency === 'annually') nextDate = addMonths(startDate, 12);
       onNextPaymentDateChange(nextDate);
     }
   }, [startDate, frequency, onNextPaymentDateChange]);
@@ -53,14 +52,14 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
     <div className="home-container">
       <div className="input-row">
         <TextField
-          label="固定費名"
+          label={t('fixedCostForm.name')}
           variant="outlined"
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
           className="input-field"
         />
         <TextField
-          label="金額"
+          label={t('fixedCostForm.amount')}
           variant="outlined"
           type="number"
           value={amount}
@@ -68,23 +67,23 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
           className="input-field"
         />
         <FormControl className="input-field">
-          <InputLabel>支払方法</InputLabel>
+          <InputLabel>{t('fixedCostForm.paymentMethod')}</InputLabel>
           <Select
             value={paymentMethod}
-            label="支払方法"
+            label={t('fixedCostForm.paymentMethod')}
             onChange={(e) => onPaymentMethodChange(e.target.value)}
           >
-            <MenuItem value="bank">口座振替</MenuItem>
-            <MenuItem value="credit">クレジットカード</MenuItem>
-            <MenuItem value="cash">現金</MenuItem>
-            <MenuItem value="other">その他</MenuItem>
+            <MenuItem value="bank">{t('fixedCostForm.method.bank')}</MenuItem>
+            <MenuItem value="credit">{t('fixedCostForm.method.credit')}</MenuItem>
+            <MenuItem value="cash">{t('fixedCostForm.method.cash')}</MenuItem>
+            <MenuItem value="other">{t('fixedCostForm.method.other')}</MenuItem>
           </Select>
         </FormControl>
         <FormControl className="input-field">
-          <InputLabel>カテゴリ</InputLabel>
+          <InputLabel>{t('fixedCostForm.category')}</InputLabel>
           <Select
             value={selectedCategory || ''}
-            label="カテゴリ"
+            label={t('fixedCostForm.category')}
             onChange={(e) => onCategoryChange(Number(e.target.value))}
           >
             {categories.map((category) => (
@@ -95,21 +94,21 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
           </Select>
         </FormControl>
         <FormControl className="input-field">
-          <InputLabel>支払頻度</InputLabel>
+          <InputLabel>{t('fixedCostForm.frequency')}</InputLabel>
           <Select
             value={frequency}
-            label="支払頻度"
+            label={t('fixedCostForm.frequency')}
             onChange={(e) => onFrequencyChange(e.target.value)}
           >
-            <MenuItem value="monthly">毎月</MenuItem>
-            <MenuItem value="quarterly">三ヶ月毎</MenuItem>
-            <MenuItem value="annually">毎年</MenuItem>
-            <MenuItem value="other">その他</MenuItem>
+            <MenuItem value="monthly">{t('fixedCostForm.freq.monthly')}</MenuItem>
+            <MenuItem value="quarterly">{t('fixedCostForm.freq.quarterly')}</MenuItem>
+            <MenuItem value="annually">{t('fixedCostForm.freq.annually')}</MenuItem>
+            <MenuItem value="other">{t('fixedCostForm.freq.other')}</MenuItem>
           </Select>
         </FormControl>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
           <DatePicker
-            label="現在の支払日"
+            label={t('fixedCostForm.startDate')}
             value={startDate}
             onChange={onStartDateChange}
             slotProps={{ textField: { className: 'date-picker-input' } }}
@@ -117,7 +116,7 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
         </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
           <DatePicker
-            label="次回支払日"
+            label={t('fixedCostForm.nextPaymentDate')}
             value={nextPaymentDate}
             onChange={onNextPaymentDateChange}
             slotProps={{ textField: { className: 'date-picker-input' } }}
@@ -125,15 +124,15 @@ const FixedCostForm: React.FC<FixedCostFormProps> = ({
         </LocalizationProvider>
         {editId === null ? (
           <Button onClick={onSubmit} variant="contained">
-            追加
+            {t('common.add')}
           </Button>
         ) : (
           <>
             <Button onClick={onSubmit} variant="contained" color="primary">
-              更新
+              {t('common.update')}
             </Button>
             <Button onClick={onCancel} variant="outlined" color="secondary">
-              キャンセル
+              {t('common.cancel')}
             </Button>
           </>
         )}

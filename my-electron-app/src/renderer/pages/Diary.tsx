@@ -5,10 +5,12 @@ import {
 } from '@mui/material';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
+import { useTranslation } from 'react-i18next';
 import './Diary.css';
 import { getDiaryByDate, upsertDiary, deleteDiary } from '../services/diaryService';
 
 const Diary: React.FC = () => {
+  const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [content, setContent] = useState('');
   const [message, setMessage] = useState<string | null>(null);
@@ -21,18 +23,18 @@ const Diary: React.FC = () => {
         setContent(entry?.content || '');
         setMessage(null);
       } catch {
-        setMessage('日記の読み込みに失敗しました');
+        setMessage(t('diary.message.loadFailed'));
       }
     };
     loadDiary(selectedDate);
-  }, [selectedDate]);
+  }, [selectedDate, t]);
 
   const handleSave = async () => {
     try {
       await upsertDiary(selectedDate, content);
-      setMessage('保存しました');
+      setMessage(t('diary.message.saved'));
     } catch {
-      setMessage('保存に失敗しました');
+      setMessage(t('diary.message.saveFailed'));
     }
   };
 
@@ -41,12 +43,12 @@ const Diary: React.FC = () => {
       const deleted = await deleteDiary(selectedDate);
       if (deleted) {
         setContent('');
-        setMessage('削除しました');
+        setMessage(t('diary.message.deleted'));
       } else {
-        setMessage('削除に失敗しました');
+        setMessage(t('diary.message.deleteFailed'));
       }
     } catch {
-      setMessage('削除に失敗しました');
+      setMessage(t('diary.message.deleteFailed'));
     }
   };
 
@@ -57,11 +59,11 @@ const Diary: React.FC = () => {
 
   return (
     <div className="diary-container">
-      <Typography variant="h5" gutterBottom>日記</Typography>
+      <Typography variant="h5" gutterBottom>{t('diary.title')}</Typography>
 
       {message && <Alert severity="info" sx={{ mb: 2 }}>{message}</Alert>}
 
-      <FormLabel htmlFor="date-input" sx={{ mb: 1 }}>日付</FormLabel>
+      <FormLabel htmlFor="date-input" sx={{ mb: 1 }}>{t('diary.date')}</FormLabel>
       <TextField
         id="date-input"
         type="date"
@@ -72,13 +74,13 @@ const Diary: React.FC = () => {
       />
 
       <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)} sx={{ mb: 2 }}>
-        <Tab label="編集" />
-        <Tab label="プレビュー" />
+        <Tab label={t('diary.editTab')} />
+        <Tab label={t('diary.previewTab')} />
       </Tabs>
 
       {tab === 0 ? (
         <TextField
-          label="内容（Markdown対応）"
+          label={t('diary.contentLabel')}
           multiline
           rows={10}
           fullWidth
@@ -94,8 +96,12 @@ const Diary: React.FC = () => {
       )}
 
       <Box display="flex" gap={2}>
-        <Button variant="contained" onClick={handleSave} color="primary">保存</Button>
-        <Button variant="outlined" onClick={handleDelete} color="error">削除</Button>
+        <Button variant="contained" onClick={handleSave} color="primary">
+          {t('diary.saveButton')}
+        </Button>
+        <Button variant="outlined" onClick={handleDelete} color="error">
+          {t('diary.deleteButton')}
+        </Button>
       </Box>
     </div>
   );

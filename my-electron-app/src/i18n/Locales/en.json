@@ -25,5 +25,81 @@
   "categories.updateError": "Failed to update category.",
   "categories.deleteError": "Failed to delete category.",
   "categories.nameRequired": "Category name is required.",
-  "categories.noEditTarget": "No category selected for editing."
+  "categories.noEditTarget": "No category selected for editing.",
+  "fixedCosts.title": "Fixed Costs Management",
+  "fixedCosts.total": "Total",
+  "fixedCosts.error.fetchCategories": "Failed to fetch categories",
+  "fixedCosts.error.fetchFixedCosts": "Failed to fetch fixed costs.",
+  "fixedCosts.error.add": "Failed to add.",
+  "fixedCosts.error.update": "Failed to update.",
+  "fixedCosts.error.delete": "Failed to delete.",
+  "fixedCosts.error.required": "Please fill in all required fields.",
+  "fixedCostForm": {
+    "name": "Fixed Cost Name",
+    "amount": "Amount",
+    "paymentMethod": "Payment Method",
+    "category": "Category",
+    "frequency": "Payment Frequency",
+    "startDate": "Current Payment Date",
+    "nextPaymentDate": "Next Payment Date",
+    "method": {
+      "bank": "Bank Transfer",
+      "credit": "Credit Card",
+      "cash": "Cash",
+      "other": "Other"
+    },
+    "freq": {
+      "monthly": "Monthly",
+      "quarterly": "Quarterly",
+      "annually": "Annually",
+      "other": "Other"
+    }
+  },
+  "common": {
+    "add": "Add",
+    "update": "Update",
+    "cancel": "Cancel"
+  },
+  "filter": {
+    "title": "Filter",
+    "searchType": "Search Type",
+    "exact": "Search by Exact Date",
+    "range": "Search by Date Range",
+    "start": "Start Date",
+    "end": "End Date",
+    "clear": "Clear"
+  },
+  "fixedCostList": {
+    "description": "Item",
+    "amount": "Amount",
+    "date": "Payment Date",
+    "category": "Category",
+    "paymentMethod": "Payment Method",
+    "frequency": "Frequency",
+    "nextPayment": "Next Payment",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "notSet": "Not Set"
+  },
+"budget.title": "Monthly Budget Management",
+"budget.selectMonth": "Select Month",
+"budget.setBudget": "Set Budget",
+"budget.totalExpenses": "Total Expenses",
+"budget.difference": "Difference",
+"budget.enterBudget": "Enter Budget",
+"budget.saveBudget": "Save Budget",
+"budget.invalidAmountAlert": "Please enter a valid number",
+  "diary.title": "Diary",
+  "diary.date": "Date",
+  "diary.editTab": "Edit",
+  "diary.previewTab": "Preview",
+  "diary.contentLabel": "Content (Markdown supported)",
+  "diary.saveButton": "Save",
+  "diary.deleteButton": "Delete",
+  "diary.message.saved": "Saved successfully",
+  "diary.message.deleted": "Deleted successfully",
+  "diary.message.deleteFailed": "Failed to delete",
+  "diary.message.saveFailed": "Failed to save",
+  "diary.message.loadFailed": "Failed to load diary entry"
 }

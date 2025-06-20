@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {fetchBudget, saveBudget, fetchTotalExpensesForMonth} from '../services/budgetService';
+import { useTranslation } from 'react-i18next';
+import { fetchBudget, saveBudget, fetchTotalExpensesForMonth } from '../services/budgetService';
 import './Budget.css';
 
 const BudgetPage: React.FC = () => {
   const navigate = useNavigate(); 
+  const { t } = useTranslation();
+
   const [month, setMonth] = useState<string>(new Date().toISOString().slice(0, 7));
   const [budget, setBudget] = useState<number>(0);
   const [expenses, setExpenses] = useState<number>(0);
@@ -24,7 +27,7 @@ const BudgetPage: React.FC = () => {
   const handleSave = async () => {
     const amount = parseFloat(inputBudget);
     if (isNaN(amount)) {
-      alert('有効な数値を入力してください');
+      alert(t('budget.invalidAmountAlert'));
       return;
     }
     await saveBudget(month, amount);
@@ -33,9 +36,9 @@ const BudgetPage: React.FC = () => {
 
   return (
     <div className="budget-container">
-      <h1>月別予算管理</h1>
+      <h1>{t('budget.title')}</h1>
       <label className="month-label">
-        設定月:
+        {t('budget.selectMonth')}:
         <input
           type="month"
           value={month}
@@ -45,9 +48,9 @@ const BudgetPage: React.FC = () => {
       </label>
 
       <div className="summary">
-        <p>設定済み予算: ¥{budget.toLocaleString()}</p>
-        <p>支出合計: ¥{expenses.toLocaleString()}</p>
-        <p>差額: ¥{(budget - expenses).toLocaleString()}</p>
+        <p>{t('budget.setBudget')}: ¥{budget.toLocaleString()}</p>
+        <p>{t('budget.totalExpenses')}: ¥{expenses.toLocaleString()}</p>
+        <p>{t('budget.difference')}: ¥{(budget - expenses).toLocaleString()}</p>
       </div>
 
       <div className="input-group">
@@ -55,10 +58,12 @@ const BudgetPage: React.FC = () => {
           type="number"
           value={inputBudget}
           onChange={(e) => setInputBudget(e.target.value)}
-          placeholder="予算を入力"
+          placeholder={t('budget.enterBudget')}
           className="budget-input"
         />
-        <button onClick={handleSave} className="save-button">予算を保存</button>
+        <button onClick={handleSave} className="save-button">
+          {t('budget.saveBudget')}
+        </button>
       </div>
     </div>
   );

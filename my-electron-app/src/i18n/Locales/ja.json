@@ -24,5 +24,81 @@
   "categories.updateError": "カテゴリの更新に失敗しました。",
   "categories.deleteError": "カテゴリの削除に失敗しました。",
   "categories.nameRequired": "カテゴリ名は必須です。",
-  "categories.noEditTarget": "編集するカテゴリが選ばれていません。"
+  "categories.noEditTarget": "編集するカテゴリが選ばれていません。",
+  "fixedCosts.title": "固定費管理",
+  "fixedCosts.total": "合計",
+  "fixedCosts.error.fetchCategories": "カテゴリの取得に失敗しました",
+  "fixedCosts.error.fetchFixedCosts": "固定費の取得に失敗しました。",
+  "fixedCosts.error.add": "追加に失敗しました。",
+  "fixedCosts.error.update": "更新に失敗しました。",
+  "fixedCosts.error.delete": "削除に失敗しました。",
+  "fixedCosts.error.required": "すべての項目を入力してください。",
+  "fixedCostForm": {
+    "name": "固定費名",
+    "amount": "金額",
+    "paymentMethod": "支払方法",
+    "category": "カテゴリ",
+    "frequency": "支払頻度",
+    "startDate": "現在の支払日",
+    "nextPaymentDate": "次回支払日",
+    "method": {
+      "bank": "口座振替",
+      "credit": "クレジットカード",
+      "cash": "現金",
+      "other": "その他"
+    },
+    "freq": {
+      "monthly": "毎月",
+      "quarterly": "三ヶ月毎",
+      "annually": "毎年",
+      "other": "その他"
+    }
+  },
+  "common": {
+    "add": "追加",
+    "update": "更新",
+    "cancel": "キャンセル"
+  },
+  "filter": {
+    "title": "フィルター",
+    "searchType": "検索タイプ",
+    "exact": "日付で検索（完全一致）",
+    "range": "期間で検索（範囲指定）",
+    "start": "開始日",
+    "end": "終了日",
+    "clear": "クリア"
+  },
+  "fixedCostList": {
+    "description": "項目",
+    "amount": "金額",
+    "date": "支払日",
+    "category": "カテゴリ",
+    "paymentMethod": "支払方法",
+    "frequency": "支払頻度",
+    "nextPayment": "次回支払日",
+    "actions": "操作",
+    "edit": "編集",
+    "delete": "削除",
+    "notSet": "未設定"
+  },
+"budget.title": "月別予算管理",
+"budget.selectMonth": "設定月",
+"budget.setBudget": "設定済み予算",
+"budget.totalExpenses": "支出合計",
+"budget.difference": "差額",
+"budget.enterBudget": "予算を入力",
+"budget.saveBudget": "予算を保存",
+"budget.invalidAmountAlert": "有効な数値を入力してください",
+  "diary.title": "日記",
+  "diary.date": "日付",
+  "diary.editTab": "編集",
+  "diary.previewTab": "プレビュー",
+  "diary.contentLabel": "内容（Markdown対応）",
+  "diary.saveButton": "保存",
+  "diary.deleteButton": "削除",
+  "diary.message.saved": "保存しました",
+  "diary.message.deleted": "削除しました",
+  "diary.message.deleteFailed": "削除に失敗しました",
+  "diary.message.saveFailed": "保存に失敗しました",
+  "diary.message.loadFailed": "日記の読み込みに失敗しました"
 }

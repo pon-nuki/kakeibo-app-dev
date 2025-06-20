@@ -72,11 +72,11 @@
   transform: scale(1.1);
 }
 
-.icon-button[title='編集'] {
+.icon-button.icon-edit {
   color: #3f51b5;
 }
 
-.icon-button[title='削除'] {
+.icon-button.icon-delete {
   color: #f44336;
 }
 

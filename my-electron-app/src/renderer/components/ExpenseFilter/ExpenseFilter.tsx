@@ -13,6 +13,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ja } from 'date-fns/locale';
 import { ExpenseFilterProps } from '../../../types/expenseFilterTypes';
+import { useTranslation } from 'react-i18next';
 
 const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
   searchType,
@@ -24,19 +25,21 @@ const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
   rangeEndDate,
   setRangeEndDate,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="expense-filter-container">
-      <h3>フィルター</h3>
+      <h3>{t('filter.title')}</h3>
 
       <FormControl component="fieldset">
-        <FormLabel component="legend">検索タイプ</FormLabel>
+        <FormLabel component="legend">{t('filter.searchType')}</FormLabel>
         <RadioGroup
           value={searchType}
           onChange={(e) => setSearchType(e.target.value as 'exact' | 'range')}
           row
         >
-          <FormControlLabel value="exact" control={<Radio />} label="日付で検索（完全一致）" />
-          <FormControlLabel value="range" control={<Radio />} label="期間で検索（範囲指定）" />
+          <FormControlLabel value="exact" control={<Radio />} label={t('filter.exact')} />
+          <FormControlLabel value="range" control={<Radio />} label={t('filter.range')} />
         </RadioGroup>
       </FormControl>
 
@@ -45,7 +48,7 @@ const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
           <div className="date-picker-row">
             <DatePicker
               enableAccessibleFieldDOMStructure={false}
-              label="日付で検索（完全一致）"
+              label={t('filter.exact')}
               value={filterDate}
               onChange={setFilterDate}
               slots={{ textField: TextField }}
@@ -56,7 +59,7 @@ const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
               size="small"
               style={{ marginLeft: 8 }}
             >
-              クリア
+              {t('filter.clear')}
             </Button>
           </div>
         )}
@@ -65,14 +68,14 @@ const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
           <div className="date-picker-row">
             <DatePicker
               enableAccessibleFieldDOMStructure={false}
-              label="開始日"
+              label={t('filter.start')}
               value={rangeStartDate}
               onChange={setRangeStartDate}
               slots={{ textField: TextField }}
             />
             <DatePicker
               enableAccessibleFieldDOMStructure={false}
-              label="終了日"
+              label={t('filter.end')}
               value={rangeEndDate}
               onChange={setRangeEndDate}
               slots={{ textField: TextField }}

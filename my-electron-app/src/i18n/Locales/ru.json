@@ -25,6 +25,82 @@
   "categories.updateError": "Не удалось обновить категорию.",
   "categories.deleteError": "Не удалось удалить категорию.",
   "categories.nameRequired": "Название категории обязательно.",
-  "categories.noEditTarget": "Категория для редактирования не выбрана."
+  "categories.noEditTarget": "Категория для редактирования не выбрана.",
+  "fixedCosts.title": "Управление фиксированными расходами",
+  "fixedCosts.total": "Итого",
+  "fixedCosts.error.fetchCategories": "Не удалось получить категории",
+  "fixedCosts.error.fetchFixedCosts": "Не удалось получить фиксированные расходы.",
+  "fixedCosts.error.add": "Не удалось добавить.",
+  "fixedCosts.error.update": "Не удалось обновить.",
+  "fixedCosts.error.delete": "Не удалось удалить.",
+  "fixedCosts.error.required": "Пожалуйста, заполните все обязательные поля.",
+  "fixedCostForm": {
+    "name": "Название постоянного расхода",
+    "amount": "Сумма",
+    "paymentMethod": "Способ оплаты",
+    "category": "Категория",
+    "frequency": "Частота оплаты",
+    "startDate": "Текущая дата оплаты",
+    "nextPaymentDate": "Следующая дата оплаты",
+    "method": {
+      "bank": "Банковский перевод",
+      "credit": "Кредитная карта",
+      "cash": "Наличные",
+      "other": "Другое"
+    },
+    "freq": {
+      "monthly": "Ежемесячно",
+      "quarterly": "Ежеквартально",
+      "annually": "Ежегодно",
+      "other": "Другое"
+    }
+  },
+  "common": {
+    "add": "Добавить",
+    "update": "Обновить",
+    "cancel": "Отмена"
+  },
+  "filter": {
+    "title": "Фильтр",
+    "searchType": "Тип поиска",
+    "exact": "Поиск по точной дате",
+    "range": "Поиск по диапазону дат",
+    "start": "Дата начала",
+    "end": "Дата окончания",
+    "clear": "Очистить"
+  },
+  "fixedCostList": {
+    "description": "Наименование",
+    "amount": "Сумма",
+    "date": "Дата оплаты",
+    "category": "Категория",
+    "paymentMethod": "Способ оплаты",
+    "frequency": "Периодичность",
+    "nextPayment": "Следующая оплата",
+    "actions": "Действия",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "notSet": "Не указано"
+  },
+"budget.title": "Управление ежемесячным бюджетом",
+"budget.selectMonth": "Выберите месяц",
+"budget.setBudget": "Установленный бюджет",
+"budget.totalExpenses": "Общие расходы",
+"budget.difference": "Разница",
+"budget.enterBudget": "Введите бюджет",
+"budget.saveBudget": "Сохранить бюджет",
+"budget.invalidAmountAlert": "Введите допустимое число",
+  "diary.title": "Дневник",
+  "diary.date": "Дата",
+  "diary.editTab": "Редактировать",
+  "diary.previewTab": "Предпросмотр",
+  "diary.contentLabel": "Содержание (поддерживается Markdown)",
+  "diary.saveButton": "Сохранить",
+  "diary.deleteButton": "Удалить",
+  "diary.message.saved": "Успешно сохранено",
+  "diary.message.deleted": "Успешно удалено",
+  "diary.message.deleteFailed": "Не удалось удалить",
+  "diary.message.saveFailed": "Не удалось сохранить",
+  "diary.message.loadFailed": "Не удалось загрузить запись"
 
 }

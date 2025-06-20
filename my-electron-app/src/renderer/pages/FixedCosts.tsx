@@ -8,6 +8,7 @@ import FixedCostList from '../components/FixedCostList/FixedCostList';
 import { FixedCost } from '../../types/common.d';
 import { fetchCategories } from '../services/categoriesService';
 import { normalizeFixedCosts } from '../../utils/normalizers';
+import { useTranslation } from 'react-i18next';
 import {
   fetchFixedCosts,
   addFixedCost,
@@ -16,6 +17,7 @@ import {
 } from '../services/fixedCostService';
 
 const FixedCosts: React.FC = () => {
+  const { t } = useTranslation();
   const [fixedCosts, setFixedCosts] = useState<FixedCost[]>([]);
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
@@ -43,7 +45,7 @@ const FixedCosts: React.FC = () => {
       const categories = await fetchCategories();
       setCategories(categories);
     } catch (error) {
-      setErrorMessage('カテゴリの取得に失敗しました');
+      setErrorMessage(t('fixedCosts.error.fetchCategories'));
     }
   };
 
@@ -57,7 +59,7 @@ const FixedCosts: React.FC = () => {
       const normalized = normalizeFixedCosts(data);
       setFixedCosts(normalized);
     } catch {
-      setErrorMessage('固定費の取得に失敗しました。');
+      setErrorMessage(t('fixedCosts.error.fetchFixedCosts'));
     }
   };
 
@@ -72,10 +74,10 @@ const FixedCosts: React.FC = () => {
         await fetchAndSetFixedCosts();
         resetForm();
       } catch {
-        setErrorMessage('追加に失敗しました。');
+        setErrorMessage(t('fixedCosts.error.add'));
       }
     } else {
-      setErrorMessage('すべての項目を入力してください。');
+      setErrorMessage(t('fixedCosts.error.required'));
     }
   };
 
@@ -86,7 +88,7 @@ const FixedCosts: React.FC = () => {
         await fetchAndSetFixedCosts();
         resetForm();
       } catch {
-        setErrorMessage('更新に失敗しました。');
+        setErrorMessage(t('fixedCosts.error.update'));
       }
     }
   };
@@ -96,7 +98,7 @@ const FixedCosts: React.FC = () => {
       await deleteFixedCost(id);
       await fetchAndSetFixedCosts();
     } catch {
-      setErrorMessage('削除に失敗しました。');
+      setErrorMessage(t('fixedCosts.error.delete'));
     }
   };
 
@@ -145,7 +147,7 @@ const FixedCosts: React.FC = () => {
     <div className="home-container">
       <Box className="header-wrapper">
         <Box className="title-icon-row">
-          <Typography variant="h5" className="header-title">固定費管理</Typography>
+          <Typography variant="h5" className="header-title">{t('fixedCosts.title')}</Typography>
           <IconButton><FilterListIcon /></IconButton>
         </Box>
       </Box>
