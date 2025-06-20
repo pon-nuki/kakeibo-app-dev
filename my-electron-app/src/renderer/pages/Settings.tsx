@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import './Settings.css';
 
 const Settings: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [autoRegister, setAutoRegister] = useState<boolean>(true);
   const [notifyFixedCost, setNotifyFixedCost] = useState<boolean>(true);
+  const [language, setLanguage] = useState<string>('ja');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -11,18 +15,12 @@ const Settings: React.FC = () => {
       try {
         const autoResult = await window.electron.getSetting('autoRegisterFixedCosts');
         const notifyResult = await window.electron.getSetting('notifyFixedCost');
+        const langResult = await window.electron.getSetting('language');
 
-        console.log('取得した設定値:', {
-          autoRegisterFixedCosts: autoResult.value,
-          notifyFixedCost: notifyResult.value,
-        });
-
-        // autoRegisterの設定値
         setAutoRegister(autoResult.value === 'true');
-
-        // notifyの設定値
         setNotifyFixedCost(notifyResult.value === 'true');
-
+        setLanguage(langResult.value || 'ja');
+        i18n.changeLanguage(langResult.value || 'ja');
       } catch (err) {
         console.error('設定取得エラー:', err);
       } finally {
@@ -36,36 +34,35 @@ const Settings: React.FC = () => {
   const handleToggleAutoRegister = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setAutoRegister(checked);
-    try {
-      await window.electron.setSetting('autoRegisterFixedCosts', checked.toString());
-    } catch (err) {
-      console.error('自動登録の設定保存エラー:', err);
-    }
+    await window.electron.setSetting('autoRegisterFixedCosts', checked.toString());
   };
 
   const handleToggleNotify = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setNotifyFixedCost(checked);
-    try {
-      await window.electron.setSetting('notifyFixedCost', checked.toString());
-    } catch (err) {
-      console.error('通知設定の保存エラー:', err);
-    }
+    await window.electron.setSetting('notifyFixedCost', checked.toString());
+  };
+
+  const handleLanguageChange = (event: SelectChangeEvent<string>) => {
+    const selectedLang = event.target.value;
+    setLanguage(selectedLang);
+    i18n.changeLanguage(selectedLang);
+    window.electron.setSetting('language', selectedLang);
   };
 
   return (
     <div className="home-container">
       <div className="header-wrapper">
-        <h2 className="header-title">設定</h2>
-        <p>ここではアプリの設定を行えます。</p>
+        <h2 className="header-title">{t('settings.title')}</h2>
+        <p>{t('settings.description')}</p>
       </div>
 
       {loading ? (
-        <p>読み込み中...</p>
+        <p>{t('settings.loading')}</p>
       ) : (
         <>
           <div className="input-row">
-            <label htmlFor="autoToggle" className="toggle-label">毎月自動で固定費を登録</label>
+            <label htmlFor="autoToggle" className="toggle-label">{t('settings.autoRegister')}</label>
             <label className="switch">
               <input
                 id="autoToggle"
@@ -78,7 +75,7 @@ const Settings: React.FC = () => {
           </div>
 
           <div className="input-row">
-            <label htmlFor="notifyToggle" className="toggle-label">固定費支払日前に通知を受け取る</label>
+            <label htmlFor="notifyToggle" className="toggle-label">{t('settings.notifyFixedCost')}</label>
             <label className="switch">
               <input
                 id="notifyToggle"
@@ -88,6 +85,22 @@ const Settings: React.FC = () => {
               />
               <span className="slider round"></span>
             </label>
+          </div>
+          <div className="input-row">
+            <label htmlFor="language-select" className="toggle-label">
+              {t('settings.language')}：
+            </label>
+            <FormControl size="small" style={{ minWidth: 160 }}>
+              <Select
+                id="language-select"
+                value={language}
+                onChange={handleLanguageChange}
+              >
+                <MenuItem value="ja">日本語</MenuItem>
+                <MenuItem value="en">English</MenuItem>
+                <MenuItem value="ru">Русский</MenuItem>
+              </Select>
+            </FormControl>
           </div>
         </>
       )}

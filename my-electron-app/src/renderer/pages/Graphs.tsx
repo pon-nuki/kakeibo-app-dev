@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { Pie, Line, Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
+import { useTranslation } from 'react-i18next';
 import './Graphs.css';
 
 Chart.register(...registerables);
 
 const Graphs: React.FC = () => {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<'category' | 'monthly' | 'budget'>('category');
   const [categoryData, setCategoryData] = useState<any[]>([]);
   const [monthlyData, setMonthlyData] = useState<any[]>([]);
@@ -30,7 +32,7 @@ const Graphs: React.FC = () => {
       setBudgetCompare(budget);
       setErrorMessage(null);
     } catch (err) {
-      setErrorMessage('データの取得に失敗しました。');
+      setErrorMessage(t('graphs.fetchError'));
     }
   };
 
@@ -45,7 +47,7 @@ const Graphs: React.FC = () => {
   const lineData = {
     labels: monthlyData.map(d => d.month),
     datasets: [{
-      label: '月別支出合計',
+      label: t('graphs.monthlyTotal'),
       data: monthlyData.map(d => d.total),
       borderColor: '#36A2EB',
       fill: false,
@@ -56,12 +58,12 @@ const Graphs: React.FC = () => {
     labels: budgetCompare.map(d => d.month),
     datasets: [
       {
-        label: '予算',
+        label: t('graphs.budget'),
         data: budgetCompare.map(d => d.budget),
         backgroundColor: '#FFCE56'
       },
       {
-        label: '実支出',
+        label: t('graphs.actual'),
         data: budgetCompare.map(d => d.actual),
         backgroundColor: '#FF6384'
       }
@@ -71,7 +73,9 @@ const Graphs: React.FC = () => {
   return (
     <div className="home-container">
       <Box className="header-wrapper">
-        <Typography variant="h5" className="header-title">支出グラフ</Typography>
+        <Typography variant="h5" className="header-title">
+          {t('graphs.title')}
+        </Typography>
       </Box>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
@@ -81,30 +85,30 @@ const Graphs: React.FC = () => {
           value={tab}
           exclusive
           onChange={(_, value) => value && setTab(value)}
-          aria-label="グラフ切り替え"
+          aria-label={t('graphs.tabAriaLabel')}
         >
-          <ToggleButton value="category">カテゴリー別</ToggleButton>
-          <ToggleButton value="monthly">月別支出</ToggleButton>
-          <ToggleButton value="budget">予算と出費の比較</ToggleButton>
+          <ToggleButton value="category">{t('graphs.category')}</ToggleButton>
+          <ToggleButton value="monthly">{t('graphs.monthly')}</ToggleButton>
+          <ToggleButton value="budget">{t('graphs.budget')}</ToggleButton>
         </ToggleButtonGroup>
       </Box>
 
       <Box className="graph-display-area" sx={{ padding: '1rem 0' }}>
         {tab === 'category' && (
           <>
-            <Typography variant="h6" sx={{ mb: 2 }}>カテゴリー別支出</Typography>
+            <Typography variant="h6">{t('graphs.categoryTitle')}</Typography>
             <Pie data={pieData} />
           </>
         )}
         {tab === 'monthly' && (
           <>
-            <Typography variant="h6" sx={{ mb: 2 }}>月別支出推移</Typography>
+            <Typography variant="h6">{t('graphs.monthlyTitle')}</Typography>
             <Line data={lineData} />
           </>
         )}
         {tab === 'budget' && (
           <>
-            <Typography variant="h6" sx={{ mb: 2 }}>予算と出費の比較</Typography>
+            <Typography variant="h6">{t('graphs.budgetTitle')}</Typography>
             <Bar data={barData} />
           </>
         )}

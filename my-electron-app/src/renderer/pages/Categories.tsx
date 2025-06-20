@@ -4,36 +4,30 @@ import './Categories.css';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Filter from '../components/CategoriesFilter/CategoriesFilter';
 import CategoryList from '../components/CategoriesList/CategoriesList';
-import { Category}  from '../../types/common'
+import { Category } from '../../types/common';
 import { fetchCategories, addCategory, updateCategory, deleteCategory } from '../services/categoriesService';
+import { useTranslation } from 'react-i18next';
 
 const Categories: React.FC = () => {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryName, setCategoryName] = useState<string>('');
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // フィルター用
-  const [filterDate, setFilterDate] = useState<Date | null>(null);
-  const [rangeStartDate, setRangeStartDate] = useState<Date | null>(null);
-  const [rangeEndDate, setRangeEndDate] = useState<Date | null>(null);
-  const [searchType, setSearchType] = useState<'exact' | 'range'>('exact'); // 検索タイプ
+  useEffect(() => {
+    fetchAndSetCategories();
+  }, []);
 
-  // データを取得する
   const fetchAndSetCategories = async () => {
     try {
       const data = await fetchCategories();
       setCategories(data);
     } catch (error) {
-      setErrorMessage('カテゴリの取得に失敗しました。');
+      setErrorMessage(t('categories.fetchError'));
     }
   };
 
-  useEffect(() => {
-    fetchAndSetCategories();
-  }, []);
-
-  // カテゴリを追加
   const handleAddCategory = async () => {
     if (categoryName) {
       try {
@@ -42,14 +36,13 @@ const Categories: React.FC = () => {
         setCategoryName('');
         setErrorMessage('');
       } catch (err) {
-        setErrorMessage('カテゴリの追加に失敗しました');
+        setErrorMessage(t('categories.addError'));
       }
     } else {
-      setErrorMessage('カテゴリ名は必須です。');
+      setErrorMessage(t('categories.nameRequired'));
     }
   };
 
-  // カテゴリを更新
   const handleUpdateCategory = async () => {
     if (editCategoryId !== null && categoryName) {
       try {
@@ -59,46 +52,37 @@ const Categories: React.FC = () => {
         setCategoryName('');
         setErrorMessage('');
       } catch (err) {
-        setErrorMessage('カテゴリの更新に失敗しました。');
+        setErrorMessage(t('categories.updateError'));
       }
     } else {
-      setErrorMessage('編集するカテゴリが選ばれていません。');
+      setErrorMessage(t('categories.noEditTarget'));
     }
   };
 
-  // カテゴリを削除
   const handleDeleteCategory = async (id: number) => {
     try {
       await deleteCategory(id);
       await fetchAndSetCategories();
     } catch (error) {
-      setErrorMessage('カテゴリの削除に失敗しました。');
+      setErrorMessage(t('categories.deleteError'));
     }
   };
 
-  // カテゴリの編集開始
   const startEditingCategory = (category: Category) => {
     setEditCategoryId(category.id);
     setCategoryName(category.name);
   };
 
-  // 編集キャンセル
   const cancelEdit = () => {
     setEditCategoryId(null);
     setCategoryName('');
   };
 
-  // 合計金額の計算（フィルターに合わせた表示）
-  const totalFilteredAmount = categories.reduce(
-    (total, category) => total + category.id, // カテゴリには金額はないので仮でIDで合計
-    0
-  );
-
   return (
     <div className="home-container">
       <Box className="header-wrapper">
         <Box className="title-icon-row">
-          <Typography variant="h5" className="header-title">カテゴリ設定</Typography>
+          <Typography variant="h5" className="header-title">{t('categories.title')}</Typography>
           <IconButton className="filter-icon-button">
             <FilterListIcon />
           </IconButton>
@@ -106,10 +90,9 @@ const Categories: React.FC = () => {
       </Box>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-      {/* カテゴリフォーム */}
       <Box className="category-form">
         <TextField
-          label="カテゴリ名"
+          label={t('categories.inputLabel')}
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
           fullWidth
@@ -119,16 +102,15 @@ const Categories: React.FC = () => {
           color="primary"
           onClick={editCategoryId === null ? handleAddCategory : handleUpdateCategory}
         >
-          {editCategoryId === null ? '追加' : '更新'}
+          {editCategoryId === null ? t('categories.add') : t('categories.update')}
         </Button>
         {editCategoryId && (
-          <Button variant="outlined" onClick={cancelEdit}>キャンセル</Button>
+          <Button variant="outlined" onClick={cancelEdit}>{t('categories.cancel')}</Button>
         )}
       </Box>
 
       <hr />
 
-      {/* カテゴリリスト */}
       <CategoryList
         categories={categories}
         startEditingCategory={startEditingCategory}
@@ -136,7 +118,7 @@ const Categories: React.FC = () => {
         editCategoryId={editCategoryId}
       />
 
-      <h3>合計カテゴリ数: {categories.length}</h3>
+      <h3>{t('categories.total')}: {categories.length}</h3>
     </div>
   );
 };

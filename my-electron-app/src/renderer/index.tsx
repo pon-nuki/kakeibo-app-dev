@@ -8,6 +8,7 @@ import { HashRouter } from 'react-router-dom';
 
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
+import '../i18n/i18n';
 
 // nonce を window から取得
 const nonce = (window as any).__webpack_nonce__ || 'abc123';
