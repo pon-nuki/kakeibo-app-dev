@@ -5,7 +5,8 @@
     "autoRegister": "毎月自動で固定費を登録",
     "notifyFixedCost": "固定費支払日前に通知を受け取る",
     "language": "表示言語",
-    "loading": "読み込み中..."
+    "loading": "読み込み中...",
+    "currency": "通貨"
   },
   "menu": {
     "home": "家計簿",

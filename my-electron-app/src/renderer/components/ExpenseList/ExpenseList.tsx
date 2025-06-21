@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { List } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,6 +7,10 @@ import Pagination from '../Pagination/PaginationControls';
 import { ExpenseListProps } from '../../../types/expenseListTypes';
 import { Expense } from '../../../types/common';
 import { useTranslation } from 'react-i18next';
+import CurrencyAmount from '../CurrencyAmount/CurrencyAmount';
+
+const allowedCurrencies = ['JPY', 'USD', 'RUB'] as const;
+type CurrencyCode = typeof allowedCurrencies[number];
 
 const ITEMS_PER_PAGE = 10;
 
@@ -18,7 +22,26 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
   categories,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [currency, setCurrency] = useState<CurrencyCode>('JPY');
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const fetchCurrency = async () => {
+      try {
+        const result = await window.electron.getSetting('currency');
+        const value = result.value;
+        if (allowedCurrencies.includes(value as CurrencyCode)) {
+          setCurrency(value as CurrencyCode);
+        } else {
+          setCurrency('JPY');
+        }
+      } catch (err) {
+        console.error('通貨設定の取得エラー:', err);
+        setCurrency('JPY');
+      }
+    };
+    fetchCurrency();
+  }, []);
 
   const pageCount = Math.ceil(filteredExpenses.length / ITEMS_PER_PAGE);
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
@@ -53,7 +76,9 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
             className={`expense-list-item ${editId === expense.id ? 'editing-item' : ''}`}
           >
             <div className="col col-description">{expense.description}</div>
-            <div className="col col-amount">¥{expense.amount.toLocaleString()}</div>
+            <div className="col col-amount">
+              <CurrencyAmount amount={expense.amount} currencyCode={currency} />
+            </div>
             <div className="col col-date">{expense.date}</div>
             <div className="col col-category">{getCategoryName(expense)}</div>
             <div className="col col-actions">

@@ -246,6 +246,7 @@ export const insertDefaultSettings = async (): Promise<void> => {
   const defaultSettings = [
     ['autoRegisterFixedCosts', 'true'],
     ['notifyFixedCost', 'true'],
+    ['currency', 'JPY']
   ];
 
   return new Promise((resolve, reject) => {

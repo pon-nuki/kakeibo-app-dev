@@ -8,7 +8,8 @@
     "autoRegister": "Automatically register fixed costs monthly",
     "notifyFixedCost": "Receive a reminder before fixed costs are due",
     "language": "Display Language",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "currency": "Currency"
   },
   "menu": {
     "home": "Home",

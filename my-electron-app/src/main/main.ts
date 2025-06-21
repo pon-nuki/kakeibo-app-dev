@@ -1,4 +1,6 @@
 // src/main/main.ts
+import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import cron from 'node-cron';
@@ -43,6 +45,12 @@ const initializeApp = async () => {
     await initializeDatabase();
     console.log('データベース初期化完了');
 
+    // インストーラで選択された初期言語を設定（初回のみ）
+    await setInitialLanguageFromInstaller();
+
+    // 通貨設定
+    await setInitialCurrency();
+
     // 設定を確認して固定費自動登録がONなら登録
     const autoRegister = await getSettingValue('autoRegisterFixedCosts');
     if (autoRegister === 'true') {
@@ -52,14 +60,56 @@ const initializeApp = async () => {
       console.log('固定費の自動登録は無効です');
     }
 
-    // 定期的な固定費登録（アプリ起動中に毎月1日1時）
+    // 定期的な固定費登録
     scheduleAutoRegisterFixedCosts();
 
-    // 3日以内の固定費の支払いがある場合に通知を行う
+    // 通知確認
     checkUpcomingFixedCostNotifications();
 
   } catch (error) {
     console.error('アプリケーションの初期化エラー:', error);
+  }
+};
+
+const setInitialLanguageFromInstaller = async () => {
+  const langFilePath = path.join(os.homedir(), 'AppData', 'Roaming', 'my-electron-app', 'lang.txt');
+
+  if (!fs.existsSync(langFilePath)) return;
+
+  try {
+    const lang = fs.readFileSync(langFilePath, 'utf-8').trim();
+
+    const currentSetting = await getSettingValue('language');
+    if (!currentSetting) {
+      await setSettingValue('language', lang);
+      console.log(`初期言語設定を ${lang} にしました`);
+    } else {
+      console.log(`既に設定されている言語: ${currentSetting}`);
+    }
+
+    fs.unlinkSync(langFilePath); // 1回限りの設定なので削除
+  } catch (error) {
+    console.error('初期言語設定エラー:', error);
+  }
+};
+
+const setInitialCurrency = async () => {
+  const currencyFilePath = path.join(os.homedir(), 'AppData', 'Roaming', 'my-electron-app', 'currency.txt');
+
+  if (!fs.existsSync(currencyFilePath)) return;
+
+  try {
+    const currency = fs.readFileSync(currencyFilePath, 'utf-8').trim();
+    const currentCurrency = await getSettingValue('currency');
+
+    if (!currentCurrency) {
+      await setSettingValue('currency', currency);
+      console.log(`初期通貨設定を ${currency} にしました`);
+    }
+
+    fs.unlinkSync(currencyFilePath);
+  } catch (error) {
+    console.error('初期通貨設定エラー:', error);
   }
 };
 

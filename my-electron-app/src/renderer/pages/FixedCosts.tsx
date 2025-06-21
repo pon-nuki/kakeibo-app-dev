@@ -9,6 +9,7 @@ import { FixedCost } from '../../types/common.d';
 import { fetchCategories } from '../services/categoriesService';
 import { normalizeFixedCosts } from '../../utils/normalizers';
 import { useTranslation } from 'react-i18next';
+import CurrencyAmount from '../components/CurrencyAmount/CurrencyAmount';
 import {
   fetchFixedCosts,
   addFixedCost,
@@ -17,6 +18,9 @@ import {
 } from '../services/fixedCostService';
 
 const FixedCosts: React.FC = () => {
+  const allowedCurrencies = ['JPY', 'USD', 'RUB'] as const;
+  type CurrencyCode = typeof allowedCurrencies[number];
+  const [currency, setCurrency] = useState<CurrencyCode>('JPY');
   const { t } = useTranslation();
   const [fixedCosts, setFixedCosts] = useState<FixedCost[]>([]);
   const [name, setName] = useState('');
@@ -39,6 +43,25 @@ const FixedCosts: React.FC = () => {
   // ページング
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+  useEffect(() => {
+    const fetchCurrency = async () => {
+      try {
+        const result = await window.electron.getSetting('currency');
+        const value = result.value;
+        if (allowedCurrencies.includes(value as CurrencyCode)) {
+          setCurrency(value as CurrencyCode);
+        } else {
+          setCurrency('JPY');
+        }
+      } catch (err) {
+        console.error('通貨取得エラー:', err);
+        setCurrency('JPY');
+      }
+    };
+
+    fetchCurrency();
+  }, []);
 
   const fetchAndSetCategories = async () => {
     try {
@@ -200,7 +223,7 @@ const FixedCosts: React.FC = () => {
         onPageChange={(_, page) => setCurrentPage(page)}
       />
 
-      <h3>合計: ¥{totalAmount.toLocaleString()}</h3>
+      <h3>{t('fixedCosts.total')}: <CurrencyAmount amount={totalAmount} currencyCode={currency} /></h3>
     </div>
   );
 };

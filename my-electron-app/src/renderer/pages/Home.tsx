@@ -13,8 +13,12 @@ import { fetchFixedCosts } from '../services/fixedCostService';
 import { FixedCost } from '../../types/common.d';
 import FixedCostSummary from '../components/FixedCostSummary/FixedCostSummary';
 import { useTranslation } from 'react-i18next';
+import CurrencyAmount from '../components/CurrencyAmount/CurrencyAmount';
 
 const Home: React.FC = () => {
+  const allowedCurrencies = ['JPY', 'USD', 'RUB'] as const;
+  type CurrencyCode = typeof allowedCurrencies[number];
+  const [currency, setCurrency] = useState<CurrencyCode>('JPY');
   const { t } = useTranslation();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [description, setDescription] = useState('');
@@ -64,6 +68,25 @@ const Home: React.FC = () => {
     fetchAndSetFixedCosts();
     fetchAndSetCategories();
     fetchAndSetExpenses();
+  }, []);
+
+  useEffect(() => {
+    const fetchCurrency = async () => {
+      try {
+        const result = await window.electron.getSetting('currency');
+        const value = result.value;
+        if (allowedCurrencies.includes(value as CurrencyCode)) {
+          setCurrency(value as CurrencyCode);
+        } else {
+          setCurrency('JPY');
+        }
+      } catch (err) {
+        console.error('通貨設定取得エラー:', err);
+        setCurrency('JPY');
+      }
+    };
+
+    fetchCurrency();
   }, []);
 
   const handleAddExpense = async () => {
@@ -205,11 +228,14 @@ const Home: React.FC = () => {
       />
 
       <Box sx={{ mt: 4 }}>
-        <h3>{t('home.totalVariable')}: ¥{totalFilteredAmount.toLocaleString()}</h3>
+        <h3>
+          {t('home.totalVariable')}: <CurrencyAmount amount={totalFilteredAmount} currencyCode={currency} />
+        </h3>
         <FixedCostSummary
           fixedCosts={filteredFixedCosts}
           categories={categories}
           totalVariable={totalFilteredAmount}
+          currency={currency}
         />
       </Box>
     </div>

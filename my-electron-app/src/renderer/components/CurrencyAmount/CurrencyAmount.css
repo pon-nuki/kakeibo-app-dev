@@ -1,0 +1,15 @@
+.amount-with-currency {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.amount {
+  font-size: 1.2em;
+}
+
+.currency-symbol {
+  font-size: 0.6em;
+  position: relative;
+  bottom: -2px;
+}
