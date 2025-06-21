@@ -44,6 +44,12 @@ declare global {
       // 設定取得・保存
       getSetting: (key: string) => Promise<{ key: string; value: string | null }>;
       setSetting: (key: string, value: string) => Promise<{ message: string; key: string; value: string }>;
+
+      // デフォルトカテゴリの挿入
+      insertDefaultCategories: () => Promise<{ success: boolean; error?: string }>;
+
+      // デフォルト設定の挿入
+      insertDefaultSettings: () => Promise<{ success: boolean; error?: string }>;
     };
   }
 }

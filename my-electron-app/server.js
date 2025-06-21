@@ -267,10 +267,6 @@ const startApp = async () => {
   try {
     await createTableIfNotExists();
     console.log('全テーブル作成完了');
-    await insertDefaultCategories();
-    console.log('デフォルトカテゴリの挿入完了');
-    await insertDefaultSettings();
-    console.log('デフォルト設定の挿入完了');
   } catch (error) {
     console.error('エラー:', error);
   }
@@ -681,4 +677,26 @@ app.post('/settings/:key', (req, res) => {
     }
     res.json({ message: `設定 "${key}" を保存しました`, key, value });
   });
+});
+
+// デフォルトカテゴリ登録
+app.post('/initialize/default-categories', async (req, res) => {
+  try {
+    await insertDefaultCategories();
+    res.json({ message: 'デフォルトカテゴリを挿入しました' });
+  } catch (error) {
+    console.error('デフォルトカテゴリ挿入エラー:', error.message);
+    res.status(500).json({ error: 'デフォルトカテゴリの挿入に失敗しました' });
+  }
+});
+
+// デフォルト設定登録
+app.post('/initialize/default-settings', async (req, res) => {
+  try {
+    await insertDefaultSettings();
+    res.status(200).json({ message: 'デフォルト設定を登録しました' });
+  } catch (err) {
+    console.error('デフォルト設定登録エラー:', err.message);
+    res.status(500).json({ error: 'デフォルト設定登録に失敗しました' });
+  }
 });

@@ -31,27 +31,31 @@ import { fetchExpenses,
           getMonthlySpending, 
           getBudgetVsActual,
           getSettingValue,
-          setSettingValue
+          setSettingValue,
+          insertDefaultCategories,
+          insertDefaultSettings
         } from './db';
 
 let mainWindow: BrowserWindow | null;
 
 console.log('App is starting');
 
-// アプリケーション初期化関数
 const initializeApp = async () => {
   try {
-    // データベース初期化
     await initializeDatabase();
     console.log('データベース初期化完了');
 
-    // インストーラで選択された初期言語を設定（初回のみ）
-    await setInitialLanguageFromInstaller();
+    // 言語と通貨の初期設定はここでは行わない
+    const initialized = await getSettingValue('initialized');
+    if (initialized !== 'true') {
+      console.log('初期化フラグがfalseのため、初期処理をスキップ');
+      return;
+    }
 
-    // 通貨設定
+    // ここからは初期化済みのユーザーにのみ実行
+    await setInitialLanguageFromInstaller();
     await setInitialCurrency();
 
-    // 設定を確認して固定費自動登録がONなら登録
     const autoRegister = await getSettingValue('autoRegisterFixedCosts');
     if (autoRegister === 'true') {
       console.log('設定により起動時に固定費を自動登録します');
@@ -60,12 +64,8 @@ const initializeApp = async () => {
       console.log('固定費の自動登録は無効です');
     }
 
-    // 定期的な固定費登録
     scheduleAutoRegisterFixedCosts();
-
-    // 通知確認
     checkUpcomingFixedCostNotifications();
-
   } catch (error) {
     console.error('アプリケーションの初期化エラー:', error);
   }
@@ -510,6 +510,28 @@ const checkUpcomingFixedCostNotifications = async () => {
     console.error('通知の表示エラー:', error);
   }
 };
+
+// デフォルトカテゴリの登録
+ipcMain.handle('insertDefaultCategories', async () => {
+  try {
+    await insertDefaultCategories();
+    return { success: true };
+  } catch (err) {
+    console.error('insertDefaultCategories エラー:', err);
+    return { success: false, error: err instanceof Error ? err.message : '不明なエラー' };
+  }
+});
+
+// デフォルト設定の登録
+ipcMain.handle('insertDefaultSettings', async () => {
+  try {
+    await insertDefaultSettings();
+    return { success: true };
+  } catch (error: any) {
+    console.error('insertDefaultSettings エラー:', error);
+    return { success: false, error: error.message };
+  }
+});
 
 // アプリケーション開始
 initializeApp();

@@ -282,9 +282,8 @@ export const insertDefaultSettings = async (): Promise<void> => {
 
 export const initializeDatabase = async (): Promise<void> => {
   try {
+    // テーブルを作成
     await createTablesIfNotExists();
-    await insertDefaultCategories();
-    await insertDefaultSettings();
 
     console.log('データベース初期化完了');
   } catch (error: unknown) {

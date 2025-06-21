@@ -97,6 +97,12 @@ try {
     getNotifySetting: () => ipcRenderer.invoke('getSetting', 'notifyFixedCost'),
     setNotifySetting: (enabled: boolean) =>
       ipcRenderer.invoke('setSetting', 'notifyFixedCost', enabled ? 'true' : 'false'),
+
+    // デフォルトカテゴリの挿入
+    insertDefaultCategories: () => ipcRenderer.invoke('insertDefaultCategories'),
+
+    // デフォルト設定の挿入
+    insertDefaultSettings: () => ipcRenderer.invoke('insertDefaultSettings'),
   });
 
   console.log("preload.ts 完了");
