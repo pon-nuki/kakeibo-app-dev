@@ -29,7 +29,7 @@
 
 
 コマンド
-npm run build-exporter：resources/exporter.exeを生成（配布用）
+npm run build-exporter：resources/exporter.exeを生成（配布用）※\my-electron-app\resourcesを作成しておくこと
 npm run export-csv：Goスクリプトを実行してCSV出力（開発用）
 npm run package：Electronアプリをビルド
 
