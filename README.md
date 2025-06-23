@@ -82,6 +82,7 @@ Planned features:
 * SQLite
 * MUI (Material UI)
 * Chart.js
+* Go
 
 ---
 
@@ -96,10 +97,10 @@ $ cd my-electron-app
 $ npm install
 
 # Start the application (for development) / アプリを起動（開発用） / Запуск приложения (для разработки)
+$ npm run build
 $ npm run start
 
 # For production build (if packaging) / 本番ビルド（パッケージ化する場合） / Сборка для продакшн (при упаковке)
-$ npm run build
 $ npm run package
 ```
 
@@ -117,6 +118,12 @@ my-electron-app/
 │  ├─ services/        # Business logic / ビジネスロジック / Логика приложения
 │  ├─ pages/           # UI pages / 画面ページ / Страницы интерфейса
 │  └─ components/      # UI components / UIコンポーネント / Компоненты
+├─ go-csv-exporter/    # CSV exporter in Go / Go言語CSVエクスポート / CSV-экспортер на Go
+│  ├─ exporter.go      # Main export logic / エクスポートロジック / Основная логика
+│  ├─ go.mod           # Go module config / Goモジュール設定 / Конфигурация модуля Go
+│  └─ go.sum           # Module checksums / モジュールチェックサム / Контрольные суммы
+├─ resources/          # Static executables / exe等の配置 / Внешние ресурсы
+│  └─ exporter.exe     # Production-ready Go exporter / 本番用Goエクスポーター / Готовый экспортёр
 ├─ server.js           # Express backend / バックエンド / Сервер Express
 ├─ webpack.config.js   # Webpack configuration
 └─ package.json        # Scripts and dependencies
