@@ -7,6 +7,7 @@ import cron from 'node-cron';
 import { registerFixedCosts } from './services/autoRegister';
 import { getUpcomingFixedCostNotifications } from './services/notificationService';
 import { Notification } from 'electron';
+import { spawn  } from 'child_process';
 import { fetchExpenses,
           addExpense,
           deleteExpense,
@@ -531,6 +532,61 @@ ipcMain.handle('insertDefaultSettings', async () => {
     console.error('insertDefaultSettings エラー:', error);
     return { success: false, error: error.message };
   }
+});
+
+// CSVエクスポート
+ipcMain.handle('export-csv', async () => {
+  const isDev = !app.isPackaged;
+
+  const executablePath = isDev
+    ? path.join(__dirname, '../../resources/exporter.exe') // 開発時
+    : path.join(process.resourcesPath, 'exporter.exe'); // 本番時
+
+  return new Promise((resolve, reject) => {
+    if (isDev) {
+      const child = spawn('go', ['run', 'exporter.go'], {
+        cwd: path.dirname(executablePath),
+        env: { ...process.env, CGO_ENABLED: '1' }
+      });
+
+      let output = '';
+      let error = '';
+
+      child.stdout.on('data', (data) => (output += data));
+      child.stderr.on('data', (data) => (error += data));
+
+      child.on('close', (code) => {
+        if (code === 0) {
+          console.log('CSV export success:', output);
+          resolve({ message: 'Export successful.' });
+        } else {
+          console.error('CSV export failed:', error);
+          reject(new Error(error));
+        }
+      });
+
+    } else {
+      const child = spawn(executablePath, [], {
+        env: { ...process.env },
+      });
+
+      let output = '';
+      let error = '';
+
+      child.stdout.on('data', (data) => (output += data));
+      child.stderr.on('data', (data) => (error += data));
+
+      child.on('close', (code) => {
+        if (code === 0) {
+          console.log('CSV export success:', output);
+          resolve({ message: 'Export successful.' });
+        } else {
+          console.error('CSV export failed:', error);
+          reject(new Error(error));
+        }
+      });
+    }
+  });
 });
 
 // アプリケーション開始

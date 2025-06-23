@@ -11,7 +11,9 @@
     "build": "npm run build:main && webpack --config webpack.config.js --mode production",
     "package": "npm run build && npm run build:electron",
     "build:main": "tsc -p tsconfig.main.json",
-    "build:electron": "electron-builder"
+    "build:electron": "electron-builder",
+    "export-csv": "cd go-csv-exporter && cross-env CGO_ENABLED=1 go run exporter.go",
+    "build-exporter": "cd go-csv-exporter && go build -o ../resources/exporter.exe exporter.go"
   },
   "keywords": [],
   "author": "",
@@ -22,7 +24,18 @@
     "files": [
       "dist/**/*",
       "server.js",
-      "icon.ico"
+      "icon.ico",
+      {
+        "from": "resources/exporter.exe",
+        "to": "resources/exporter.exe",
+        "filter": ["**/*"]
+      }
+    ],
+    "extraResources": [
+      {
+        "from": "resources/exporter.exe",
+        "to": "exporter.exe"
+      }
     ],
     "directories": {
       "output": "release"
@@ -50,6 +63,7 @@
     "@types/sqlite3": "^3.1.11",
     "babel-loader": "^10.0.0",
     "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "electron": "^36.3.2",
     "electron-builder": "^26.0.12",

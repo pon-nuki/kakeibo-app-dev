@@ -15,7 +15,8 @@
     "fixedCosts": "固定費設定",
     "categories": "カテゴリ設定",
     "graphs": "グラフで見る",
-    "settings": "アプリ設定"
+    "settings": "アプリ設定",
+    "importExport": "インポート・エクスポート"
   },
   "graphs": {
     "title": "支出グラフ",
@@ -166,5 +167,13 @@
   "actions": {
     "edit": "編集",
     "delete": "削除"
+  },
+  "importExport": {
+    "import_export": "インポート・エクスポート",
+    "export_csv": "CSVエクスポート",
+    "exporting": "エクスポート中...",
+    "export_success": "エクスポートが完了しました。",
+    "export_failed": "エクスポートに失敗しました。",
+    "import_coming_soon": "CSVインポート機能は近日公開予定です。"
   }
 }

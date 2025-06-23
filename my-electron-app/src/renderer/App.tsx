@@ -10,6 +10,7 @@ import Diary from './pages/Diary';
 import Graphs from './pages/Graphs';
 import AppLayout from './components/Layouts/AppLayout';
 import SetupModal from './components/SetupModal/SetupModal';
+import ImportExport from './pages/ImportExport'; 
 
 const App: React.FC = () => {
   const [initialized, setInitialized] = useState<boolean | null>(null);
@@ -50,6 +51,7 @@ const App: React.FC = () => {
             <Route path="/categories" element={<Categories />} />
             <Route path="/diary" element={<Diary />} />
             <Route path="/graphs" element={<Graphs />} />
+            <Route path="/import-export" element={<ImportExport />} />
           </Routes>
         </Suspense>
       </AppLayout>

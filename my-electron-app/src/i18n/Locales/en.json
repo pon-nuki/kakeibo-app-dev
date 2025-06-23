@@ -18,7 +18,8 @@
     "fixedCosts": "Fixed Costs",
     "categories": "Categories",
     "graphs": "Graphs",
-    "settings": "Settings"
+    "settings": "Settings",
+    "importExport": "Import / Export"
   },
   "graphs": {
     "title": "Spending Graphs",
@@ -169,5 +170,13 @@
   "actions": {
     "edit": "Edit",
     "delete": "Delete"
+  },
+  "importExport": {
+    "import_export": "Import & Export",
+    "export_csv": "Export CSV",
+    "exporting": "Exporting...",
+    "export_success": "Export completed successfully.",
+    "export_failed": "Export failed.",
+    "import_coming_soon": "CSV import will be available soon."
   }
 }

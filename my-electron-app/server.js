@@ -3,6 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const { exec } = require('child_process');
 const app = express();
 const port = 3000;
 
@@ -699,4 +700,14 @@ app.post('/initialize/default-settings', async (req, res) => {
     console.error('デフォルト設定登録エラー:', err.message);
     res.status(500).json({ error: 'デフォルト設定登録に失敗しました' });
   }
+});
+
+// CSVエクスポート
+app.post('/export/csv', (req, res) => {
+  exec('go run ./go-csv-exporter/exporter.go', { env: { ...process.env, CGO_ENABLED: '1' } }, (err, stdout, stderr) => {
+    if (err) {
+      return res.status(500).json({ error: stderr });
+    }
+    res.json({ message: 'エクスポート成功', output: stdout });
+  });
 });

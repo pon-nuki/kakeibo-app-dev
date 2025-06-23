@@ -24,6 +24,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { path: '/fixed-costs', label: t('menu.fixedCosts') },
     { path: '/categories', label: t('menu.categories') },
     { path: '/graphs', label: t('menu.graphs') },
+    { path: '/import-export', label: t('menu.importExport') },
     { path: '/settings', label: t('menu.settings') },
   ];
 

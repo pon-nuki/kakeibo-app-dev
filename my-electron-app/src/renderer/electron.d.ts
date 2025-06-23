@@ -50,6 +50,9 @@ declare global {
 
       // デフォルト設定の挿入
       insertDefaultSettings: () => Promise<{ success: boolean; error?: string }>;
+
+      // CSVエクスポート
+       exportCsv: () => Promise<{ message: string }>;
     };
   }
 }

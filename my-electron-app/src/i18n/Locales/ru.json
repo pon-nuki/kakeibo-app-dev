@@ -18,7 +18,8 @@
     "fixedCosts": "Постоянные расходы",
     "categories": "Категории",
     "graphs": "Графики",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "importExport": "Импорт / Экспорт"
   },
   "graphs": {
     "title": "Графики расходов",
@@ -169,5 +170,13 @@
   "actions": {
     "edit": "Редактировать",
     "delete": "Удалить"
+  },
+  "importExport": {
+    "import_export": "Импорт и экспорт",
+    "export_csv": "Экспорт в CSV",
+    "exporting": "Экспорт... Пожалуйста, подождите.",
+    "export_success": "Экспорт успешно завершён.",
+    "export_failed": "Ошибка при экспорте.",
+    "import_coming_soon": "Импорт CSV будет доступен в ближайшее время."
   }
 }

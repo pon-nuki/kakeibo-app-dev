@@ -103,6 +103,9 @@ try {
 
     // デフォルト設定の挿入
     insertDefaultSettings: () => ipcRenderer.invoke('insertDefaultSettings'),
+
+    // CSVエクスポート
+    exportCsv: (): Promise<{ message: string }> => ipcRenderer.invoke('export-csv'),
   });
 
   console.log("preload.ts 完了");

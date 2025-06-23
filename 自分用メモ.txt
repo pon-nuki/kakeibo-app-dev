@@ -26,3 +26,20 @@
 ・UI層はサービス関数を使うだけでよい（window.electron を直接呼ばない）
 ・サービス層が開発／本番環境に応じて処理を切り替える
 ・開発時にはserver.jsを起動しておくことで、HTTP経由で動作確認可能
+
+
+コマンド
+npm run build-exporter：resources/exporter.exeを生成（配布用）
+npm run export-csv：Goスクリプトを実行してCSV出力（開発用）
+npm run package：Electronアプリをビルド
+
+開発環境実行:
+npm run build
+npm run start
+
+npmインストール:
+rmdir /s /q node_modules
+del package-lock.json
+rmdir /s /q dist
+rmdir /s /q dist-tsc
+npm install
