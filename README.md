@@ -50,9 +50,9 @@
 
 **Kakeibo App** is a personal budgeting application built with React, Electron, TypeScript, Node.js, Go, and SQLite.
 
-- English: A next-level budgeting app that grows with you.
-- 日本語: 収支を爆上げ管理！多機能かつ直感的な家計簿アプリ。
-- Русский: Приложение для бюджета, которое вдохновляет на финансовый успех.
+- English: A power-packed budgeting app that grows with your lifestyle.
+- 日本語: 支出管理を爆上げ！誰でも使える多機能家計簿アプリ。
+- Русский: Лёгкий и мощный способ управлять своими финансами с удовольствием.
 
 ---
 
