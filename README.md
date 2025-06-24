@@ -1,5 +1,9 @@
 # Kakeibo App (In Development)
 
+> Elevate your finances, ignite your future — a budgeting app like no other!  
+> 収支を爆上げ！未来を変える家計簿、ここに誕生！  
+> Поднимите финансы и зажгите будущее — уникальное приложение для бюджета!
+
 ## Screenshots / スクリーンショット / Скриншоты
 
 ### Personal Budget / 家計簿 / Личный бюджет
