@@ -4,6 +4,31 @@
 > 収支を爆上げ！未来を変える家計簿、ここに誕生！  
 > Поднимите финансы и зажгите будущее — уникальное приложение для бюджета!
 
+---
+
+###  Extended Intro / イントロ追加 / Расширенное вступление
+
+**🇬🇧 English**  
+Tired of managing your finances? That era is over.  
+With this single app, you can track your spending, set your budget, visualize your trends, and even reflect through journaling — all in one place.  
+Powered by blazing-fast Go in the backend, smart Python analysis, and a snappy UI built with modern React + TypeScript.  
+Local-first. No cloud. No worries.
+
+**🇯🇵 日本語**  
+ 家計管理、めんどくさい？もうそんな時代は終わりです。  
+このアプリひとつで「収支の記録」「予算の把握」「グラフで可視化」「日記で気持ちの整理」――全部できる！  
+しかもバックエンドには爆速の Go、分析には賢い Python、UI は最新の React + TypeScript。サクサク快適！  
+PC だけで完結。クラウド不要。完全ローカル＆安心設計！
+
+**🇷🇺 Русский**  
+ Устали от сложного управления финансами? Это в прошлом.  
+Это приложение объединяет всё: учёт расходов, контроль бюджета, наглядные графики и даже дневник для отражения мыслей.  
+Скоростной Go на бэкенде, умный Python для анализа и современный интерфейс на React + TypeScript.  
+Всё локально. Без облаков. Без стресса.
+
+---
+
+
 ## Screenshots / スクリーンショット / Скриншоты
 
 ### Personal Budget / 家計簿 / Личный бюджет
