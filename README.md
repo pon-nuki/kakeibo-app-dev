@@ -1,107 +1,78 @@
-# Kakeibo App (In Development)
+# Kakeibo App
 
 ## Screenshots / スクリーンショット / Скриншоты
 
 ### Personal Budget / 家計簿 / Личный бюджет
-
-<p align="center">
-  <img src="images/kakeibo.png" alt="Personal Budget screen" width="600" />
-</p>
+- images/kakeibo.png
 
 ### Journal / 日記 / Дневник
-
-<p align="center">
-  <img src="images/nikki.png" alt="Journal screen" width="600" />
-</p>
+- images/nikki.png
 
 ### Category Management / カテゴリ設定 / Управление категориями
-
-<p align="center">
-  <img src="images/kategori.png" alt="Category management screen" width="600" />
-</p>
+- images/kategori.png
 
 ### Recurring Expenses / 固定費設定 / Регулярные расходы
-
-<p align="center">
-  <img src="images/koteihi.png" alt="Recurring expenses screen" width="600" />
-</p>
+- images/koteihi.png
 
 ### Budget Planning / 予算設定 / Планирование бюджета
+- images/yosan.png
 
-<p align="center">
-  <img src="images/yosan.png" alt="Budget planning screen" width="600" />
-</p>
-
-### Analytics (Graphs) / グラフで見る / Аналитика (графики)
-
-<p align="center">
-  <img src="images/gurafu.png" alt="Analytics and graphs screen" width="600" />
-</p>
+### Analytics / グラフで見る / Аналитика
+- images/gurafu.png
 
 ### App Settings / アプリ設定 / Настройки приложения
-
-<p align="center">
-  <img src="images/settei.png" alt="App settings screen" width="600" />
-</p>
+- images/settei.png
 
 ---
 
 ## Overview / 概要 / Обзор
 
-**Kakeibo App** is a personal budgeting application built with **React**, **Electron**, **TypeScript**, **Node.js**, and **SQLite**.
+**Kakeibo App** is a personal budgeting application built with React, Electron, TypeScript, Node.js, Go, and SQLite.
 
-* *English*: A simple, effective tool for tracking income and expenses.
-* *日本語*: 収支を簡単に記録・管理できる家計簿アプリです。
-* *Русский*: Простое приложение для ведения личного бюджета.
+- English: A next-level budgeting app that grows with you.
+- 日本語: 収支を爆上げ管理！多機能かつ直感的な家計簿アプリ。
+- Русский: Приложение для бюджета, которое вдохновляет на финансовый успех.
 
 ---
 
 ## Development Status / 開発状況 / Статус разработки
 
-* Basic expense tracking implemented
-* Fixed cost registration
-* Diary feature
-* Monthly budget comparison
-* Graph-based analytics
-* Configurable settings
+- Expense tracking with performance-focused input
+- Recurring costs with flexible scheduling
+- Multi-language journal with mood and tags
+- Monthly budget goals with visual graphs
+- Graph-based insights and breakdowns
+- Fully configurable settings screen
 
-Planned features:
-
-* Export options (CSV, PDF)
-* Password protection
-* Cloud sync (TBD)
+Planned Features:
+- CSV & PDF export/import
+- Secure password login
+- Optional cloud sync for backups
 
 ---
 
 ## Tech Stack / 技術構成 / Технологии
 
-* React
-* Electron
-* TypeScript
-* Node.js
-* SQLite
-* MUI (Material UI)
-* Chart.js
-* Go
+- React + TypeScript
+- Electron
+- Node.js
+- SQLite
+- Go
+- MUI
+- Chart.js
 
 ---
 
 ## Installation / インストール方法 / Установка
 
 ```bash
-# Clone the repository / リポジトリをクローン / Клонируйте репозиторий
-$ git clone https://github.com/pon-nuki/kakeibo-app-dev.git
-$ cd my-electron-app
-
-# Install dependencies / 依存関係のインストール / Установка зависимостей
-$ npm install
-
-# Start the application (for development) / アプリを起動（開発用） / Запуск приложения (для разработки)
-$ npm run build
-$ npm run start
-
-# For production build (if packaging) / 本番ビルド（パッケージ化する場合） / Сборка для продакшн (при упаковке)
-$ npm run package
+git clone https://github.com/pon-nuki/kakeibo-app-dev.git
+cd my-electron-app
+npm install
+npm run build
+npm run start
+# パッケージ化する場合
+npm run package
 ```
 
 ---
@@ -110,32 +81,32 @@ $ npm run package
 
 ```
 my-electron-app/
-├─ dist/               # Production build / 本番ビルド / Продакшн сборка
-├─ public/             # Static files / 静的ファイル / Статические файлы
+├─ dist/
+├─ public/
 ├─ src/
-│  ├─ main/            # Electron main process / Electronメインプロセス / Главный процесс
-│  ├─ renderer/        # React frontend / Reactフロントエンド / Интерфейс
-│  ├─ services/        # Business logic / ビジネスロジック / Логика приложения
-│  ├─ pages/           # UI pages / 画面ページ / Страницы интерфейса
-│  └─ components/      # UI components / UIコンポーネント / Компоненты
-├─ go-csv-exporter/    # CSV exporter in Go / Go言語CSVエクスポート / CSV-экспортер на Go
-│  ├─ exporter.go      # Main export logic / エクスポートロジック / Основная логика
-│  ├─ go.mod           # Go module config / Goモジュール設定 / Конфигурация модуля Go
-│  └─ go.sum           # Module checksums / モジュールチェックサム / Контрольные суммы
-├─ go-csv-importer/    # CSV importer in Go / Go言語CSVインポート / CSV-импортёр на Go
-│  ├─ importer.go      # Main import logic / インポートロジック / Основная логика
-│  ├─ go.mod           # Go module config / Goモジュール設定 / Конфигурация модуля Go
-│  └─ go.sum           # Module checksums / モジュールチェックサム / Контрольные суммы
-├─ resources/          # Static executables / exe等の配置 / Внешние ресурсы
-│  ├─ exporter.exe     # Production-ready Go exporter / 本番用Goエクスポーター / Готовый экспортёр
-│  └─ importer.exe     # Production-ready Go importer / 本番用Goインポーター / Готовый импортёр
-├─ server.js           # Express backend / バックエンド / Сервер Express
-├─ webpack.config.js   # Webpack configuration
-└─ package.json        # Scripts and dependencies
+│  ├─ main/
+│  ├─ renderer/
+│  ├─ services/
+│  ├─ pages/
+│  └─ components/
+├─ go-csv-exporter/
+│  ├─ exporter.go
+│  ├─ go.mod
+│  └─ go.sum
+├─ go-csv-importer/
+│  ├─ importer.go
+│  ├─ go.mod
+│  └─ go.sum
+├─ resources/
+│  ├─ exporter.exe
+│  └─ importer.exe
+├─ server.js
+├─ webpack.config.js
+└─ package.json
 ```
 
 ---
 
 ## License / ライセンス / Лицензия
 
-[MIT](./LICENSE)
+MIT License
