@@ -122,8 +122,13 @@ my-electron-app/
 │  ├─ exporter.go      # Main export logic / エクスポートロジック / Основная логика
 │  ├─ go.mod           # Go module config / Goモジュール設定 / Конфигурация модуля Go
 │  └─ go.sum           # Module checksums / モジュールチェックサム / Контрольные суммы
+├─ go-csv-importer/    # CSV importer in Go / Go言語CSVインポート / CSV-импортёр на Go
+│  ├─ importer.go      # Main import logic / インポートロジック / Основная логика
+│  ├─ go.mod           # Go module config / Goモジュール設定 / Конфигурация модуля Go
+│  └─ go.sum           # Module checksums / モジュールチェックサム / Контрольные суммы
 ├─ resources/          # Static executables / exe等の配置 / Внешние ресурсы
-│  └─ exporter.exe     # Production-ready Go exporter / 本番用Goエクスポーター / Готовый экспортёр
+│  ├─ exporter.exe     # Production-ready Go exporter / 本番用Goエクスポーター / Готовый экспортёр
+│  └─ importer.exe     # Production-ready Go importer / 本番用Goインポーター / Готовый импортёр
 ├─ server.js           # Express backend / バックエンド / Сервер Express
 ├─ webpack.config.js   # Webpack configuration
 └─ package.json        # Scripts and dependencies
