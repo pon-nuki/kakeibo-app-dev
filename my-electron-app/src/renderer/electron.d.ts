@@ -53,6 +53,12 @@ declare global {
 
       // CSVエクスポート
        exportCsv: () => Promise<{ message: string }>;
+
+      // CSVインポート
+      importCsv: (filePath: string) => Promise<{ message: string }>;
+
+      // CSVファイル選択ダイアログ
+      selectCsvFile: () => Promise<string>;
     };
   }
 }

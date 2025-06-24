@@ -106,6 +106,12 @@ try {
 
     // CSVエクスポート
     exportCsv: (): Promise<{ message: string }> => ipcRenderer.invoke('export-csv'),
+
+    // CSVインポート
+    importCsv: (filePath: string) => ipcRenderer.invoke('import-csv', filePath),
+
+    // CSVファイル選択ダイアログ
+    selectCsvFile: () => ipcRenderer.invoke('select-csv-file'),
   });
 
   console.log("preload.ts 完了");

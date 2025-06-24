@@ -2,12 +2,12 @@
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import cron from 'node-cron';
 import { registerFixedCosts } from './services/autoRegister';
 import { getUpcomingFixedCostNotifications } from './services/notificationService';
 import { Notification } from 'electron';
-import { spawn  } from 'child_process';
+import { spawn, execFile } from 'child_process';
 import { fetchExpenses,
           addExpense,
           deleteExpense,
@@ -587,6 +587,40 @@ ipcMain.handle('export-csv', async () => {
       });
     }
   });
+});
+
+// CSVインポート
+ipcMain.handle('import-csv', async (_event, filePath: string) => {
+  const isDev = !app.isPackaged;
+  const executablePath = isDev
+    ? path.join(__dirname, '../../resources/importer.exe') // 開発時
+    : path.join(process.resourcesPath, 'importer.exe'); // 本番時
+
+  return new Promise((resolve, reject) => {
+    execFile(executablePath, [filePath], (err, stdout, stderr) => {
+      if (err) {
+        console.error('CSV import failed:', stderr);
+        return reject(new Error(stderr));
+      }
+      console.log('CSV import success:', stdout);
+      resolve({ message: 'Import successful.' });
+    });
+  });
+});
+
+// CSVファイル選択ダイアログ
+ipcMain.handle('select-csv-file', async () => {
+  const result = await dialog.showOpenDialog({
+    title: 'CSVファイルを選択',
+    properties: ['openFile'],
+    filters: [{ name: 'CSV Files', extensions: ['csv'] }],
+  });
+
+  if (result.canceled || result.filePaths.length === 0) {
+    return '';
+  }
+
+  return result.filePaths[0];
 });
 
 // アプリケーション開始

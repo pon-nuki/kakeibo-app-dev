@@ -177,6 +177,11 @@
     "exporting": "Exporting...",
     "export_success": "Export completed successfully.",
     "export_failed": "Export failed.",
-    "import_coming_soon": "CSV import will be available soon."
+    "select_csv": "Select CSV file",
+    "import_csv": "Import CSV",
+    "importing": "Importing...",
+    "import_success": "Import completed successfully.",
+    "import_failed": "Import failed.",
+    "no_file": "No file selected."
   }
 }

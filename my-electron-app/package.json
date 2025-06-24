@@ -13,7 +13,8 @@
     "build:main": "tsc -p tsconfig.main.json",
     "build:electron": "electron-builder",
     "export-csv": "cd go-csv-exporter && cross-env CGO_ENABLED=1 go run exporter.go",
-    "build-exporter": "cd go-csv-exporter && go build -o ../resources/exporter.exe exporter.go"
+    "build-exporter": "cd go-csv-exporter && go build -o ../resources/exporter.exe exporter.go",
+    "build-importer": "cd go-csv-importer && go build -o ../resources/importer.exe importer.go"
   },
   "keywords": [],
   "author": "",
@@ -29,12 +30,21 @@
         "from": "resources/exporter.exe",
         "to": "resources/exporter.exe",
         "filter": ["**/*"]
+      },
+      {
+        "from": "resources/importer.exe",
+        "to": "resources/importer.exe",
+        "filter": ["**/*"]
       }
     ],
     "extraResources": [
       {
         "from": "resources/exporter.exe",
         "to": "exporter.exe"
+      },
+      {
+        "from": "resources/importer.exe",
+        "to": "importer.exe"
       }
     ],
     "directories": {
@@ -93,6 +103,7 @@
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.2.0",
     "marked": "^15.0.12",
+    "multer": "^2.0.1",
     "node-cron": "^4.1.0",
     "node-emoji": "^2.2.0",
     "path-browserify": "^1.0.1",

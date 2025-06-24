@@ -6,6 +6,8 @@ const os = require('os');
 const { exec } = require('child_process');
 const app = express();
 const port = 3000;
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 // データベースパスをユーザーディレクトリに設定
 const username = os.userInfo().username;
@@ -709,5 +711,28 @@ app.post('/export/csv', (req, res) => {
       return res.status(500).json({ error: stderr });
     }
     res.json({ message: 'エクスポート成功', output: stdout });
+  });
+});
+
+// CSVインポート
+app.post('/import/csv', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'CSVファイルがアップロードされていません' });
+  }
+
+  const importerPath = path.join(__dirname, 'go-csv-importer', 'importer.go');
+  const csvPath = path.resolve(req.file.path);
+
+  exec(`go run "${importerPath}" "${csvPath}"`, { env: { ...process.env, CGO_ENABLED: '1' } }, (err, stdout, stderr) => {
+    // CSVファイルは使い終わったら削除する
+    fs.unlink(csvPath, () => {});
+
+    if (err) {
+      console.error('インポート失敗:', stderr);
+      return res.status(500).json({ error: stderr });
+    }
+
+    console.log('インポート成功:', stdout);
+    res.json({ message: 'インポート成功', output: stdout });
   });
 });

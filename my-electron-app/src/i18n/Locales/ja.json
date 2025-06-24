@@ -170,10 +170,15 @@
   },
   "importExport": {
     "import_export": "インポート・エクスポート",
-    "export_csv": "CSVエクスポート",
+    "export_csv": "CSVをエクスポート",
     "exporting": "エクスポート中...",
     "export_success": "エクスポートが完了しました。",
     "export_failed": "エクスポートに失敗しました。",
-    "import_coming_soon": "CSVインポート機能は近日公開予定です。"
+    "select_csv": "CSVファイルを選択",
+    "import_csv": "CSVをインポート",
+    "importing": "インポート中...",
+    "import_success": "インポートが完了しました。",
+    "import_failed": "インポートに失敗しました。",
+    "no_file": "ファイルが選択されていません。"
   }
 }

@@ -173,10 +173,15 @@
   },
   "importExport": {
     "import_export": "Импорт и экспорт",
-    "export_csv": "Экспорт в CSV",
-    "exporting": "Экспорт... Пожалуйста, подождите.",
+    "export_csv": "Экспорт CSV",
+    "exporting": "Экспорт данных...",
     "export_success": "Экспорт успешно завершён.",
-    "export_failed": "Ошибка при экспорте.",
-    "import_coming_soon": "Импорт CSV будет доступен в ближайшее время."
+    "export_failed": "Ошибка экспорта.",
+    "select_csv": "Выбрать CSV-файл",
+    "import_csv": "Импорт CSV",
+    "importing": "Импорт данных...",
+    "import_success": "Импорт успешно завершён.",
+    "import_failed": "Ошибка импорта.",
+    "no_file": "Файл не выбран."
   }
 }
