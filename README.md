@@ -1,27 +1,48 @@
-# Kakeibo App
+# Kakeibo App (In Development)
 
 ## Screenshots / スクリーンショット / Скриншоты
 
 ### Personal Budget / 家計簿 / Личный бюджет
-- images/kakeibo.png
+
+<p align="center">
+  <img src="images/kakeibo.png" alt="Personal Budget screen" width="600" />
+</p>
 
 ### Journal / 日記 / Дневник
-- images/nikki.png
+
+<p align="center">
+  <img src="images/nikki.png" alt="Journal screen" width="600" />
+</p>
 
 ### Category Management / カテゴリ設定 / Управление категориями
-- images/kategori.png
+
+<p align="center">
+  <img src="images/kategori.png" alt="Category management screen" width="600" />
+</p>
 
 ### Recurring Expenses / 固定費設定 / Регулярные расходы
-- images/koteihi.png
+
+<p align="center">
+  <img src="images/koteihi.png" alt="Recurring expenses screen" width="600" />
+</p>
 
 ### Budget Planning / 予算設定 / Планирование бюджета
-- images/yosan.png
 
-### Analytics / グラフで見る / Аналитика
-- images/gurafu.png
+<p align="center">
+  <img src="images/yosan.png" alt="Budget planning screen" width="600" />
+</p>
+
+### Analytics (Graphs) / グラフで見る / Аналитика (графики)
+
+<p align="center">
+  <img src="images/gurafu.png" alt="Analytics and graphs screen" width="600" />
+</p>
 
 ### App Settings / アプリ設定 / Настройки приложения
-- images/settei.png
+
+<p align="center">
+  <img src="images/settei.png" alt="App settings screen" width="600" />
+</p>
 
 ---
 
