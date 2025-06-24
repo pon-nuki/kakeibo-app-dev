@@ -7,7 +7,7 @@ import cron from 'node-cron';
 import { registerFixedCosts } from './services/autoRegister';
 import { getUpcomingFixedCostNotifications } from './services/notificationService';
 import { Notification } from 'electron';
-import { spawn, execFile } from 'child_process';
+import { spawn } from 'child_process';
 import { fetchExpenses,
           addExpense,
           deleteExpense,
@@ -538,72 +538,74 @@ ipcMain.handle('insertDefaultSettings', async () => {
 ipcMain.handle('export-csv', async () => {
   const isDev = !app.isPackaged;
 
+  const goScriptDir = isDev
+    ? path.join(__dirname, '../../go-csv-exporter')
+    : process.resourcesPath;
+
   const executablePath = isDev
-    ? path.join(__dirname, '../../resources/exporter.exe') // 開発時
-    : path.join(process.resourcesPath, 'exporter.exe'); // 本番時
+    ? 'go'
+    : path.join(goScriptDir, 'exporter.exe');
 
   return new Promise((resolve, reject) => {
-    if (isDev) {
-      const child = spawn('go', ['run', 'exporter.go'], {
-        cwd: path.dirname(executablePath),
-        env: { ...process.env, CGO_ENABLED: '1' }
-      });
+    const args = isDev ? ['run', 'exporter.go'] : [];
 
-      let output = '';
-      let error = '';
+    const child = spawn(executablePath, args, {
+      cwd: goScriptDir,
+      env: { ...process.env, CGO_ENABLED: '1' }
+    });
 
-      child.stdout.on('data', (data) => (output += data));
-      child.stderr.on('data', (data) => (error += data));
+    let output = '';
+    let error = '';
 
-      child.on('close', (code) => {
-        if (code === 0) {
-          console.log('CSV export success:', output);
-          resolve({ message: 'Export successful.' });
-        } else {
-          console.error('CSV export failed:', error);
-          reject(new Error(error));
-        }
-      });
+    child.stdout.on('data', (data) => (output += data));
+    child.stderr.on('data', (data) => (error += data));
 
-    } else {
-      const child = spawn(executablePath, [], {
-        env: { ...process.env },
-      });
-
-      let output = '';
-      let error = '';
-
-      child.stdout.on('data', (data) => (output += data));
-      child.stderr.on('data', (data) => (error += data));
-
-      child.on('close', (code) => {
-        if (code === 0) {
-          console.log('CSV export success:', output);
-          resolve({ message: 'Export successful.' });
-        } else {
-          console.error('CSV export failed:', error);
-          reject(new Error(error));
-        }
-      });
-    }
+    child.on('close', (code) => {
+      if (code === 0) {
+        console.log('CSV export success:', output);
+        resolve({ message: 'Export successful.' });
+      } else {
+        console.error('CSV export failed:', error);
+        reject(new Error(error));
+      }
+    });
   });
 });
 
 // CSVインポート
 ipcMain.handle('import-csv', async (_event, filePath: string) => {
   const isDev = !app.isPackaged;
+
+  const goScriptDir = isDev
+    ? path.join(__dirname, '../../go-csv-importer')
+    : process.resourcesPath;
+
   const executablePath = isDev
-    ? path.join(__dirname, '../../resources/importer.exe') // 開発時
-    : path.join(process.resourcesPath, 'importer.exe'); // 本番時
+    ? 'go'
+    : path.join(goScriptDir, 'importer.exe');
+
+  const args = isDev ? ['run', 'importer.go', filePath] : [filePath];
 
   return new Promise((resolve, reject) => {
-    execFile(executablePath, [filePath], (err, stdout, stderr) => {
-      if (err) {
-        console.error('CSV import failed:', stderr);
-        return reject(new Error(stderr));
+    const child = spawn(executablePath, args, {
+      cwd: goScriptDir,
+      env: { ...process.env, CGO_ENABLED: '1' }
+    });
+
+    let output = '';
+    let error = '';
+
+    child.stdout.on('data', (data) => (output += data));
+    child.stderr.on('data', (data) => (error += data));
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        console.log('CSV import success:', output);
+        resolve({ message: 'Import successful.' });
+      } else {
+        console.error('CSV import failed:', error);
+        reject(new Error(error));
       }
-      console.log('CSV import success:', stdout);
-      resolve({ message: 'Import successful.' });
     });
   });
 });
