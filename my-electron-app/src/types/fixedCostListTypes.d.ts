@@ -1,4 +1,4 @@
-import { FixedCost } from '../../../types/common.d';
+import { FixedCost } from '../../../types/common';
 
 export interface FixedCostListProps {
   filteredFixedCosts: FixedCost[];

@@ -1,4 +1,4 @@
-import { Diary } from '../../types/common.d';
+import { Diary } from '../../types/common';
 
 const isDev = process.env.NODE_ENV === 'development';
 

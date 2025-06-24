@@ -1,5 +1,5 @@
 // src/renderer/electron.d.ts
-import { Expense, FixedCost, DeleteResult, Category } from '../types/common.d';
+import { Expense, FixedCost, DeleteResult, Category } from '../types/common';
 
 declare global {
   interface Window {

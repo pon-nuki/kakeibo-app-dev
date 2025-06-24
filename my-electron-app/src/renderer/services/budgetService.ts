@@ -1,5 +1,5 @@
 // services/budgetService.ts
-import { Budget } from '../../types/common.d';
+import { Budget } from '../../types/common';
 
 const isDev = process.env.NODE_ENV === 'development';
 

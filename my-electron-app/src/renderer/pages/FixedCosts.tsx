@@ -5,7 +5,7 @@ import Filter from '../components/ExpenseFilter/ExpenseFilter';
 import Pagination from '../components/Pagination/PaginationControls';
 import FixedCostForm from '../components/FixedCostForm/FixedCostForm';
 import FixedCostList from '../components/FixedCostList/FixedCostList';
-import { FixedCost } from '../../types/common.d';
+import { FixedCost } from '../../types/common';
 import { fetchCategories } from '../services/categoriesService';
 import { normalizeFixedCosts } from '../../utils/normalizers';
 import { useTranslation } from 'react-i18next';

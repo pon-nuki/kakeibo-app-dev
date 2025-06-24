@@ -1,5 +1,5 @@
 // src/renderer/services/graphsService.ts
-import { CategorySummary, MonthlySpending, BudgetVsActual } from '../../types/common.d';
+import { CategorySummary, MonthlySpending, BudgetVsActual } from '../../types/common';
 
 const isDev = process.env.NODE_ENV === 'development';
 

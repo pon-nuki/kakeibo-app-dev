@@ -1,4 +1,4 @@
-import { Expense } from '../../../types/common.d';
+import { Expense } from '../../../types/common';
 
 export interface ExpenseListProps {
   filteredExpenses: Expense[];
