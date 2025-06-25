@@ -736,3 +736,21 @@ app.post('/import/csv', upload.single('file'), (req, res) => {
     res.json({ message: 'インポート成功', output: stdout });
   });
 });
+
+// shopping_history.jsonのパス
+const shoppingHistoryPath = path.join(__dirname, 'shopping_history.json');
+
+// 支出傾向履歴取得エンドポイント
+app.get('/shopping-history', (req, res) => {
+  try {
+    if (!fs.existsSync(shoppingHistoryPath)) {
+      return res.json([]); // ファイルがなければ空配列を返す
+    }
+    const data = fs.readFileSync(shoppingHistoryPath, 'utf-8');
+    const parsed = JSON.parse(data);
+    res.json(parsed);
+  } catch (err) {
+    console.error('支出傾向履歴取得エラー:', err.message);
+    res.status(500).json({ error: '支出傾向履歴の取得に失敗しました' });
+  }
+});

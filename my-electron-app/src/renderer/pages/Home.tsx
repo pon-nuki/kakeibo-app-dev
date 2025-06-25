@@ -13,6 +13,7 @@ import { fetchFixedCosts } from '../services/fixedCostService';
 import FixedCostSummary from '../components/FixedCostSummary/FixedCostSummary';
 import { useTranslation } from 'react-i18next';
 import CurrencyAmount from '../components/CurrencyAmount/CurrencyAmount';
+import{ ShoppingHistoryItem } from '../../types/shoppingHistoryItem';
 
 const Home: React.FC = () => {
   const allowedCurrencies = ['JPY', 'USD', 'RUB'] as const;
@@ -34,6 +35,22 @@ const Home: React.FC = () => {
   const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [fixedCosts, setFixedCosts] = useState<FixedCost[]>([]);
+  const [shoppingHistory, setShoppingHistory] = useState<ShoppingHistoryItem[]>([]);
+
+  useEffect(() => {
+    const loadShoppingHistory = async () => {
+      try {
+        const data = await window.electron.getShoppingHistory();
+        if (data) {
+          setShoppingHistory(data);
+        }
+      } catch (err) {
+        console.error('支出傾向履歴の読み込みに失敗:', err);
+      }
+    };
+
+    loadShoppingHistory();
+  }, []);
 
   const fetchAndSetFixedCosts = async () => {
     try {
@@ -237,6 +254,25 @@ const Home: React.FC = () => {
           currency={currency}
         />
       </Box>
+      {shoppingHistory.length > 0 && (
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            支出傾向のある閲覧履歴（最近のもの）
+          </Typography>
+          <ul style={{ paddingLeft: 16 }}>
+            {shoppingHistory.slice(0, 5).map((item, index) => (
+              <li key={index} style={{ marginBottom: 8 }}>
+                <Typography variant="body2" color="textSecondary">
+                  {new Date(item.visited).toLocaleString()}
+                </Typography>
+                <Typography variant="body1">
+                  {item.title}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        </Box>
+      )}
     </div>
   );
 };

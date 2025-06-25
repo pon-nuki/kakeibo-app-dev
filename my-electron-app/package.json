@@ -26,6 +26,7 @@
       "dist/**/*",
       "server.js",
       "icon.ico",
+      "python/**",
       {
         "from": "resources/exporter.exe",
         "to": "resources/exporter.exe",

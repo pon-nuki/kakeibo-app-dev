@@ -625,5 +625,22 @@ ipcMain.handle('select-csv-file', async () => {
   return result.filePaths[0];
 });
 
+ipcMain.handle('get-shopping-history', async () => {
+  try {
+    const filePath = path.join(app.getAppPath(), 'python', 'shopping_history.json');
+
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, 'utf-8');
+      return JSON.parse(content);
+    } else {
+      console.warn('shopping_history.json が見つかりません');
+      return [];
+    }
+  } catch (error) {
+    console.error('shopping_history.json の読み込み失敗:', error);
+    return [];
+  }
+});
+
 // アプリケーション開始
 initializeApp();

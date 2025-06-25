@@ -1,5 +1,6 @@
 // src/renderer/electron.d.ts
 import { Expense, FixedCost, DeleteResult, Category } from '../types/common';
+import { ShoppingHistoryItem } from '../types/shoppingHistoryItem';
 
 declare global {
   interface Window {
@@ -59,6 +60,9 @@ declare global {
 
       // CSVファイル選択ダイアログ
       selectCsvFile: () => Promise<string>;
+
+      // 支出傾向
+      getShoppingHistory: () => Promise<ShoppingHistoryItem[]>;
     };
   }
 }

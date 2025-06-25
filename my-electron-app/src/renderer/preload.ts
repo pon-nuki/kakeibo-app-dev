@@ -112,6 +112,9 @@ try {
 
     // CSVファイル選択ダイアログ
     selectCsvFile: () => ipcRenderer.invoke('select-csv-file'),
+
+    // 支出傾向
+    getShoppingHistory: () => ipcRenderer.invoke('get-shopping-history'),
   });
 
   console.log("preload.ts 完了");
