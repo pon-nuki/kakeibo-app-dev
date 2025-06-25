@@ -122,11 +122,13 @@ Planned Features:
 
 ## Tech Stack / 技術構成 / Технологии
 
-- React + TypeScript
+- React
+- TypeScript
 - Electron
 - Node.js
 - SQLite
 - Go
+- Python
 - MUI
 - Chart.js
 
@@ -166,6 +168,9 @@ my-electron-app/
 │  ├─ importer.go
 │  ├─ go.mod
 │  └─ go.sum
+├─ python/
+│  ├─ history_analyzer.py
+│  └─ shopping_history.json
 ├─ resources/
 │  ├─ exporter.exe
 │  └─ importer.exe
