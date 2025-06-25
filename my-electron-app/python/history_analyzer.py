@@ -8,8 +8,8 @@ import json
 from urllib.parse import urlparse
 from collections import Counter
 
-# 出力を Shift_JIS に変換（Windowsのcmd向け）
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='cp932')
+# 出力をutf-8にする
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 def get_browser_history_paths(base_dir_name, browser_name):
     """
