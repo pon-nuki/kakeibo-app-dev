@@ -148,6 +148,7 @@ Planned Features:
 - Go
 - Python
 - C
+- CSS
 - MUI
 - Chart.js
 
