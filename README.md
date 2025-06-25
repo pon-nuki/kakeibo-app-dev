@@ -46,6 +46,24 @@ Amazon や楽天など、ショッピング系サイトの閲覧履歴をロー�
 ※ Весь анализ выполняется **локально**, **ничего не отправляется во внешние сети**. Ваша конфиденциальность полностью защищена.
 
 ---
+### Database Auto-Backup / 自動DBバックアップ / Автоматическое резервное копирование БД
+
+**🇬🇧 English**  
+The app automatically backs up your local database once per day (on first launch).  
+The backup system is written in lightweight **C language** for fast and direct file operations, ensuring high performance and reliability.  
+Backups are stored locally in the `AppData/Roaming/kakeibo/backup` folder and rotated after 30 days.
+
+**🇯🇵 日本語**  
+本アプリでは、初回起動時に **ローカルのデータベースを自動でバックアップ** します（1日1回）。  
+バックアップ機能は軽量で高速な **C言語** によって実装されており、直接ファイル操作を行うことで、高い信頼性とパフォーマンスを実現しています。  
+バックアップは `AppData/Roaming/kakeibo/backup` フォルダに保存され、30日後に自動削除されます。
+
+**🇷🇺 Русский**  
+Приложение автоматически создает резервную копию локальной базы данных один раз в день (при первом запуске).  
+Механизм резервного копирования реализован на **языке C** — это обеспечивает высокую скорость и надежность благодаря прямому управлению файлами.  
+Резервные копии хранятся локально в папке `AppData/Roaming/kakeibo/backup` и удаляются через 30 дней.
+
+---
 
 
 ## Screenshots / スクリーンショット / Скриншоты
