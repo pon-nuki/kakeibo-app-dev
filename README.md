@@ -1,5 +1,53 @@
 # Kakeibo App (In Development)
 
+> Elevate your finances, ignite your future — a budgeting app like no other!  
+> 収支を爆上げ！未来を変える家計簿、ここに誕生！  
+> Поднимите финансы и зажгите будущее — уникальное приложение для бюджета!
+
+---
+
+###  Extended Intro / イントロ追加 / Расширенное вступление
+
+**🇬🇧 English**  
+Tired of managing your finances? That era is over.  
+With this single app, you can track your spending, set your budget, visualize your trends, and even reflect through journaling — all in one place.  
+Powered by blazing-fast Go in the backend, smart Python analysis, and a snappy UI built with modern React + TypeScript.  
+Local-first. No cloud. No worries.
+
+**🇯🇵 日本語**  
+ 家計管理、めんどくさい？もうそんな時代は終わりです。  
+このアプリひとつで「収支の記録」「予算の把握」「グラフで可視化」「日記で気持ちの整理」――全部できる！  
+しかもバックエンドには爆速の Go、分析には賢い Python、UI は最新の React + TypeScript。サクサク快適！  
+PC だけで完結。クラウド不要。完全ローカル＆安心設計！
+
+**🇷🇺 Русский**  
+ Устали от сложного управления финансами? Это в прошлом.  
+Это приложение объединяет всё: учёт расходов, контроль бюджета, наглядные графики и даже дневник для отражения мыслей.  
+Скоростной Go на бэкенде, умный Python для анализа и современный интерфейс на React + TypeScript.  
+Всё локально. Без облаков. Без стресса.
+
+---
+
+## 支出傾向分析 / Shopping Trend Analysis / Анализ расходов
+
+**English**  
+The app can locally analyze your browsing history to detect potential shopping-related visits (e.g., Amazon, Rakuten).  
+This helps you identify hidden spending habits and manage your budget better.  
+※ All analysis is performed **locally** and **never sent externally**. Your privacy is 100% respected.
+
+**日本語**  
+Amazon や楽天など、ショッピング系サイトの閲覧履歴をローカルで分析して「支出傾向」を可視化します。  
+知らず知らずの出費を把握して、よりよい予算管理へ。  
+※ **すべての処理はローカルで実行**され、**外部に送信されることは一切ありません**。プライバシーは完全に保護されます。
+
+**Русский**  
+Приложение может локально анализировать вашу историю просмотров, чтобы выявить посещения сайтов покупок (например, Amazon, Rakuten).  
+Это помогает понять скрытые расходы и лучше управлять бюджетом.  
+※ Весь анализ выполняется **локально**, **ничего не отправляется во внешние сети**. Ваша конфиденциальность полностью защищена.
+
+---
+
+
 ## Screenshots / スクリーンショット / Скриншоты
 
 ### Personal Budget / 家計簿 / Личный бюджет
@@ -48,60 +96,54 @@
 
 ## Overview / 概要 / Обзор
 
-**Kakeibo App** is a personal budgeting application built with **React**, **Electron**, **TypeScript**, **Node.js**, and **SQLite**.
+**Kakeibo App** is a personal budgeting application built with React, Electron, TypeScript, Node.js, Go, and SQLite.
 
-* *English*: A simple, effective tool for tracking income and expenses.
-* *日本語*: 収支を簡単に記録・管理できる家計簿アプリです。
-* *Русский*: Простое приложение для ведения личного бюджета.
+- English: A power-packed budgeting app that grows with your lifestyle.
+- 日本語: 支出管理を爆上げ！誰でも使える多機能家計簿アプリ。
+- Русский: Лёгкий и мощный способ управлять своими финансами с удовольствием.
 
 ---
 
 ## Development Status / 開発状況 / Статус разработки
 
-* Basic expense tracking implemented
-* Fixed cost registration
-* Diary feature
-* Monthly budget comparison
-* Graph-based analytics
-* Configurable settings
+- Expense tracking with performance-focused input
+- Recurring costs with flexible scheduling
+- Multi-language journal with mood and tags
+- Monthly budget goals with visual graphs
+- Graph-based insights and breakdowns
+- Fully configurable settings screen
 
-Planned features:
-
-* Export options (CSV, PDF)
-* Password protection
-* Cloud sync (TBD)
+Planned Features:
+- CSV & PDF export/import
+- Secure password login
+- Optional cloud sync for backups
 
 ---
 
 ## Tech Stack / 技術構成 / Технологии
 
-* React
-* Electron
-* TypeScript
-* Node.js
-* SQLite
-* MUI (Material UI)
-* Chart.js
-* Go
+- React
+- TypeScript
+- Electron
+- Node.js
+- SQLite
+- Go
+- Python
+- MUI
+- Chart.js
 
 ---
 
 ## Installation / インストール方法 / Установка
 
 ```bash
-# Clone the repository / リポジトリをクローン / Клонируйте репозиторий
-$ git clone https://github.com/pon-nuki/kakeibo-app-dev.git
-$ cd my-electron-app
-
-# Install dependencies / 依存関係のインストール / Установка зависимостей
-$ npm install
-
-# Start the application (for development) / アプリを起動（開発用） / Запуск приложения (для разработки)
-$ npm run build
-$ npm run start
-
-# For production build (if packaging) / 本番ビルド（パッケージ化する場合） / Сборка для продакшн (при упаковке)
-$ npm run package
+git clone https://github.com/pon-nuki/kakeibo-app-dev.git
+cd my-electron-app
+npm install
+npm run build
+npm run start
+# パッケージ化する場合
+npm run package
 ```
 
 ---
@@ -110,32 +152,35 @@ $ npm run package
 
 ```
 my-electron-app/
-├─ dist/               # Production build / 本番ビルド / Продакшн сборка
-├─ public/             # Static files / 静的ファイル / Статические файлы
+├─ dist/
+├─ public/
 ├─ src/
-│  ├─ main/            # Electron main process / Electronメインプロセス / Главный процесс
-│  ├─ renderer/        # React frontend / Reactフロントエンド / Интерфейс
-│  ├─ services/        # Business logic / ビジネスロジック / Логика приложения
-│  ├─ pages/           # UI pages / 画面ページ / Страницы интерфейса
-│  └─ components/      # UI components / UIコンポーネント / Компоненты
-├─ go-csv-exporter/    # CSV exporter in Go / Go言語CSVエクスポート / CSV-экспортер на Go
-│  ├─ exporter.go      # Main export logic / エクスポートロジック / Основная логика
-│  ├─ go.mod           # Go module config / Goモジュール設定 / Конфигурация модуля Go
-│  └─ go.sum           # Module checksums / モジュールチェックサム / Контрольные суммы
-├─ go-csv-importer/    # CSV importer in Go / Go言語CSVインポート / CSV-импортёр на Go
-│  ├─ importer.go      # Main import logic / インポートロジック / Основная логика
-│  ├─ go.mod           # Go module config / Goモジュール設定 / Конфигурация модуля Go
-│  └─ go.sum           # Module checksums / モジュールチェックサム / Контрольные суммы
-├─ resources/          # Static executables / exe等の配置 / Внешние ресурсы
-│  ├─ exporter.exe     # Production-ready Go exporter / 本番用Goエクスポーター / Готовый экспортёр
-│  └─ importer.exe     # Production-ready Go importer / 本番用Goインポーター / Готовый импортёр
-├─ server.js           # Express backend / バックエンド / Сервер Express
-├─ webpack.config.js   # Webpack configuration
-└─ package.json        # Scripts and dependencies
+│  ├─ main/
+│  ├─ renderer/
+│  ├─ services/
+│  ├─ pages/
+│  └─ components/
+├─ go-csv-exporter/
+│  ├─ exporter.go
+│  ├─ go.mod
+│  └─ go.sum
+├─ go-csv-importer/
+│  ├─ importer.go
+│  ├─ go.mod
+│  └─ go.sum
+├─ python/
+│  ├─ history_analyzer.py
+│  └─ shopping_history.json
+├─ resources/
+│  ├─ exporter.exe
+│  └─ importer.exe
+├─ server.js
+├─ webpack.config.js
+└─ package.json
 ```
 
 ---
 
 ## License / ライセンス / Лицензия
 
-[MIT](./LICENSE)
+MIT License
