@@ -24,3 +24,5 @@ package-lock.json
 /release
 /dist-tsc
 /go-csv-exporter/exporter.exe
+/python/build/*
+/python/history_analyzer.spec
