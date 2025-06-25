@@ -66,7 +66,6 @@ Backups are stored locally in the `AppData/Roaming/kakeibo/backup` folder and ro
 
 ---
 
-
 ## Screenshots / スクリーンショット / Скриншоты
 
 ### Personal Budget / 家計簿 / Личный бюджет
