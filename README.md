@@ -189,8 +189,7 @@ my-electron-app/
 │  ├─ go.mod
 │  └─ go.sum
 ├─ python/
-│  ├─ history_analyzer.py
-│  └─ shopping_history.json
+│  └─ history_analyzer.py
 ├─ resources/
 │  ├─ exporter.exe
 │  ├─ importer.exe
