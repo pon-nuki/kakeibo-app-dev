@@ -1,30 +1,31 @@
-@echo off
+ï»¿@echo off
+chcp 65001 >nul
 setlocal
 
-echo === C: db_backup.exe ƒrƒ‹ƒh ===
+echo === C: db_backup.exe ãƒ“ãƒ«ãƒ‰ ===
 cd /d c-backup-tool
 gcc -o db_backup.exe db_backup.c
 if errorlevel 1 exit /b 1
 copy /Y db_backup.exe ..\resources\
 
-echo === Python: history_analyzer.exe ƒrƒ‹ƒh ===
+echo === Python: history_analyzer.exe ãƒ“ãƒ«ãƒ‰ ===
 cd /d ..\python
 pyinstaller --onefile history_analyzer.py --distpath dist
 if errorlevel 1 exit /b 1
 copy /Y dist\history_analyzer.exe ..\resources\
 
-echo === Go: exporter.exe ƒrƒ‹ƒh ===
+echo === Go: exporter.exe ãƒ“ãƒ«ãƒ‰ ===
 cd /d ..\go-csv-exporter
 go build -o exporter.exe exporter.go
 if errorlevel 1 exit /b 1
 copy /Y exporter.exe ..\resources\
 
-echo === Go: importer.exe ƒrƒ‹ƒh ===
+echo === Go: importer.exe ãƒ“ãƒ«ãƒ‰ ===
 cd /d ..\go-csv-importer
 go build -o importer.exe importer.go
 if errorlevel 1 exit /b 1
 copy /Y importer.exe ..\resources\
 
-echo === Š®—¹ ===
+echo === å®Œäº† ===
 endlocal
 pause
