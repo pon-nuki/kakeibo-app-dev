@@ -1,6 +1,5 @@
 # 行動規範（Code of Conduct）
 
-- [日本語](./CODE_OF_CONDUCT.md)
 - [English](./CODE_OF_CONDUCT.en.md)
 - [Русский](./CODE_OF_CONDUCT.ru.md)
 
