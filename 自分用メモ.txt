@@ -43,3 +43,5 @@ del package-lock.json
 rmdir /s /q dist
 rmdir /s /q dist-tsc
 npm install
+
+C、Python、Goをビルドしたいときはmy-electron-app/build-all.batを叩く
