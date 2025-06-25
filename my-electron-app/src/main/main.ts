@@ -538,29 +538,21 @@ ipcMain.handle('insertDefaultSettings', async () => {
   }
 });
 
+const isDev = !app.isPackaged;
+
 // CSVエクスポート
 ipcMain.handle('export-csv', async () => {
-  const isDev = !app.isPackaged;
-
-  const goScriptDir = isDev
-    ? path.join(__dirname, '../../go-csv-exporter')
-    : process.resourcesPath;
-
-  const executablePath = isDev
-    ? 'go'
-    : path.join(goScriptDir, 'exporter.exe');
+  const exePath = isDev
+    ? path.join(__dirname, '../../resources/exporter.exe')
+    : path.join(process.resourcesPath, 'exporter.exe');
 
   return new Promise((resolve, reject) => {
-    const args = isDev ? ['run', 'exporter.go'] : [];
-
-    const child = spawn(executablePath, args, {
-      cwd: goScriptDir,
-      env: { ...process.env, CGO_ENABLED: '1' }
+    const child = spawn(exePath, [], {
+      cwd: path.dirname(exePath),
+      env: { ...process.env }
     });
 
-    let output = '';
-    let error = '';
-
+    let output = '', error = '';
     child.stdout.on('data', (data) => (output += data));
     child.stderr.on('data', (data) => (error += data));
 
@@ -578,27 +570,17 @@ ipcMain.handle('export-csv', async () => {
 
 // CSVインポート
 ipcMain.handle('import-csv', async (_event, filePath: string) => {
-  const isDev = !app.isPackaged;
-
-  const goScriptDir = isDev
-    ? path.join(__dirname, '../../go-csv-importer')
-    : process.resourcesPath;
-
-  const executablePath = isDev
-    ? 'go'
-    : path.join(goScriptDir, 'importer.exe');
-
-  const args = isDev ? ['run', 'importer.go', filePath] : [filePath];
+  const exePath = isDev
+    ? path.join(__dirname, '../../resources/importer.exe')
+    : path.join(process.resourcesPath, 'importer.exe');
 
   return new Promise((resolve, reject) => {
-    const child = spawn(executablePath, args, {
-      cwd: goScriptDir,
-      env: { ...process.env, CGO_ENABLED: '1' }
+    const child = spawn(exePath, [filePath], {
+      cwd: path.dirname(exePath),
+      env: { ...process.env }
     });
 
-    let output = '';
-    let error = '';
-
+    let output = '', error = '';
     child.stdout.on('data', (data) => (output += data));
     child.stderr.on('data', (data) => (error += data));
 
@@ -619,22 +601,16 @@ ipcMain.handle('select-csv-file', async () => {
   const result = await dialog.showOpenDialog({
     title: 'CSVファイルを選択',
     properties: ['openFile'],
-    filters: [{ name: 'CSV Files', extensions: ['csv'] }],
+    filters: [{ name: 'CSV Files', extensions: ['csv'] }]
   });
 
-  if (result.canceled || result.filePaths.length === 0) {
-    return '';
-  }
-
-  return result.filePaths[0];
+  return result.canceled || result.filePaths.length === 0 ? '' : result.filePaths[0];
 });
 
+// 閲覧履歴取得（Python）
 ipcMain.handle('get-shopping-history', async () => {
   try {
-    const isDev = !app.isPackaged;
-    const userDataPath = app.getPath('userData');
-    const jsonPath = path.join(userDataPath, 'shopping_history.json');
-
+    const jsonPath = path.join(app.getPath('userData'), 'shopping_history.json');
     const exePath = isDev
       ? path.join(__dirname, '../../resources/history_analyzer.exe')
       : path.join(process.resourcesPath, 'history_analyzer.exe');
@@ -642,15 +618,10 @@ ipcMain.handle('get-shopping-history', async () => {
     if (fs.existsSync(exePath)) {
       console.log('[Python exe実行] 開始:', exePath);
       await new Promise<void>((resolve, reject) => {
-        const proc = spawn(exePath);
+        const proc = spawn(exePath, [], { cwd: path.dirname(exePath) });
 
-        proc.stdout.on('data', (data) => {
-          console.log('[Python stdout]', data.toString());
-        });
-
-        proc.stderr.on('data', (data) => {
-          console.error('[Python stderr]', data.toString());
-        });
+        proc.stdout.on('data', (data) => console.log('[Python stdout]', data.toString()));
+        proc.stderr.on('data', (data) => console.error('[Python stderr]', data.toString()));
 
         proc.on('close', (code) => {
           console.log('[Python 終了コード]', code);
@@ -664,7 +635,6 @@ ipcMain.handle('get-shopping-history', async () => {
       });
     }
 
-    // JSONファイルを読み込む
     if (fs.existsSync(jsonPath)) {
       const content = fs.readFileSync(jsonPath, 'utf-8');
       return JSON.parse(content);
@@ -678,16 +648,14 @@ ipcMain.handle('get-shopping-history', async () => {
   }
 });
 
-
+// DB自動バックアップ
 ipcMain.handle('run-db-backup', async () => {
   try {
-    const isDev = !app.isPackaged;
     const exePath = isDev
-      ? path.join(__dirname, '../../c-backup-tool/db_backup.exe')
+      ? path.join(__dirname, '../../resources/db_backup.exe')
       : path.join(process.resourcesPath, 'db_backup.exe');
 
     console.log('[Backup] 実行ファイルパス:', exePath);
-
     if (!fs.existsSync(exePath)) {
       throw new Error(`[Backup] 実行ファイルが存在しません: ${exePath}`);
     }
@@ -695,19 +663,12 @@ ipcMain.handle('run-db-backup', async () => {
     return new Promise((resolve, reject) => {
       const child = spawn(exePath, [], {
         cwd: path.dirname(exePath),
-        windowsHide: true,
+        windowsHide: true
       });
 
-      let output = '';
-      let errorOutput = '';
-
-      child.stdout.on('data', (data) => {
-        output += data.toString();
-      });
-
-      child.stderr.on('data', (data) => {
-        errorOutput += data.toString();
-      });
+      let output = '', errorOutput = '';
+      child.stdout.on('data', (data) => (output += data.toString()));
+      child.stderr.on('data', (data) => (errorOutput += data.toString()));
 
       child.on('close', (code) => {
         if (code === 0) {
