@@ -1,8 +1,5 @@
 # 行動規範（Code of Conduct）
 
-- [English](./CODE_OF_CONDUCT.en.md)
-- [Русский](./CODE_OF_CONDUCT.ru.md)
-
 私たちは、安心・尊重・誠実を大切にしながらソフトウェア開発に取り組みます。
 
 ## 私の行動指針
