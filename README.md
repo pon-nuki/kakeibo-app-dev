@@ -28,6 +28,25 @@ PC だけで完結。クラウド不要。完全ローカル＆安心設計！
 
 ---
 
+## 支出傾向分析 / Shopping Trend Analysis / Анализ расходов
+
+**English**  
+The app can locally analyze your browsing history to detect potential shopping-related visits (e.g., Amazon, Rakuten).  
+This helps you identify hidden spending habits and manage your budget better.  
+※ All analysis is performed **locally** and **never sent externally**. Your privacy is 100% respected.
+
+**日本語**  
+Amazon や楽天など、ショッピング系サイトの閲覧履歴をローカルで分析して「支出傾向」を可視化します。  
+知らず知らずの出費を把握して、よりよい予算管理へ。  
+※ **すべての処理はローカルで実行**され、**外部に送信されることは一切ありません**。プライバシーは完全に保護されます。
+
+**Русский**  
+Приложение может локально анализировать вашу историю просмотров, чтобы выявить посещения сайтов покупок (например, Amazon, Rakuten).  
+Это помогает понять скрытые расходы и лучше управлять бюджетом.  
+※ Весь анализ выполняется **локально**, **ничего не отправляется во внешние сети**. Ваша конфиденциальность полностью защищена.
+
+---
+
 
 ## Screenshots / スクリーンショット / Скриншоты
 
