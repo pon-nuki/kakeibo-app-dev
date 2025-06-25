@@ -19,7 +19,11 @@ export const runDatabaseBackupIfNeeded = async () => {
       return;
     }
 
-    const exePath = path.join(__dirname, '../../c-backup-tool/db_backup.exe');
+    const isDev = !app.isPackaged;
+    const exePath = isDev
+      ? path.join(__dirname, '../../c-backup-tool/db_backup.exe')
+      : path.join(process.resourcesPath, 'db_backup.exe');
+
     const backupDir = path.join(app.getPath('userData'), 'backup');
     const dbPath = path.join(app.getPath('userData'), 'expenses.db');
 
@@ -27,8 +31,11 @@ export const runDatabaseBackupIfNeeded = async () => {
       fs.mkdirSync(backupDir, { recursive: true });
     }
 
-    console.log(`[Backup] バックアップ開始: ${today}`);
+    console.log('[Backup] バックアップ開始:', today);
+    console.log('[Backup] 実行ファイル:', exePath);
+
     await execFileAsync(exePath, [dbPath, backupDir]);
+
     await setSetting('lastBackupDate', today);
 
     // 古いバックアップ（30日以上前）を削除
