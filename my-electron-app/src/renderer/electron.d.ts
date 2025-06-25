@@ -63,6 +63,9 @@ declare global {
 
       // 支出傾向
       getShoppingHistory: () => Promise<ShoppingHistoryItem[]>;
+
+      // DBバックアップ
+      runDbBackup: () => Promise<string>;
     };
   }
 }

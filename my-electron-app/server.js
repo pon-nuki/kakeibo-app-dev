@@ -3,7 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const { exec } = require('child_process');
+const { exec, execFile } = require('child_process');
 const app = express();
 const port = 3000;
 const multer = require('multer');
@@ -753,4 +753,19 @@ app.get('/shopping-history', (req, res) => {
     console.error('支出傾向履歴取得エラー:', err.message);
     res.status(500).json({ error: '支出傾向履歴の取得に失敗しました' });
   }
+});
+
+// DBバックアップAPI
+app.post('/backup/database', (req, res) => {
+  const backupExePath = path.join(__dirname, 'c-backup-tool', 'db_backup.exe');
+
+  execFile(backupExePath, (error, stdout, stderr) => {
+    if (error) {
+      console.error('バックアップ実行エラー:', stderr);
+      return res.status(500).json({ error: 'バックアップに失敗しました', detail: stderr });
+    }
+
+    console.log('バックアップ成功:', stdout);
+    res.json({ message: 'バックアップ成功', output: stdout });
+  });
 });

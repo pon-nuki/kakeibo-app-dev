@@ -7,7 +7,8 @@ import cron from 'node-cron';
 import { registerFixedCosts } from './services/autoRegister';
 import { getUpcomingFixedCostNotifications } from './services/notificationService';
 import { Notification } from 'electron';
-import { spawn } from 'child_process';
+import { spawn, execFile } from 'child_process';
+import { runDatabaseBackupIfNeeded } from './dbBackup';
 import { fetchExpenses,
           addExpense,
           deleteExpense,
@@ -45,6 +46,9 @@ const initializeApp = async () => {
   try {
     await initializeDatabase();
     console.log('データベース初期化完了');
+
+    // DBバックアップを実行
+    await runDatabaseBackupIfNeeded();
 
     // 言語と通貨の初期設定はここでは行わない
     const initialized = await getSettingValue('initialized');
@@ -639,6 +643,31 @@ ipcMain.handle('get-shopping-history', async () => {
   } catch (error) {
     console.error('shopping_history.json の読み込み失敗:', error);
     return [];
+  }
+});
+
+ipcMain.handle('run-db-backup', async () => {
+  try {
+  const isDev = !app.isPackaged;
+
+  const exePath = isDev
+    ? path.join(__dirname, '../../c-backup-tool/db_backup.exe')
+    : path.join(process.resourcesPath, 'db_backup.exe');
+
+    return new Promise((resolve, reject) => {
+      execFile(exePath, (error, stdout, stderr) => {
+        if (error) {
+          console.error('バックアップ失敗:', stderr);
+          reject(stderr);
+        } else {
+          console.log('バックアップ成功:', stdout);
+          resolve(stdout);
+        }
+      });
+    });
+  } catch (err) {
+    console.error('実行エラー:', err);
+    throw err;
   }
 });
 

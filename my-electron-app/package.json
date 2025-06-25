@@ -27,15 +27,20 @@
       "server.js",
       "icon.ico",
       "python/**",
+      "resources/db_backup.exe",
       {
         "from": "resources/exporter.exe",
         "to": "resources/exporter.exe",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       },
       {
         "from": "resources/importer.exe",
         "to": "resources/importer.exe",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       }
     ],
     "extraResources": [
@@ -99,6 +104,7 @@
     "chart.js": "^4.4.9",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
     "dompurify": "^3.2.6",
     "highlight.js": "^11.11.1",
     "i18next": "^25.2.1",

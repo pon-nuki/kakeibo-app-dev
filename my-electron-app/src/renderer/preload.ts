@@ -115,6 +115,9 @@ try {
 
     // 支出傾向
     getShoppingHistory: () => ipcRenderer.invoke('get-shopping-history'),
+
+    // DBバックアップ
+    runDbBackup: () => ipcRenderer.invoke('run-db-backup'),
   });
 
   console.log("preload.ts 完了");
