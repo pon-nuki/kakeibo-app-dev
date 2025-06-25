@@ -27,7 +27,13 @@
       "server.js",
       "icon.ico",
       "python/**",
-      "resources/db_backup.exe",
+      {
+        "from": "resources/db_backup.exe",
+        "to": "resources/db_backup.exe",
+        "filter": [
+          "**/*"
+        ]
+      },
       {
         "from": "resources/exporter.exe",
         "to": "resources/exporter.exe",
@@ -51,6 +57,10 @@
       {
         "from": "resources/importer.exe",
         "to": "importer.exe"
+      },
+      {
+        "from": "resources/db_backup.exe",
+        "to": "db_backup.exe"
       }
     ],
     "directories": {

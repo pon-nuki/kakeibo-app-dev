@@ -7,7 +7,7 @@ import cron from 'node-cron';
 import { registerFixedCosts } from './services/autoRegister';
 import { getUpcomingFixedCostNotifications } from './services/notificationService';
 import { Notification } from 'electron';
-import { spawn, execFile } from 'child_process';
+import { spawn } from 'child_process';
 import { runDatabaseBackupIfNeeded } from './dbBackup';
 import { fetchExpenses,
           addExpense,
@@ -646,27 +646,49 @@ ipcMain.handle('get-shopping-history', async () => {
   }
 });
 
+
 ipcMain.handle('run-db-backup', async () => {
   try {
-  const isDev = !app.isPackaged;
+    const isDev = !app.isPackaged;
+    const exePath = isDev
+      ? path.join(__dirname, '../../c-backup-tool/db_backup.exe')
+      : path.join(process.resourcesPath, 'db_backup.exe');
 
-  const exePath = isDev
-    ? path.join(__dirname, '../../c-backup-tool/db_backup.exe')
-    : path.join(process.resourcesPath, 'db_backup.exe');
+    console.log('[Backup] 実行ファイルパス:', exePath);
+
+    if (!fs.existsSync(exePath)) {
+      throw new Error(`[Backup] 実行ファイルが存在しません: ${exePath}`);
+    }
 
     return new Promise((resolve, reject) => {
-      execFile(exePath, (error, stdout, stderr) => {
-        if (error) {
-          console.error('バックアップ失敗:', stderr);
-          reject(stderr);
+      const child = spawn(exePath, [], {
+        cwd: path.dirname(exePath),
+        windowsHide: true,
+      });
+
+      let output = '';
+      let errorOutput = '';
+
+      child.stdout.on('data', (data) => {
+        output += data.toString();
+      });
+
+      child.stderr.on('data', (data) => {
+        errorOutput += data.toString();
+      });
+
+      child.on('close', (code) => {
+        if (code === 0) {
+          console.log('[Backup] バックアップ成功:', output.trim());
+          resolve({ message: 'バックアップ成功', output: output.trim() });
         } else {
-          console.log('バックアップ成功:', stdout);
-          resolve(stdout);
+          console.error('[Backup] バックアップ失敗:', errorOutput.trim());
+          reject(new Error(errorOutput.trim() || 'バックアップに失敗しました'));
         }
       });
     });
   } catch (err) {
-    console.error('実行エラー:', err);
+    console.error('[Backup] 実行エラー:', err);
     throw err;
   }
 });
