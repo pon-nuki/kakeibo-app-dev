@@ -19,7 +19,22 @@ const App: React.FC = () => {
     const checkInitialized = async () => {
       try {
         const result = await window.electron.getSetting('initialized');
-        setInitialized(result?.value === 'true');
+        const isInitialized = result?.value === 'true';
+        console.log('[起動] initialized =', result?.value);
+        setInitialized(isInitialized);
+
+        if (isInitialized) {
+          console.log('[起動] 初期化済み、履歴分析開始');
+          // 初期化済みなら履歴分析を実行
+          try {
+            const analysisResult = await window.electron.getShoppingHistory();
+            console.log('履歴分析実行結果:', analysisResult);
+          } catch (err) {
+            console.error('履歴分析エラー:', err);
+          }
+        } else {
+          console.log('[起動] 初期化されていないためスキップ');
+        }
       } catch {
         setInitialized(false);
       }

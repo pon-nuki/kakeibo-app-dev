@@ -108,10 +108,21 @@ if __name__ == "__main__":
         for domain, count in domain_counts[:5]:
             print(f"  {domain:<30} ... {count}回")
 
-        # JSONファイルに保存
+        # ElectronのuserData（APPDATA/kakeibo）に保存
         try:
-            with open("shopping_history.json", "w", encoding="utf-8") as f:
+            appdata = os.environ.get("APPDATA")  # Windows環境変数
+            if not appdata:
+                raise EnvironmentError("APPDATA 環境変数が見つかりません")
+
+            output_dir = os.path.join(appdata, "kakeibo")
+            os.makedirs(output_dir, exist_ok=True)
+
+            output_path = os.path.join(output_dir, "shopping_history.json")
+
+            with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(shopping_history, f, ensure_ascii=False, indent=2)
-            print("\nshopping_history.json に保存しました。")
+
+            print(f"\nshopping_history.json に保存しました → {output_path}")
         except Exception as e:
             print(f"JSON保存失敗: {e}")
+

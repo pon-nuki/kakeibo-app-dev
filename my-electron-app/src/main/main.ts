@@ -631,10 +631,42 @@ ipcMain.handle('select-csv-file', async () => {
 
 ipcMain.handle('get-shopping-history', async () => {
   try {
-    const filePath = path.join(app.getAppPath(), 'python', 'shopping_history.json');
+    const isDev = !app.isPackaged;
+    const userDataPath = app.getPath('userData');
+    const jsonPath = path.join(userDataPath, 'shopping_history.json');
 
-    if (fs.existsSync(filePath)) {
-      const content = fs.readFileSync(filePath, 'utf-8');
+    const exePath = isDev
+      ? path.join(__dirname, '../../resources/history_analyzer.exe')
+      : path.join(process.resourcesPath, 'history_analyzer.exe');
+
+    if (fs.existsSync(exePath)) {
+      console.log('[Python exe実行] 開始:', exePath);
+      await new Promise<void>((resolve, reject) => {
+        const proc = spawn(exePath);
+
+        proc.stdout.on('data', (data) => {
+          console.log('[Python stdout]', data.toString());
+        });
+
+        proc.stderr.on('data', (data) => {
+          console.error('[Python stderr]', data.toString());
+        });
+
+        proc.on('close', (code) => {
+          console.log('[Python 終了コード]', code);
+          resolve();
+        });
+
+        proc.on('error', (err) => {
+          console.error('[Python 実行エラー]', err);
+          reject(err);
+        });
+      });
+    }
+
+    // JSONファイルを読み込む
+    if (fs.existsSync(jsonPath)) {
+      const content = fs.readFileSync(jsonPath, 'utf-8');
       return JSON.parse(content);
     } else {
       console.warn('shopping_history.json が見つかりません');

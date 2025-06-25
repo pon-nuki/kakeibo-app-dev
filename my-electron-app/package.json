@@ -47,6 +47,13 @@
         "filter": [
           "**/*"
         ]
+      },
+      {
+        "from": "resources/history_analyzer.exe",
+        "to": "resources/history_analyzer.exe",
+        "filter": [
+          "**/*"
+        ]
       }
     ],
     "extraResources": [
@@ -61,6 +68,10 @@
       {
         "from": "resources/db_backup.exe",
         "to": "db_backup.exe"
+      },
+      {
+        "from": "resources/history_analyzer.exe",
+        "to": "history_analyzer.exe"
       }
     ],
     "directories": {
