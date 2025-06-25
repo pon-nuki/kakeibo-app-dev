@@ -4,6 +4,7 @@
   "description": "kakeibo Desktop",
   "main": "dist/main/main.js",
   "scripts": {
+    "prebuild": "cmd /c build-all.bat",
     "start": "concurrently \"npm run start:react\" \"npm run start:electron\" \"npm run start:backend\"",
     "start:react": "webpack serve --config webpack.config.js --mode development",
     "start:electron": "wait-on http://localhost:8080 && echo 'React app is ready!' && electron .",
