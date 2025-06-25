@@ -192,7 +192,12 @@ my-electron-app/
 │  └─ shopping_history.json
 ├─ resources/
 │  ├─ exporter.exe
-│  └─ importer.exe
+│  ├─ importer.exe
+│  └─ db_backup.exe
+├─ c-backup-tool/
+│  ├─ db_backup.c
+│  ├─ db_backup.exe
+│  └─ Makefile
 ├─ server.js
 ├─ webpack.config.js
 └─ package.json
