@@ -74,6 +74,59 @@ Backups are stored locally in the `AppData/Roaming/kakeibo/backup` folder and ro
 
 ---
 
+# 月末警告ツール（月末支出アラート）
+
+## 🇯🇵 日本語
+
+このアプリには、月末が近づくと支出を警告する **Rust製ツール（`month_end_alert.exe`）** が組み込まれています。
+
+### 概要
+
+- 月末まで **5日以内** になると、アプリ起動時に **警告メッセージ** を表示します。
+- Rustで月末までの日数を計算し、通知用の `.txt` を生成します。
+- Electronがこの `.txt` を読み取り、警告が必要な場合はモーダルで表示します。
+
+### 注意点
+
+- 出力ファイルパス（本番）: `%APPDATA%/kakeibo/month_end_alert.txt`
+- 開発時は `resources/month_end_alert.txt` に出力されます。
+
+---
+
+## 🇺🇸 English
+
+This app includes a **Rust-based tool (`month_end_alert.exe`)** that alerts users when the end of the month is approaching.
+
+### Overview
+
+- When there are **5 days or fewer** left in the month, the app shows a **warning message** at startup.
+- A small Rust program calculates the remaining days and creates a `.txt` file with a message.
+- Electron reads that file and shows the alert in a modal if necessary.
+
+### Notes
+
+- Output file path (production): `%APPDATA%/kakeibo/month_end_alert.txt`
+- In development, the output goes to `resources/month_end_alert.txt`.
+
+---
+
+## 🇷🇺 Русский
+
+Это приложение включает в себя инструмент на Rust (`month_end_alert.exe`), который предупреждает пользователя о приближении конца месяца.
+
+### Описание
+
+- Если до конца месяца остаётся **5 дней или меньше**, при запуске приложения появится **предупреждающее сообщение**.
+- Программа на Rust рассчитывает оставшиеся дни и записывает сообщение в `.txt` файл.
+- Electron читает этот файл и показывает модальное предупреждение при необходимости.
+
+### Примечания
+
+- Путь к файлу (в продакшене): `%APPDATA%/kakeibo/month_end_alert.txt`
+- В режиме разработки файл создаётся в `resources/month_end_alert.txt`.
+
+---
+
 ## Screenshots / スクリーンショット / Скриншоты
 
 ### Personal Budget / 家計簿 / Личный бюджет
@@ -157,6 +210,7 @@ Planned Features:
 - Python
 - C
 - CSS
+- Rust
 - MUI
 - Chart.js
 
@@ -183,29 +237,35 @@ my-electron-app/
 ├─ dist/
 ├─ public/
 ├─ src/
-│  ├─ main/
-│  ├─ renderer/
-│  ├─ services/
-│  ├─ pages/
-│  └─ components/
+│ ├─ main/
+│ ├─ renderer/
+│ ├─ services/
+│ ├─ pages/
+│ └─ components/
 ├─ go-csv-exporter/
-│  ├─ exporter.go
-│  ├─ go.mod
-│  └─ go.sum
+│ ├─ exporter.go
+│ ├─ go.mod
+│ └─ go.sum
 ├─ go-csv-importer/
-│  ├─ importer.go
-│  ├─ go.mod
-│  └─ go.sum
+│ ├─ importer.go
+│ ├─ go.mod
+│ └─ go.sum
 ├─ python/
-│  └─ history_analyzer.py
+│ └─ history_analyzer.py
+├─ rust-month-end-alert/
+│ ├─ src/
+│ │ └─ main.rs
+│ ├─ Cargo.toml
+│ └─ Cargo.lock
 ├─ resources/
-│  ├─ exporter.exe
-│  ├─ importer.exe
-│  └─ db_backup.exe
+│ ├─ exporter.exe
+│ ├─ importer.exe
+│ ├─ db_backup.exe
+│ └─ month_end_alert.exe
 ├─ c-backup-tool/
-│  ├─ db_backup.c
-│  ├─ db_backup.exe
-│  └─ Makefile
+│ ├─ db_backup.c
+│ ├─ db_backup.exe
+│ └─ Makefile
 ├─ server.js
 ├─ webpack.config.js
 └─ package.json
