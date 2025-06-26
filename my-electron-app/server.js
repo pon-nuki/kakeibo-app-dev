@@ -270,6 +270,9 @@ const startApp = async () => {
   try {
     await createTableIfNotExists();
     console.log('全テーブル作成完了');
+
+    // 月末警告を起動時に実行
+    runMonthEndAlert();
   } catch (error) {
     console.error('エラー:', error);
   }
@@ -769,3 +772,15 @@ app.post('/backup/database', (req, res) => {
     res.json({ message: 'バックアップ成功', output: stdout });
   });
 });
+
+// 月末警告
+const runMonthEndAlert = () => {
+  const exePath = path.join(__dirname, 'resources', 'month_end_alert.exe');
+  execFile(exePath, (error, stdout, stderr) => {
+    if (error) {
+      console.error('[月末警告] 実行エラー:', error.message);
+      return;
+    }
+    console.log('[月末警告] 出力:', stdout.trim());
+  });
+};

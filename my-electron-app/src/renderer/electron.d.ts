@@ -66,6 +66,9 @@ declare global {
 
       // DBバックアップ
       runDbBackup: () => Promise<string>;
+
+      // 月末警告
+      runMonthEndAlert: () => Promise<void>;
     };
   }
 }

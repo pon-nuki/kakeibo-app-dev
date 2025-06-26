@@ -9,6 +9,8 @@ import { getUpcomingFixedCostNotifications } from './services/notificationServic
 import { Notification } from 'electron';
 import { spawn } from 'child_process';
 import { runDatabaseBackupIfNeeded } from './dbBackup';
+import { runMonthEndAlert } from './runMonthEndAlert';
+import { showMonthEndAlert } from './monthEndAlert';
 import { fetchExpenses,
           addExpense,
           deleteExpense,
@@ -49,6 +51,14 @@ const initializeApp = async () => {
 
     // DBバックアップを実行
     await runDatabaseBackupIfNeeded();
+
+    // 月末警告ツールを実行
+    await runMonthEndAlert();
+    console.log('mainWindow');
+    console.log(mainWindow);
+    if (mainWindow) {
+      await showMonthEndAlert(mainWindow);
+    }
 
     // 言語と通貨の初期設定はここでは行わない
     const initialized = await getSettingValue('initialized');
@@ -684,6 +694,42 @@ ipcMain.handle('run-db-backup', async () => {
     console.error('[Backup] 実行エラー:', err);
     throw err;
   }
+});
+
+// 月末警告ツールを実行し、結果ファイルを読み込む
+ipcMain.handle('run-month-end-alert', async () => {
+  const isDev = !app.isPackaged;
+  const exePath = isDev
+    ? path.join(__dirname, '../../resources/month_end_alert.exe')
+    : path.join(process.resourcesPath, 'month_end_alert.exe');
+
+  const userDataPath = app.getPath('userData');
+  const alertFilePath = path.join(userDataPath, 'month_end_alert.txt');
+
+  return new Promise<string>((resolve, reject) => {
+    const proc = spawn(exePath);
+
+    proc.stdout.on('data', (data) => {
+      console.log('[Rust stdout]', data.toString());
+    });
+
+    proc.stderr.on('data', (data) => {
+      console.error('[Rust stderr]', data.toString());
+    });
+
+    proc.on('close', () => {
+      if (fs.existsSync(alertFilePath)) {
+        const message = fs.readFileSync(alertFilePath, 'utf-8');
+        resolve(message.trim());
+      } else {
+        reject(new Error('month_end_alert.txt が見つかりません'));
+      }
+    });
+
+    proc.on('error', (err) => {
+      reject(err);
+    });
+  });
 });
 
 // アプリケーション開始

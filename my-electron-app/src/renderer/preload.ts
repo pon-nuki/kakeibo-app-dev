@@ -118,6 +118,9 @@ try {
 
     // DBバックアップ
     runDbBackup: () => ipcRenderer.invoke('run-db-backup'),
+
+    // 月末警告
+    runMonthEndAlert: () => ipcRenderer.invoke('run-month-end-alert'),
   });
 
   console.log("preload.ts 完了");
