@@ -14,7 +14,7 @@
 
 ---
 
-###  Extended Intro / イントロ追加 / Расширенное вступление
+### Extended Intro / イントロ追加 / Расширенное вступление
 
 **🇬🇧 English**  
 Tired of managing your finances? That era is over.  
@@ -23,13 +23,13 @@ Powered by blazing-fast Go in the backend, smart Python analysis, and a snappy U
 Local-first. No cloud. No worries.
 
 **🇯🇵 日本語**  
- 家計管理、めんどくさい？もうそんな時代は終わりです。  
+家計管理、めんどくさい？もうそんな時代は終わりです。  
 このアプリひとつで「収支の記録」「予算の把握」「グラフで可視化」「日記で気持ちの整理」――全部できる！  
 しかもバックエンドには爆速の Go、分析には賢い Python、UI は最新の React + TypeScript。サクサク快適！  
 PC だけで完結。クラウド不要。完全ローカル＆安心設計！
 
 **🇷🇺 Русский**  
- Устали от сложного управления финансами? Это в прошлом.  
+Устали от сложного управления финансами? Это в прошлом.  
 Это приложение объединяет всё: учёт расходов, контроль бюджета, наглядные графики и даже дневник для отражения мыслей.  
 Скоростной Go на бэкенде, умный Python для анализа и современный интерфейс на React + TypeScript.  
 Всё локально. Без облаков. Без стресса.
@@ -76,54 +76,54 @@ Backups are stored locally in the `AppData/Roaming/kakeibo/backup` folder and ro
 
 ## 月末警告ツール（月末支出アラート）
 
-** 🇯🇵 日本語
+**🇯🇵 日本語**
 
 このアプリには、月末が近づくと支出を警告する **Rust製ツール（`month_end_alert.exe`）** が組み込まれています。
 
-** 概要
+**概要**
 
 - 月末まで **5日以内** になると、アプリ起動時に **警告メッセージ** を表示します。
 - Rustで月末までの日数を計算し、通知用の `.txt` を生成します。
 - Electronがこの `.txt` を読み取り、警告が必要な場合はモーダルで表示します。
 
-** 注意点
+**注意点**
 
 - 出力ファイルパス（本番）: `%APPDATA%/kakeibo/month_end_alert.txt`
 - 開発時は `resources/month_end_alert.txt` に出力されます。
 
 ---
 
-** 🇺🇸 English
+**🇺🇸 English**
 
 This app includes a **Rust-based tool (`month_end_alert.exe`)** that alerts users when the end of the month is approaching.
 
-** Overview
+**Overview**
 
 - When there are **5 days or fewer** left in the month, the app shows a **warning message** at startup.
 - A small Rust program calculates the remaining days and creates a `.txt` file with a message.
 - Electron reads that file and shows the alert in a modal if necessary.
 
-** Notes
+**Notes**
 
 - Output file path (production): `%APPDATA%/kakeibo/month_end_alert.txt`
 - In development, the output goes to `resources/month_end_alert.txt`.
 
 ---
 
-** 🇷🇺 Русский
+**🇷🇺 Русский**
 
 Это приложение включает в себя инструмент на Rust (`month_end_alert.exe`), который предупреждает пользователя о приближении конца месяца.
 
-** Описание
+**Описание**
 
 - Если до конца месяца остаётся **5 дней или меньше**, при запуске приложения появится **предупреждающее сообщение**.
 - Программа на Rust рассчитывает оставшиеся дни и записывает сообщение в `.txt` файл.
 - Electron читает этот файл и показывает модальное предупреждение при необходимости.
 
-** Примечания
+**Примечания**
 
 - Путь к файлу (в продакшене): `%APPDATA%/kakeibo/month_end_alert.txt`
-- В режиме разработки файл создаётся в `resources/month_end_alert.txt`.
+- В режиме разработки файл создаётся в `resources/month_end_alert.txt`
 
 ---
 
@@ -131,45 +131,31 @@ This app includes a **Rust-based tool (`month_end_alert.exe`)** that alerts user
 
 ### Personal Budget / 家計簿 / Личный бюджет
 
-<p align="center">
-  <img src="images/kakeibo.png" alt="Personal Budget screen" width="600" />
-</p>
+![Personal Budget](images/kakeibo.png)
 
 ### Journal / 日記 / Дневник
 
-<p align="center">
-  <img src="images/nikki.png" alt="Journal screen" width="600" />
-</p>
+![Journal](images/nikki.png)
 
 ### Category Management / カテゴリ設定 / Управление категориями
 
-<p align="center">
-  <img src="images/kategori.png" alt="Category management screen" width="600" />
-</p>
+![Category](images/kategori.png)
 
 ### Recurring Expenses / 固定費設定 / Регулярные расходы
 
-<p align="center">
-  <img src="images/koteihi.png" alt="Recurring expenses screen" width="600" />
-</p>
+![Fixed Costs](images/koteihi.png)
 
 ### Budget Planning / 予算設定 / Планирование бюджета
 
-<p align="center">
-  <img src="images/yosan.png" alt="Budget planning screen" width="600" />
-</p>
+![Budget](images/yosan.png)
 
 ### Analytics (Graphs) / グラフで見る / Аналитика (графики)
 
-<p align="center">
-  <img src="images/gurafu.png" alt="Analytics and graphs screen" width="600" />
-</p>
+![Graph](images/gurafu.png)
 
 ### App Settings / アプリ設定 / Настройки приложения
 
-<p align="center">
-  <img src="images/settei.png" alt="App settings screen" width="600" />
-</p>
+![Settings](images/settei.png)
 
 ---
 
@@ -237,35 +223,35 @@ my-electron-app/
 ├─ dist/
 ├─ public/
 ├─ src/
-│ ├─ main/
-│ ├─ renderer/
-│ ├─ services/
-│ ├─ pages/
-│ └─ components/
+│  ├─ main/
+│  ├─ renderer/
+│  ├─ services/
+│  ├─ pages/
+│  └─ components/
 ├─ go-csv-exporter/
-│ ├─ exporter.go
-│ ├─ go.mod
-│ └─ go.sum
+│  ├─ exporter.go
+│  ├─ go.mod
+│  └─ go.sum
 ├─ go-csv-importer/
-│ ├─ importer.go
-│ ├─ go.mod
-│ └─ go.sum
+│  ├─ importer.go
+│  ├─ go.mod
+│  └─ go.sum
 ├─ python/
-│ └─ history_analyzer.py
+│  └─ history_analyzer.py
 ├─ rust-month-end-alert/
-│ ├─ src/
-│ │ └─ main.rs
-│ ├─ Cargo.toml
-│ └─ Cargo.lock
+│  ├─ src/
+│  │  └─ main.rs
+│  ├─ Cargo.toml
+│  └─ Cargo.lock
 ├─ resources/
-│ ├─ exporter.exe
-│ ├─ importer.exe
-│ ├─ db_backup.exe
-│ └─ month_end_alert.exe
+│  ├─ exporter.exe
+│  ├─ importer.exe
+│  ├─ db_backup.exe
+│  └─ month_end_alert.exe
 ├─ c-backup-tool/
-│ ├─ db_backup.c
-│ ├─ db_backup.exe
-│ └─ Makefile
+│  ├─ db_backup.c
+│  ├─ db_backup.exe
+│  └─ Makefile
 ├─ server.js
 ├─ webpack.config.js
 └─ package.json
@@ -292,4 +278,3 @@ Please read [CONTRIBUTING.md](./CONTRIBUTING.en.md) before getting started.
 **🇷🇺 Русский**  
 Мы рады любым формам участия — исправления, функции, переводы и документация.  
 Пожалуйста, ознакомьтесь с [CONTRIBUTING.md](./CONTRIBUTING.ru.md) перед началом.
-
