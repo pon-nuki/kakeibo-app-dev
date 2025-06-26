@@ -6,6 +6,14 @@
 
 ---
 
+## 行動規範 / Code of Conduct
+
+- [日本語](./CODE_OF_CONDUCT.md)
+- [English](./CODE_OF_CONDUCT.en.md)
+- [Русский](./CODE_OF_CONDUCT.ru.md)
+
+---
+
 ###  Extended Intro / イントロ追加 / Расширенное вступление
 
 **🇬🇧 English**  
@@ -189,8 +197,7 @@ my-electron-app/
 │  ├─ go.mod
 │  └─ go.sum
 ├─ python/
-│  ├─ history_analyzer.py
-│  └─ shopping_history.json
+│  └─ history_analyzer.py
 ├─ resources/
 │  ├─ exporter.exe
 │  ├─ importer.exe
@@ -209,3 +216,20 @@ my-electron-app/
 ## License / ライセンス / Лицензия
 
 MIT License
+
+---
+
+## Contributing / 貢献するには / Участие в разработке
+
+**🇬🇧 English**  
+We welcome all contributions — whether it's fixing bugs, adding features, improving docs, or translating.  
+Please read [CONTRIBUTING.md](./CONTRIBUTING.en.md) before getting started.
+
+**🇯🇵 日本語**  
+バグ修正・機能追加・翻訳・ドキュメント整備など、どんな形でも貢献は大歓迎です！  
+まずは [CONTRIBUTING.md](./CONTRIBUTING.md) を読んでいただけるとスムーズです。
+
+**🇷🇺 Русский**  
+Мы рады любым формам участия — исправления, функции, переводы и документация.  
+Пожалуйста, ознакомьтесь с [CONTRIBUTING.md](./CONTRIBUTING.ru.md) перед началом.
+
