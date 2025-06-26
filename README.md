@@ -88,8 +88,7 @@ Backups are stored locally in the `AppData/Roaming/kakeibo/backup` folder and ro
 
 **注意点**
 
-- 出力ファイルパス（本番）: `%APPDATA%/kakeibo/month_end_alert.txt`
-- 開発時は `resources/month_end_alert.txt` に出力されます。
+- 出力ファイルパス: `%APPDATA%/kakeibo/month_end_alert.txt`（開発・本番共通）
 
 ---
 
@@ -105,8 +104,7 @@ This app includes a **Rust-based tool (`month_end_alert.exe`)** that alerts user
 
 **Notes**
 
-- Output file path (production): `%APPDATA%/kakeibo/month_end_alert.txt`
-- In development, the output goes to `resources/month_end_alert.txt`.
+- Output file path: `%APPDATA%/kakeibo/month_end_alert.txt` (same for development and production)
 
 ---
 
@@ -122,8 +120,7 @@ This app includes a **Rust-based tool (`month_end_alert.exe`)** that alerts user
 
 **Примечания**
 
-- Путь к файлу (в продакшене): `%APPDATA%/kakeibo/month_end_alert.txt`
-- В режиме разработки файл создаётся в `resources/month_end_alert.txt`
+- Путь к файлу: `%APPDATA%/kakeibo/month_end_alert.txt` (одинаковый для разработки и продакшена)
 
 ---
 
