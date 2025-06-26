@@ -26,3 +26,4 @@ package-lock.json
 /go-csv-exporter/exporter.exe
 /python/build/*
 /python/history_analyzer.spec
+/rust-month-end-alert/target/*
